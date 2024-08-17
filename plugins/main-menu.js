@@ -28,16 +28,17 @@ const defaultMenu = {
   before: `
 *꒷꒦꒷꒷꒦꒷꒦꒷꒷꒦꒷꒦꒷꒦꒷꒷꒦꒷꒷꒦꒷꒷꒦꒷꒦꒷꒦꒷꒦꒷*
 
-“ hello *%name*, Cómo se encuentra el día de hoy? ”
+“ Bienvenido *%name*, usted entró al menú de *Tatsumaki_Bot* ”
+
+*Puede seguir el canal del bot: https://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x  :)*
 
 ╭──⬣「 *Info User* 」⬣
 │  ≡◦ *🍭 Nombre ∙* %name
-│  ≡◦ *🍬 Dulces ∙* %limit
+│  ≡◦ *💸 Creditos ∙* %limit
 │  ≡◦ *💫 XP ∙* %totalexp
 │  ≡◦ *🐢 Nivel ∙* %level
 ╰──⬣
 %readmore
-*꒷꒦꒷꒷꒦꒷꒦꒷꒷꒦꒷꒦꒷꒦꒷꒷꒦꒷꒷꒦꒷꒷꒦꒷꒦꒷꒦꒷꒦꒷*
 
 \t\t\t*L I S T A  -  M E N Ú S*
 `.trimStart(),
