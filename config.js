@@ -10,11 +10,11 @@ import moment from 'moment-timezone'
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
 global.owner = [
-  ['51955918117', 'Danịel 🇦🇱⁩', true],
-  ['5491122461521'],
-  ['524434703586'],
-  ['51955918117'],
-  ['5491122461521']
+  ['925015528', 'Aldair 👾', true],
+  ['925015528'],
+  ['925015528'],
+  ['925015528'],
+  ['925015528']
 ]
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
@@ -25,12 +25,12 @@ global.prems = []
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
 global.packname = ``
-global.author = '{\n "bot": {\n   "name": "Sumi - Sakurasawa",\n     "author": "Danịel",\n   "status_bot": "active"\n }\n}'
-global.wait = '🐢 *Sumi Sakurasawa*'
-global.botname = 'Sumi - Sakurasawa'
-global.textbot = `Powered By Starlights Team`
-global.listo = '*🍭 Aqui tiene*'
-global.namechannel = '【 ✯ Starlights Team - Oficial Chanel ✰ 】'
+global.author = '{\n "bot": {\n   "name": "Tatsumaki_Bot⛄",\n     "author": "𝙰𝙻𝙳𝙰𝙸𝚁 👾",\n   "status_bot": "active"\n }\n}'
+global.wait = '🐢 *Tatsumaki_Bot⛄*'
+global.botname = 'Tatsumaki_Bot⛄'
+global.textbot = `Powered 𝙱𝚢 𝚃𝚊𝚝𝚜𝚞𝚖𝚊𝚔𝚒_𝙱𝚘𝚝`
+global.listo = '*Aqui tiene*'
+global.namechannel = 'тαтѕυмαкι𖤛ɕαηαℓఌᵒᶠⁱᶜⁱᵃˡ'
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
@@ -39,8 +39,8 @@ global.miniurl = fs.readFileSync('./storage/img/miniurl.jpg')
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
-global.group = 'https://chat.whatsapp.com/J1R402WH1N0Hdl3S0NDEYu'
-global.canal = 'https://whatsapp.com/channel/0029VaBpO8M3rZZdwkGFIP33'
+global.group = 'https://chat.whatsapp.com/CnN4LfY1LfB5RBbiNWOCct'
+global.canal = 'https://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x'
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
