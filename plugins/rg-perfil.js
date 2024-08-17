@@ -1,6 +1,6 @@
-import { createHash } from 'crypto' 
-import PhoneNumber from 'awesome-phonenumber'
-import fetch from 'node-fetch'
+import { createHash } from 'crypto';
+import PhoneNumber from 'awesome-phonenumber';
+import fetch from 'node-fetch';
 
 let handler = async (m, { conn, usedPrefix }) => {
   let fkontak = {
@@ -18,21 +18,21 @@ let handler = async (m, { conn, usedPrefix }) => {
     "participant": "0@s.whatsapp.net"
   }
 
-  let pp = 'https://telegra.ph/file/1f6505497e2ce19a16685.mp4'
+  let pp = 'https://telegra.ph/file/1f6505497e2ce19a16685.mp4';
   //const pp = await conn.profilePictureUrl(conn.user.jid).catch(_ => './src/avatar_contact.png')
-  let user = global.db.data.users[m.sender]
-  let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
+  let user = global.db.data.users[m.sender];
+  let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender;
+  
   try {
-    pp = await conn.getProfilePicture(who)         //pp = await conn.getProfilePicture(who)
+    pp = await conn.getProfilePicture(who);
   } catch (e) {
     // Handle errors here if necessary
   } finally {
-    let { name, limit, lastclaim, registered, regTime, age } = global.db.data.users[who]
-    //let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
-    let mentionedJid = [who]
-    let username = conn.getName(who)
-    let prem = global.prems.includes(who.split`@`[0])
-    let sn = createHash('md5').update(who).digest('hex')
+    let { name, limit, lastclaim, registered, regTime, age } = global.db.data.users[who];
+    let mentionedJid = [who];
+    let username = conn.getName(who);
+    let prem = global.prems.includes(who.split`@`[0]);
+    let sn = createHash('md5').update(who).digest('hex');
     let str = `[#Tatsumaki_Bot]
 
 *DATOS GENERALES*
@@ -40,16 +40,16 @@ let handler = async (m, { conn, usedPrefix }) => {
 *[🙎‍♂️] ID →* ${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}
 *[🗒] NOMBRES →* ${name}
 *[⚡] ALIAS →* ${username}
-*[💰] CREDITOS →* ${limit}
+*[💰] CREDITOS →* ${registered ? limit : 'No se encuentra registrado'}
 *[📈] ESTADO →* ${registered ? 'Registrado' : 'No Registrado'}
-*[⏱] ANTI-SPAM →* ${user.antispam || 'No Definido'}`
+*[⏱] ANTI-SPAM →* ${user.antispam || 'No Definido'}`;
     
-    conn.sendFile(m.chat, pp, 'pp.jpg', str, fkontak, false, { contextInfo: { mentionedJid }})
+    conn.sendFile(m.chat, pp, 'pp.jpg', str, fkontak, false, { contextInfo: { mentionedJid }});
   }
 }
 
-handler.help = ['profile [@user]']
-handler.tags = ['xp']
-handler.command = /^perfil|profile?$/i
+handler.help = ['profile [@user]'];
+handler.tags = ['xp'];
+handler.command = /^perfil|profile?$/i;
 
-export default handler
+export default handler;
