@@ -1,5 +1,5 @@
 {
-  "name": "Sumi-Sakurasawa",
+  "name": "Tatsumaki_Bot⛄",
   "version": "5.0.0",
   "description": "Simple WhatsApp Bot Multi Device",
   "main": "index.js",
@@ -18,16 +18,16 @@
     "eslint": "eslint .",
     "eslintfix": "eslint --fix ."
   },
-  "homepage": "https://github.com/DanielDiod/Sumi-Sakurasawa",
+  "homepage": "h",
   "author": {
-    "name": "DanielDiod"
+    "name": "AldairDiod"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DanielDiod/Sumi-Sakurasawa.git"
+    "url": ""
   },
   "bugs": {
-    "url": "https://github.com/DanielDiod/Sumi-Sakurasawa/issues"
+    "url": ""
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
