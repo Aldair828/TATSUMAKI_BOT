@@ -18,11 +18,16 @@ let handler = async (m, { conn, usedPrefix }) => {
     "participant": "0@s.whatsapp.net"
   }
 
-  let pp = 'https://telegra.ph/file/1f6505497e2ce19a16685.mp4';
-  //const pp = await conn.profilePictureUrl(conn.user.jid).catch(_ => './src/avatar_contact.png')
   let user = global.db.data.users[m.sender];
   let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender;
   
+  // Check if the user is registered
+  if (!user.registered) {
+    conn.reply(m.chat, 'Por favor, regístrate usando el comando `.reg nombre.edad` antes de usar este comando`.', m);
+    return;
+  }
+
+  let pp = 'https://telegra.ph/file/1f6505497e2ce19a16685.mp4';
   try {
     pp = await conn.getProfilePicture(who);
   } catch (e) {
@@ -41,8 +46,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 *[🗒] NOMBRES →* ${name}
 *[⚡] ALIAS →* ${username}
 *[💰] CREDITOS →* ${registered ? limit : 'No se encuentra registrado'}
-*[📈] ESTADO →* ${registered ? 'Registrado' : 'No Registrado'}
-*[⏱] ANTI-SPAM →* ${user.antispam || 'No Definido'}`;
+*[📈] ESTADO →* ${registered ? 'Registrado' : 'No Registrado'}`;
     
     conn.sendFile(m.chat, pp, 'pp.jpg', str, fkontak, false, { contextInfo: { mentionedJid }});
   }
