@@ -18,7 +18,7 @@ let img = catalogo
 					mediaUrl: null,
 					description: null,
 					previewType: "PHOTO",
-					thumbnailUrl: 'https://telegra.ph/file/474de03b8c0cf87231d8e.jpg',
+					thumbnailUrl: 'https://telegra.ph/file/ab013f77c6620ab82c8c9.jpg',
 		           sourceUrl: canal,
 		           mediaType: 1,
                    renderLargerThumbnail: false
