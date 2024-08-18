@@ -240,6 +240,12 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 │  𓋜 *.lowpass <mp3/vn>*
 │  𓋜 *.underwater <mp3/vn>*
 ╰──ꕤ
+
+*⋘ TATSUMAKI_BOT ⋙*
+
+➽  *DEVELOPER 👨🏻‍💻: Aldair*
+
+*https://wa.me/+51925015528*
 `.trim()
 
     let pp = './storage/img/miniurl.jpg' // Asegúrate de que esta ruta es válida para la imagen que deseas enviar
