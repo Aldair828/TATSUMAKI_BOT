@@ -49,14 +49,14 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 *Puede seguir el canal del bot:* https://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x
 
 
-*SU INFORMACIÓN BÁSICA*
+*🔰SU INFORMACIÓN BÁSICA🔰*
 
 ➢ *[👤] USUARIO:* ${name}
 ➢ *[📱] NÚMERO:* ${m.sender.split('@')[0]}
 ➢ *[💸] CRÉDITOS:* ${limit}
 ➢ *[👾] NIVEL:* ${level}
 
-*INFORMACIÓN DEL BOT*
+*🔰INFORMACIÓN DEL BOT🔰*
 
 ➢ *[🤖] NÚMERO OFICIAL:* 51955109003
 ➢ *[💮] ESTADO:* ACTIVO 🟢
