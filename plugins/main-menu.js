@@ -43,9 +43,11 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     let menuText = `
 ྀི𓊆 _tatsumaki_ 𓊇ྀི
 
-*Bienvenido @${name} al menú de _TATSUMAKI_BOT_*
+*Bienvenido* @${name} 
+*Este es el menú de _TATSUMAKI_BOT_*
 
 *Puede seguir el canal del bot:* https://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x
+
 
 *SU INFORMACIÓN BÁSICA*
 
