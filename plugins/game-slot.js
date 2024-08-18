@@ -2,8 +2,8 @@ let cooldowns = {}
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
 
-    if (!args[0]) return m.reply('🍭 Ingresa la cantidad de *🍬 Dulces* que deseas apostar.\n\n`Ejemplo:`\n' + `> *${usedPrefix + command}* 10`)
-    if (isNaN(args[0])) return m.reply('🍭 Ingresa la cantidad de *🍬 Dulces* que deseas apostar.\n\n`Ejemplo:`\n' + `> *${usedPrefix + command}* 10`)
+    if (!args[0]) return m.reply('🍭 Ingresa la cantidad de *Creditos* que deseas apostar.\n\n`Ejemplo:`\n' + `> *${usedPrefix + command}* 10`)
+    if (isNaN(args[0])) return m.reply('🍭 Ingresa la cantidad de *Creditos* que deseas apostar.\n\n`Ejemplo:`\n' + `> *${usedPrefix + command}* 10`)
     let apuesta = parseInt(args[0])
     let users = global.db.data.users[m.sender]
     
@@ -39,13 +39,13 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     }
     let end;
     if (a == b && b == c) {
-        end = `Acabas de ganar   *${apuesta} 🍬 Dulces.*`
+        end = `Acabas de ganar   *${apuesta} *Creditos*`
         users.limit += apuesta
     } else if (a == b || a == c || b == c) {
-        end = `Casi lo logras sigue intentando :) \nTen *1 🍬 Dulce.*`
+        end = `Casi lo logras sigue intentando :) \nTen *1 Creditos*`
         users.limit += 1
     } else {
-        end = `Perdiste  *${apuesta} 🍬 Dulces.*`
+        end = `Perdiste  *${apuesta} *Creditos*`
         users.limit -= apuesta
     }
     cooldowns[m.sender] = Date.now()
