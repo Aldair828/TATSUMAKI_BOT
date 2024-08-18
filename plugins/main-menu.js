@@ -47,12 +47,18 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
 *Puede seguir el canal del bot:* https://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x
 
+
 *SU INFORMACIÓN BÁSICA*
 
 ➢ *[👤] USUARIO:* ${name}
 ➢ *[ 💸] CREDITOS:* ${limit}
 ➢ *[👾] NIVEL:* ${level}
 
+
+*INFORMACION DEL BOT*
+➢ *NUMERO OFC:* 51955109003
+➢ *ESTADO:* ACTIVO 🟢
+➢ *USUARIOS REGISTRADOS:* ${rtotalreg} 
 
 
 ᧔♡᧓  *L I S T A  -  M E N Ú S*  ᧔♡᧓
@@ -65,22 +71,17 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 │  𓋜 *.menu*
 │  𓋜 *.ping*
 │  𓋜 *.runtime*
-│  𓋜 *.script*
 ╰── ꕤ
 
 ╭──ꕤ「 *Busquedas 🔎* 」ꕤ
 │  𓋜 *.mercadolibre <búsqueda>*
 │  𓋜 *.pinterest*
-│  𓋜 *.soundsearch <búsqueda>*
-│  𓋜 *.spotifysearch <búsqueda>*
-│  𓋜 *.tiktoksearch *<txt>**
-│  𓋜 *.tweetposts *<búsqueda>**
 │  𓋜 *.google <búsqueda>*
 │  𓋜 *.ytsearch <búsqueda>*
 ╰──ꕤ
 
 ╭──ꕤ「 *Juegos 🎮* 」ꕤ
-│  𓋜 *.apostar *<cantidad>**
+│  𓋜 *.ruleta 10 negro/rojo*
 │  𓋜 *.slot <apuesta>*
 ╰──ꕤ
 
@@ -193,7 +194,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ╰──ꕤ
 
 ╭──ꕤ「 *Diversión 🤪* 」ꕤ
-│  𓋜 *.hug <@usuario>*
 │  𓋜 *.afk <razón>*
 │  𓋜 *.dance *<@user>**
 │  𓋜 *.gay*
@@ -204,7 +204,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ╰──ꕤ
 
 ╭──ꕤ「 *Nsfw 🥵* 」ꕤ
-│  𓋜 *.rule34 <búsqueda>*
 │  𓋜 *.xnxxdl <url>*
 ╰──ꕤ
 
