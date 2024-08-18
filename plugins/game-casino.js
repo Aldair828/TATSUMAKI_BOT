@@ -1,65 +1,38 @@
-import db from '../lib/database.js'
+let handler = async (m, { conn, args, text, usedPrefix, command }) => {
+    const ruletaresultado = "https://telegra.ph/file/15b837f4a56299223959b.png";
 
-let buatall = 1
-let cooldowns = {}
-
-let handler = async (m, { conn, args, usedPrefix, command, DevMode }) => {
-	let user = global.db.data.users[m.sender]
-        let randomaku = `${Math.floor(Math.random() * 101)}`.trim()
-        let randomkamu = `${Math.floor(Math.random() * 55)}`.trim()
-        let Aku = (randomaku * 1)
-        let Kamu = (randomkamu * 1)
-        let count = args[0]
-		let who = m.fromMe ? conn.user.jid : m.sender
-	    let username = conn.getName(who)
-	    
-	    let tiempoEspera = 15
-	    
-	    if (cooldowns[m.sender] && Date.now() - cooldowns[m.sender] < tiempoEspera * 1000) {
-    let tiempoRestante = segundosAHMS(Math.ceil((cooldowns[m.sender] + tiempoEspera * 1000 - Date.now()) / 1000))
-    conn.reply(m.chat, `🍭 Ya has iniciado una apuesta recientemente, espera *⏱ ${tiempoRestante}* para apostar nuevamente`, m, rcanal)
-    return
-  }
-  
-  cooldowns[m.sender] = Date.now()
-	    
-        count = count ? /all/i.test(count) ? Math.floor(global.db.data.users[m.sender].limit / buatall) : parseInt(count) : args[0] ? parseInt(args[0]) : 1
-        count = Math.max(1, count)
-        if (args.length < 1) return conn.reply(m.chat, '🍭 Ingresa la cantidad de ' + `*Creditos*` + ' que deseas aportar contra' + ` *𝚃𝚊𝚝𝚜𝚞𝚖𝚊𝚔𝚒_𝙱𝚘𝚝 🤖*` + `\n\n` + '`Ejemplo:`\n' + `> *${usedPrefix + command}* 100`, m, rcanal)
-
-        if (user.limit >= count * 1) {
-            user.limit -= count * 1
-            if (Aku > Kamu) {
-                conn.reply(m.chat, '`🍟 Veamos que numeros tienen!`\n\n'+ `➠ *𝚃𝚊𝚝𝚜𝚞𝚖𝚊𝚔𝚒_𝙱𝚘𝚝 🤖* : ${Aku}\n➠ *${username}* : ${Kamu}\n\n> ${username}, *PERDISTE* ${formatNumber(count)} Creditos.`.trim(), m, rcanal)
-            } else if (Aku < Kamu) {
-                user.limit += count * 2
-                conn.reply(m.chat, '`🍟 Veamos que numeros tienen!`\n\n'+ `➠ *𝚃𝚊𝚝𝚜𝚞𝚖𝚊𝚔𝚒_𝙱𝚘𝚝 🤖* : ${Aku}\n➠ *${username}* : ${Kamu}\n\n> ${username}, *GANASTE* ${formatNumber(count * 2)} Creditos.`.trim(), m, rcanal)
-            } else {
-                user.limit += count * 1
-                conn.reply(m.chat, '`🍟 Veamos que numeros tienen!`\n\n'+ `➠ *𝚃𝚊𝚝𝚜𝚞𝚖𝚊𝚔𝚒_𝙱𝚘𝚝 🤖* : ${Aku}\n➠ *${username}* : ${Kamu}\n\n> ${username} obtienes ${formatNumber(count * 1)} Creditos.`.trim(), m, rcanal)
-            }
-        } else conn.reply(m.chat, `No tienes *${formatNumber(count)} 🍬 dulces* para apostar!`.trim(), m, rcanal)
+    let amount = parseInt(args[0]);
+    let color = args[1]?.toLowerCase();
+    if (args.length < 2 || !color) throw `Error, ingrese el monto y el color rojo o negro. ejemplo .ruleta 10 rojo `;
     
-}
-    
-handler.help = ['apostar *<cantidad>*']
-handler.tags = ['game']
-handler.command = /^(apostar|casino)$/i
-handler.register = true
+    let colores = ['rojo', 'negro'];
+    let colour = colores[Math.floor(Math.random() * colores.length)];
+    let user = global.db.data.users[m.sender];
 
-handler.fail = null
+    if (isNaN(amount) || amount < 10) throw `Para jugar tienes que apostar 10 💎.`;
+    if (!colores.includes(color)) throw 'Debes escojer un color valido: rojo o negro';
+    if (user.limit < amount) throw `¡No tienes suficiente creditos para apostar! Tienes ${user.limit} pero necesitas al menos ${amount} 💎.`;
 
-export default handler
+    let result = '';
+    if (colour == color) {
+        user.limit += amount;
+        result = `*[ 𝙿𝚁𝚄𝙴𝙱𝙰 𝚃𝚄 𝚂𝚄𝙴𝚁𝚃𝙴 ]*\n\n` +
+                 `*𝙻𝙰 𝚁𝚄𝙻𝙴𝚃𝙰 𝙿𝙰𝚁𝙾 𝙴𝙽 𝙴𝙻 𝙲𝙾𝙻𝙾𝚁:* ${colour == 'rojo' ? '🔴' : '⚫'}\n\n` +
+                 `*𝚄𝚂𝚃𝙴𝙳 𝙶𝙰𝙽𝙾:* ${amount} 💎\n` +
+                 `*CREDITOS:* ${user.limit}`;
+    } else {
+        user.limit -= amount;
+        result = `*[ 𝙿𝚁𝚄𝙴𝙱𝙰 𝚃𝚄 𝚂𝚄𝙴𝚁𝚃𝙴 ]*\n\n` +
+                 `*𝙻𝙰 𝚁𝚄𝙻𝙴𝚃𝙰 𝙿𝙰𝚁𝙾 𝙴𝙽 𝙴𝙻 𝙲𝙾𝙻𝙾𝚁:* ${colour == 'rojo' ? '🔴' : '⚫'}\n\n` +
+                 `*𝚄𝚂𝚃𝙴𝙳 𝙿𝙴𝚁𝙳𝙸𝙾:* ${amount} 💎\n` +
+                 `*CREDITOS:* ${user.limit}`;
+    }
 
-function pickRandom(list) {
-    return list[Math.floor(Math.random() * list.length)]
-}
+    conn.sendMessage(m.chat, { image: { url: ruletaresultado }, caption: result }, { quoted: m });
+};
 
-function segundosAHMS(segundos) {
-  let segundosRestantes = segundos % 60
-  return `${segundosRestantes} segundos`
-}
+handler.help = ['ruleta apuesta/color'];
+handler.tags = ['game'];
+handler.command = ['ruleta', 'rt'];
 
-function formatNumber(number) {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+export default handler;
