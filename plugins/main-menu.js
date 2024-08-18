@@ -52,7 +52,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ➢ *[👤] USUARIO:* ${name}
 ➢ *[ 💸] CREDITOS:* ${limit}
 ➢ *[👾] NIVEL:* ${level}
-➢ *[🔢] N.SERIE:* aquí el número de serie 
+➢ *[🔢] N.SERIE:* ${serialNumber}
 
 
 
