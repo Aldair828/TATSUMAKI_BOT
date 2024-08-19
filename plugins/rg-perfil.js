@@ -38,15 +38,13 @@ let handler = async (m, { conn, usedPrefix }) => {
     let username = conn.getName(who);
     let prem = global.prems.includes(who.split`@`[0]);
     let sn = createHash('md5').update(who).digest('hex');
-    let str = `[#Tatsumaki_Bot]
+    let str = `*PERFIL DE* @${who.split('@')[0]}
 
-*DATOS GENERALES*
-
-*[🙎‍♂️] ID →* ${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}
-*[🗒] NOMBRES →* ${name}
-*[⚡] ALIAS →* ${username}
-*[💰] CREDITOS →* ${registered ? limit : 'No se encuentra registrado'}
-*[📈] ESTADO →* ${registered ? 'Registrado' : 'No Registrado'}`;
+*[👤] NOMBRE →* ${name}
+*[🔗] ID →* ${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}
+*[💬] NICKNAME →* ${username}
+*[💰] CRÉDITOS →* ${registered ? limit : 'No se encuentra registrado'}
+*[🔒] ESTADO →* LIBRE [✅]`;
     
     conn.sendFile(m.chat, pp, 'pp.jpg', str, fkontak, false, { contextInfo: { mentionedJid }});
   }
