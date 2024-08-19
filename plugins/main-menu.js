@@ -58,6 +58,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
 *🔰INFORMACIÓN DEL BOT🔰*
 
+➢ *[👨🏻‍💻] CREADORES:* ALDAIR - MEOW
 ➢ *[🤖] NÚMERO OFICIAL:* 51955109003
 ➢ *[💮] ESTADO:* ACTIVO 🟢
 ➢ *[👥] USUARIOS REGISTRADOS:* ${rtotalreg} 
@@ -247,8 +248,10 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 *⋘ TATSUMAKI_BOT ⋙*
 
 ➽  *DEVELOPER 👨🏻‍💻: Aldair*
+*" https://wa.me/+51925015528 "*
 
-*https://wa.me/+51925015528*
+➽  *DEVELOPER 👨🏻‍💻: MEOW - ANGELA* 
+*" https://wa.me/+527772130823 "*
 `.trim()
 
     let pp = './storage/img/miniurl.jpg' // Asegúrate de que esta ruta es válida para la imagen que deseas enviar
