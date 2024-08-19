@@ -49,7 +49,8 @@ let handler = async (m, { conn, usedPrefix }) => {
 *[🔗] ID →* ${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}
 *[💬] NICKNAME →* ${username}
 *[💰] CRÉDITOS →* ${registered ? limit : 'No se encuentra registrado'}
-*[🔒] ESTADO →* ${estado}`;
+*[🔒] ESTADO →* ${estado}
+*[🔢] NÚMERO DE SERIE:* ${sn}`;
     
     conn.sendFile(m.chat, pp, 'pp.jpg', str, fkontak, false, { contextInfo: { mentionedJid }});
   }
