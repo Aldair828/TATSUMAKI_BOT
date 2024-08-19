@@ -1,6 +1,6 @@
 let handler = async (m, { conn, usedPrefix, command }) => {
-  let pp = 'https://tinyurl.com/25k3wmz4' // URL de la imagen o GIF de abrazo
-  let pp2 = 'https://tinyurl.com/2p8csdhj' // Segunda URL de la imagen o GIF de abrazo
+  let pp = 'https://tinyurl.com/26ww5dmm' // URL de la imagen o GIF de abrazo
+  let pp2 = 'https://tinyurl.com/26ww5dmm' // Segunda URL de la imagen o GIF de abrazo
   let who
   if (m.isGroup) who = m.mentionedJid[0]
   else who = m.chat
