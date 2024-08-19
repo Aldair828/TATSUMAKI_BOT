@@ -33,18 +33,22 @@ let handler = async (m, { conn, usedPrefix }) => {
   } catch (e) {
     // Handle errors here if necessary
   } finally {
-    let { name, limit, lastclaim, registered, regTime, age } = global.db.data.users[who];
+    let { name, limit, lastclaim, registered, regTime, age, banned } = global.db.data.users[who]; // Asegúrate de que la propiedad `banned` esté definida en tu base de datos
     let mentionedJid = [who];
     let username = conn.getName(who);
     let prem = global.prems.includes(who.split`@`[0]);
     let sn = createHash('md5').update(who).digest('hex');
+
+    // Definir estado basado en si el usuario está baneado o no
+    let estado = banned ? 'BANEADO [❌]' : 'LIBRE [✅]';
+
     let str = `*PERFIL DE* @${who.split('@')[0]}
 
 *[👤] NOMBRE →* ${name}
 *[🔗] ID →* ${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}
 *[💬] NICKNAME →* ${username}
 *[💰] CRÉDITOS →* ${registered ? limit : 'No se encuentra registrado'}
-*[🔒] ESTADO →* LIBRE [✅]`;
+*[🔒] ESTADO →* ${estado}`;
     
     conn.sendFile(m.chat, pp, 'pp.jpg', str, fkontak, false, { contextInfo: { mentionedJid }});
   }
