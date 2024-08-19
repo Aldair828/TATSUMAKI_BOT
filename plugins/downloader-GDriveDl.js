@@ -6,7 +6,7 @@ let handler = async (m, { conn }) => {
         },
         {
             autor: 'ALDAIR',
-            texto: 'PARA EL QUE SEGUIR PELEANDO POR UNA MUJER QUE HIZO PERDER TODO'
+            texto: 'PARA EL QUE SEGUIR PELEANDO POR UNA MUJER QUE HECHO PERDER TODO'
         },
         {
             autor: 'ALDAIR',
