@@ -28,57 +28,73 @@ const createBoard = (rows, cols, numMines) => {
     return board;
 };
 
-const displayBoard = (board, reveal) => {
-    return board.map(row => row.map(cell => {
-        if (reveal[cell] === true) {
+const displayBoard = (board, revealed) => {
+    return board.map((row, r) => row.map((cell, c) => {
+        let key = `${r},${c}`;
+        if (revealed[key]) {
             return cell === -1 ? '💣' : cell === 0 ? ' ' : cell;
         } else {
-            return '🟢';
+            return `(${r},${c})`;
         }
     }).join(' ')).join('\n');
 };
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
-    let [opponent, row, col] = args;
     let user = m.sender;
-    let opponentId = conn.parseMention(opponent)[0];
+    let [action, ...coords] = args;
+    let boardSize = 5; // Tablero 5x5
+    let numMines = 5;  // Número de minas
 
-    if (!opponent || row === undefined || col === undefined) {
-        return m.reply(`✋ Usa el formato correcto: > ${usedPrefix + command} <@usuario> <fila> <columna>`);
+    if (action === 'start') {
+        if (games[user]) {
+            return m.reply('🔍 Ya tienes un juego en curso. Responde con el número de la casilla que quieres descubrir.');
+        }
+
+        games[user] = { 
+            board: createBoard(boardSize, boardSize, numMines), 
+            revealed: {}, 
+            gameOver: false 
+        };
+
+        let boardDisplay = displayBoard(games[user].board, games[user].revealed);
+        return m.reply(`🎮 *Buscaminas* - Tablero:\n\n${boardDisplay}\n\n📝 Responde con el número de la casilla en formato (fila,columna) para descubrir.`);
     }
 
+    if (!games[user]) {
+        return m.reply('⚠️ No hay un juego activo. Usa `.minas start` para comenzar un nuevo juego.');
+    }
+
+    let [row, col] = coords;
     row = parseInt(row);
     col = parseInt(col);
 
-    if (!games[user]) games[user] = { board: createBoard(5, 5, 5), revealed: {} };
-    if (!games[opponentId]) games[opponentId] = { board: createBoard(5, 5, 5), revealed: {} };
+    if (isNaN(row) || isNaN(col) || row < 0 || row >= boardSize || col < 0 || col >= boardSize) {
+        return m.reply('✋ Las coordenadas deben estar dentro del tablero.');
+    }
 
-    let currentGame = games[user];
-    let opponentGame = games[opponentId];
+    if (games[user].gameOver) {
+        return m.reply('⚠️ El juego ha terminado. Usa `.minas start` para comenzar un nuevo juego.');
+    }
 
-    if (currentGame.revealed[`${row},${col}`]) {
+    let selectedCell = `${row},${col}`;
+    if (games[user].revealed[selectedCell]) {
         return m.reply('❗ Esta casilla ya ha sido revelada.');
     }
 
-    if (currentGame.board[row][col] === -1) {
-        m.reply(`💥 ¡Explosión! Has tocado una mina. Has perdido el juego.`);
+    if (games[user].board[row][col] === -1) {
+        games[user].gameOver = true;
+        let boardDisplay = displayBoard(games[user].board, games[user].revealed);
+        await conn.reply(m.chat, `💥 ¡Explosión! Has tocado una mina. Has perdido el juego.\n\n${boardDisplay}`, m);
         delete games[user];
-        delete games[opponentId];
         return;
     }
 
-    currentGame.revealed[`${row},${col}`] = true;
+    games[user].revealed[selectedCell] = true;
+    let boardDisplay = displayBoard(games[user].board, games[user].revealed);
+    await conn.reply(m.chat, `🔍 Has revelado la casilla (${row},${col}).\n\n${boardDisplay}`, m);
+}
 
-    let boardDisplay = displayBoard(currentGame.board, currentGame.revealed);
-    let opponentBoardDisplay = displayBoard(opponentGame.board, opponentGame.revealed);
-
-    await conn.reply(m.chat, `🕵️‍♂️ *Tu Tablero:*\n\n${boardDisplay}`, m);
-    await conn.reply(m.chat, `🕵️‍♂️ *Tablero de ${await conn.getName(opponentId)}:*\n\n${opponentBoardDisplay}`, m);
-
-    m.reply(`🔎 Has revelado la casilla [${row}, ${col}].`);
-};
-
-handler.help = ['minas <@usuario> <fila> <columna>']
+handler.help = ['minas [start|(fila,columna)]']
 handler.tags = ['game']
 handler.command = ['minas']
 handler.register = true
