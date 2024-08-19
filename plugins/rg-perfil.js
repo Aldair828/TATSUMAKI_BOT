@@ -33,7 +33,7 @@ let handler = async (m, { conn, usedPrefix }) => {
   } catch (e) {
     // Handle errors here if necessary
   } finally {
-    let { name, limit, lastclaim, registered, regTime, age, banned } = global.db.data.users[who]; // Asegúrate de que la propiedad `banned` esté definida en tu base de datos
+    let { name, limit, lastclaim, registered, regTime, age, banned } = global.db.data.users[who];
     let mentionedJid = [who];
     let username = conn.getName(who);
     let prem = global.prems.includes(who.split`@`[0]);
@@ -45,6 +45,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     let str = `*PERFIL DE* @${who.split('@')[0]}
 
 *[👤] NOMBRE →* ${name}
+*[📅] EDAD →* ${age} años
 *[🔗] ID →* ${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}
 *[💬] NICKNAME →* ${username}
 *[💰] CRÉDITOS →* ${registered ? limit : 'No se encuentra registrado'}
