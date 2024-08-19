@@ -1,4 +1,5 @@
 let games = {};
+let currentPlayer = null; // Variable para almacenar al jugador actual
 
 const createBoard = (rows, cols, numMines) => {
     let board = Array.from({ length: rows }, () => Array(cols).fill(0));
@@ -34,22 +35,27 @@ const displayBoard = (board, revealed) => {
         if (revealed[key]) {
             return cell === -1 ? '💣' : cell === 0 ? ' ' : cell;
         } else {
-            return `(${r},${c})`;
+            return '🟢';
         }
-    }).join(' ')).join('\n');
+    }).join('')).join('\n');
 };
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
     let user = m.sender;
-    let [action, ...coords] = args;
+    let [action, choice] = args;
     let boardSize = 5; // Tablero 5x5
     let numMines = 5;  // Número de minas
 
     if (action === 'start') {
+        if (currentPlayer && currentPlayer !== user) {
+            return m.reply('⚠️ ALGUIEN ESTÁ JUGANDO. ESPERE SU TURNO.');
+        }
+
         if (games[user]) {
             return m.reply('🔍 Ya tienes un juego en curso. Responde con el número de la casilla que quieres descubrir.');
         }
 
+        currentPlayer = user;
         games[user] = { 
             board: createBoard(boardSize, boardSize, numMines), 
             revealed: {}, 
@@ -64,16 +70,14 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         return m.reply('⚠️ No hay un juego activo. Usa `.minas start` para comenzar un nuevo juego.');
     }
 
-    let [row, col] = coords;
-    row = parseInt(row);
-    col = parseInt(col);
+    if (games[user].gameOver) {
+        return m.reply('⚠️ El juego ha terminado. Usa `.minas start` para comenzar un nuevo juego.');
+    }
+
+    let [row, col] = choice.split(',').map(Number);
 
     if (isNaN(row) || isNaN(col) || row < 0 || row >= boardSize || col < 0 || col >= boardSize) {
         return m.reply('✋ Las coordenadas deben estar dentro del tablero.');
-    }
-
-    if (games[user].gameOver) {
-        return m.reply('⚠️ El juego ha terminado. Usa `.minas start` para comenzar un nuevo juego.');
     }
 
     let selectedCell = `${row},${col}`;
@@ -86,6 +90,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         let boardDisplay = displayBoard(games[user].board, games[user].revealed);
         await conn.reply(m.chat, `💥 ¡Explosión! Has tocado una mina. Has perdido el juego.\n\n${boardDisplay}`, m);
         delete games[user];
+        currentPlayer = null; // Resetea el jugador actual
         return;
     }
 
