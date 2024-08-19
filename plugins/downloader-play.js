@@ -27,7 +27,7 @@ const handler = async (m, { conn, command, args, text, usedPrefix }) => {
     additionalText = 'vídeo';
   }
 
-  const texto1 = `Título: ${yt_play[0].title}\nPublicado: ${yt_play[0].ago}\nDuración: ${secondString(yt_play[0].duration.seconds)}\nVistas: ${MilesNumber(yt_play[0].views)}\nAutor: ${yt_play[0].author.name}\nVideo ID: ${yt_play[0].videoId}\nTipo: ${yt_play[0].type}\nURL: ${yt_play[0].url}\nAutor URL: ${yt_play[0].author.url}\n\n> Descargando ${additionalText}. Por favor espera...`.trim();
+  const texto1 = `*[💮] Título:* ${yt_play[0].title}\n*[🕒] Publicado:* ${yt_play[0].ago}\n*[🔊] Duración:* ${secondString(yt_play[0].duration.seconds)}\n*[👤] Autor:* ${yt_play[0].author.name}\n*[🗝] URL:* ${yt_play[0].url}\n\n> Descargando ${additionalText}. Por favor espera...`.trim();
 
   conn.sendMessage(m.chat, { image: { url: yt_play[0].thumbnail }, caption: texto1 }, { quoted: m });
 
