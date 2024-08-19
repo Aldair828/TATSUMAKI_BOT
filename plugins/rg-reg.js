@@ -27,12 +27,13 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
       txt += `│  ✩  *Edad* : ${age} años\n`
       txt += `│  ✩  *Numero de serie*\n`
       txt += `└  ✩  ${sn}
-      
-      
+    
       *𝙿𝙰𝚁𝙰 𝚅𝙸𝚂𝚄𝙰𝙻𝙸𝚉𝙰𝚁 𝚃𝚄 𝙿𝙴𝚁𝙵𝙸𝙻 𝚄𝚂𝙰 𝙴𝙻 𝙲𝙾𝙼𝙰𝙽𝙳𝙾*
-
-
-      .perfil`
+      .perfil
+      *𝙿𝙰𝚁𝙰 𝚅𝙴𝚁 𝙻𝙾𝚂 𝙲𝙾𝙼𝙰𝙽𝙳𝙾𝚂 𝚄𝚂𝙰*
+      .menu 
+      *𝙿𝙰𝚁𝙰 𝙲𝚄𝙰𝙻𝚀𝚄𝙸𝙴𝚁 𝙳𝚄𝙳𝙰 𝚄𝚂𝙰 𝙴𝙻 𝙲𝙾𝙼𝙰𝙽𝙳𝙾*
+      .owner `
 await conn.sendAi(m.chat, botname, textbot, txt, img, img, canal, m)
 await m.react('✅')
 }
