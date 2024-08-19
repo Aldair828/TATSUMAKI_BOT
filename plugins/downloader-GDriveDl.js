@@ -30,7 +30,7 @@ let handler = async (m, { conn }) => {
     let videoIndex = Math.floor(Math.random() * videos.length);
     let videoUrl = videos[videoIndex];
 
-    const consejoMessage = `*AUTOR:* ${consejo.autor}\n*CONSEJO:* ${consejo.texto}\n\nAquí tienes un vídeo relacionado:`;
+    const consejoMessage = `*AUTOR:* ${consejo.autor}\n\n*CONSEJO:* ${consejo.texto}\n\n\n VALORATE NELSON`;
 
     // Envía el mensaje con el consejo y el vídeo
     await conn.sendMessage(m.chat, { 
