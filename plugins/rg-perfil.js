@@ -50,6 +50,8 @@ let handler = async (m, { conn, usedPrefix }) => {
 *[💬] NICKNAME →* ${username}
 *[💰] CRÉDITOS →* ${registered ? limit : 'No se encuentra registrado'}
 *[🔒] ESTADO →* ${estado}
+
+
 *[🔢] NÚMERO DE SERIE:* ${sn}`;
     
     conn.sendFile(m.chat, pp, 'pp.jpg', str, fkontak, false, { contextInfo: { mentionedJid }});
