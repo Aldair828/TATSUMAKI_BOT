@@ -1,107 +1,45 @@
-let games = {};
-let currentPlayer = null; // Variable para almacenar al jugador actual
-
-const createBoard = (rows, cols, numMines) => {
-    let board = Array.from({ length: rows }, () => Array(cols).fill(0));
-    let mines = numMines;
-    while (mines > 0) {
-        let r = Math.floor(Math.random() * rows);
-        let c = Math.floor(Math.random() * cols);
-        if (board[r][c] === 0) {
-            board[r][c] = -1;
-            mines--;
+let handler = async (m, { conn }) => {
+    const consejos = [
+        {
+            autor: 'ALDAIR',
+            texto: 'DEJALA IR, TAL VEZ NO FUE FELIZ CONTIGO PERO CON OTRO SI LO HARÁ'
+        },
+        {
+            autor: 'ALDAIR',
+            texto: 'PARA EL QUE SEGUIR PELEANDO POR UNA MUJER QUE HIZO PERDER TODO'
+        },
+        {
+            autor: 'ALDAIR',
+            texto: 'QUIÉRETE, VALÓRATE TAL VEZ PARA ELLA NO ERES LO SUFICIENTE PERO PARA OTRA SI LO SERÁS'
         }
-    }
-    for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-            if (board[r][c] === -1) continue;
-            let count = 0;
-            for (let i = -1; i <= 1; i++) {
-                for (let j = -1; j <= 1; j++) {
-                    if (r + i >= 0 && r + i < rows && c + j >= 0 && c + j < cols && board[r + i][c + j] === -1) {
-                        count++;
-                    }
-                }
-            }
-            board[r][c] = count;
-        }
-    }
-    return board;
-};
+    ];
 
-const displayBoard = (board, revealed) => {
-    return board.map((row, r) => row.map((cell, c) => {
-        let key = `${r},${c}`;
-        if (revealed[key]) {
-            return cell === -1 ? '💣' : cell === 0 ? ' ' : cell;
-        } else {
-            return '🟢';
-        }
-    }).join('')).join('\n');
-};
+    const videos = [
+        'https://telegra.ph/file/621bec5d60a335133bca9.mp4',
+        'https://telegra.ph/file/5fe2cc44044ed6bae64a7.mp4',
+        'https://telegra.ph/file/e20cbc5e138898fe2da20.mp4',
+        'https://telegra.ph/file/2835e814a4497a8fdfb9a.mp4',
+        'https://telegra.ph/file/3c77dbe1ea67383c7f531.mp4'
+    ];
 
-let handler = async (m, { conn, args, usedPrefix, command }) => {
-    let user = m.sender;
-    let [action, choice] = args;
-    let boardSize = 5; // Tablero 5x5
-    let numMines = 5;  // Número de minas
+    // Selecciona un consejo aleatorio
+    let randomIndex = Math.floor(Math.random() * consejos.length);
+    let consejo = consejos[randomIndex];
 
-    if (action === 'start') {
-        if (currentPlayer && currentPlayer !== user) {
-            return m.reply('⚠️ ALGUIEN ESTÁ JUGANDO. ESPERE SU TURNO.');
-        }
+    // Selecciona un vídeo aleatorio
+    let videoIndex = Math.floor(Math.random() * videos.length);
+    let videoUrl = videos[videoIndex];
 
-        if (games[user]) {
-            return m.reply('🔍 Ya tienes un juego en curso. Responde con el número de la casilla que quieres descubrir.');
-        }
+    const consejoMessage = `*AUTOR:* ${consejo.autor}\n*CONSEJO:* ${consejo.texto}`;
 
-        currentPlayer = user;
-        games[user] = { 
-            board: createBoard(boardSize, boardSize, numMines), 
-            revealed: {}, 
-            gameOver: false 
-        };
-
-        let boardDisplay = displayBoard(games[user].board, games[user].revealed);
-        return m.reply(`🎮 *Buscaminas* - Tablero:\n\n${boardDisplay}\n\n📝 Responde con el número de la casilla en formato (fila,columna) para descubrir.`);
-    }
-
-    if (!games[user]) {
-        return m.reply('⚠️ No hay un juego activo. Usa `.minas start` para comenzar un nuevo juego.');
-    }
-
-    if (games[user].gameOver) {
-        return m.reply('⚠️ El juego ha terminado. Usa `.minas start` para comenzar un nuevo juego.');
-    }
-
-    let [row, col] = choice.split(',').map(Number);
-
-    if (isNaN(row) || isNaN(col) || row < 0 || row >= boardSize || col < 0 || col >= boardSize) {
-        return m.reply('✋ Las coordenadas deben estar dentro del tablero.');
-    }
-
-    let selectedCell = `${row},${col}`;
-    if (games[user].revealed[selectedCell]) {
-        return m.reply('❗ Esta casilla ya ha sido revelada.');
-    }
-
-    if (games[user].board[row][col] === -1) {
-        games[user].gameOver = true;
-        let boardDisplay = displayBoard(games[user].board, games[user].revealed);
-        await conn.reply(m.chat, `💥 ¡Explosión! Has tocado una mina. Has perdido el juego.\n\n${boardDisplay}`, m);
-        delete games[user];
-        currentPlayer = null; // Resetea el jugador actual
-        return;
-    }
-
-    games[user].revealed[selectedCell] = true;
-    let boardDisplay = displayBoard(games[user].board, games[user].revealed);
-    await conn.reply(m.chat, `🔍 Has revelado la casilla (${row},${col}).\n\n${boardDisplay}`, m);
+    // Envía el mensaje con el consejo y el vídeo
+    await conn.reply(m.chat, consejoMessage, m);
+    await conn.sendMessage(m.chat, { video: { url: videoUrl }, caption: 'Consejo en vídeo' }, { quoted: m });
 }
 
-handler.help = ['minas [start|(fila,columna)]']
-handler.tags = ['game']
-handler.command = ['minas']
+handler.help = ['consejo']
+handler.tags = ['info']
+handler.command = ['consejo']
 handler.register = true
 handler.group = false 
 export default handler;
