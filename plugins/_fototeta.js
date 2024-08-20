@@ -20,7 +20,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         user.creditos -= cantidad;
         user.banco = (user.banco || 0) + cantidad;
         
-        conn.reply(m.chat, `*Has depositado ${cantidad} créditos en tu banco*`, m);
+        conn.reply(m.chat, `*Has depositado ${cantidad} créditos en tu banco*. Ahora tienes ${user.creditos} créditos en tu perfil.`, m);
     }
 
     // Comando .retirar
@@ -35,7 +35,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         user.banco -= cantidad;
         user.creditos += cantidad;
         
-        conn.reply(m.chat, `*Has retirado ${cantidad} créditos de tu banco*`, m);
+        conn.reply(m.chat, `*Has retirado ${cantidad} créditos de tu banco*. Ahora tienes ${user.creditos} créditos en tu perfil.`, m);
     }
 }
 
