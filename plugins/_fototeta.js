@@ -1,9 +1,16 @@
-let handler = async (m, { conn, usedPrefix, command}) => {
-    // Definir el tiempo de espera de 10 segundos (10,000 milisegundos)
-    let cooldown = 10000
-    let time = global.db.data.users[m.sender].lastrob + cooldown
-    if (new Date - global.db.data.users[m.sender].lastrob < cooldown) 
-        throw `*⏱️¡Hey! Espera ${msToTime(time - new Date())} para volver a robar*`
+import { createHash } from 'crypto';
+import PhoneNumber from 'awesome-phonenumber';
+import fetch from 'node-fetch';
+
+// Handler del comando de robar
+let handler = async (m, { conn, usedPrefix }) => {
+    // Definir el tiempo de espera de 20 segundos (20,000 milisegundos)
+    let cooldown = 20000
+    let user = global.db.data.users[m.sender];
+    let time = user.lastrob + cooldown;
+
+    if (new Date - user.lastrob < cooldown) 
+        return conn.reply(m.chat, `*⏱️¡Espera ${msToTime(time - new Date())} para volver a robar!*`, m);
 
     let who
     if (m.isGroup) 
@@ -12,33 +19,37 @@ let handler = async (m, { conn, usedPrefix, command}) => {
         who = m.chat
 
     if (!who) 
-        throw `𝙀𝙏𝙄𝙌𝙐𝙀𝙏𝘼 𝘼 𝘼𝙇𝙂𝙐𝙄𝙀𝙉 𝙋𝘼𝙍𝘼 𝙍𝙊𝘽𝘼𝙍`
-    
-    if (!(who in global.db.data.users)) 
-        throw `*Este usuario no se encuentra registrado en mi base de datos*`
+        return conn.reply(m.chat, 'Uso: `.robar @usuario`', m);
 
-    let users = global.db.data.users[who]
-    
+    let targetUser = global.db.data.users[who];
+
+    // Verificar si el usuario objetivo está registrado
+    if (!targetUser) 
+        return conn.reply(m.chat, '*Este usuario no se encuentra registrado en mi base de datos*', m);
+
     // Robar créditos aleatoriamente entre 5 y 15
-    let robCredits = Math.floor(Math.random() * 11) + 5 // Genera un número aleatorio entre 5 y 15
+    let robCredits = Math.floor(Math.random() * 11) + 5; // Genera un número aleatorio entre 5 y 15
 
-    if (users.creditos < robCredits) 
-        return m.reply(`😿 @${who.split`@`[0]} tiene menos de *${robCredits} créditos* No robes a un pobre :v`, null, { mentions: [who] })    
+    if (targetUser.creditos < robCredits) 
+        return conn.reply(m.chat, `😿 @${who.split`@`[0]} tiene menos de *${robCredits} créditos* No robes a un pobre :v`, null, { mentions: [who] });
 
     // Transferir créditos
-    global.db.data.users[m.sender].creditos += robCredits
-    global.db.data.users[who].creditos -= robCredits 
+    user.creditos += robCredits;
+    targetUser.creditos -= robCredits;
 
-    m.reply(`*✧ Robaste ${robCredits} créditos a @${who.split`@`[0]}*`, null, { mentions: [who] })
-    global.db.data.users[m.sender].lastrob = new Date * 1
+    // Actualizar el tiempo del último robo
+    user.lastrob = new Date * 1;
+
+    conn.reply(m.chat, `*✧ Robaste ${robCredits} créditos a @${who.split`@`[0]}*`, null, { mentions: [who] });
 }
 
-handler.help = ['rob']
+handler.help = ['robar @user']
 handler.tags = ['econ']
-handler.command = ['robar', 'rob']
+handler.command = /^robar$/i
 handler.group = true
 handler.register = true
-export default handler  
+
+export default handler
 
 function msToTime(duration) {
     var milliseconds = parseInt((duration % 1000) / 100),
