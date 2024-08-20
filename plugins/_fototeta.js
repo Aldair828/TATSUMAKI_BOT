@@ -12,7 +12,13 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
                       `➢ *[👤] 𝚄𝚂𝚄𝙰𝚁𝙸𝙾:* @${m.sender.split('@')[0]}\n` +
                       `➢ *[💸] 𝙲𝚁𝙴́𝙳𝙸𝚃𝙾𝚂:* ${saldoBanco} créditos\n` +
                       `➢ *[🔰] 𝙳𝙴𝙿𝙾́𝚂𝙸𝚃𝙾𝚂:* ${depositos} veces\n` +
-                      `➢ *[👁‍🗨] 𝚁𝙴𝚃𝙸𝚁𝙾𝚂:* ${retiros} veces`;
+                      `➢ *[👁‍🗨] 𝚁𝙴𝚃𝙸𝚁𝙾𝚂:* ${retiros} veces
+                      
+                      𝙿𝙰𝚁𝙰 𝙳𝙴𝙿𝙾𝚂𝙸𝚃𝙰𝚁 𝚃𝚄𝚂 𝙲𝚁𝙴́𝙳𝙸𝚃𝙾𝚂 𝙴𝙽 𝙴𝙻 𝙱𝙰𝙽𝙲𝙾 𝚄𝚂𝙰 𝙴𝙻 𝙲𝙾𝙼𝙰𝙽𝙳𝙾
+                      .depositar cantidad
+                      
+                      𝙿𝙰𝚁𝙰 𝚁𝙴𝚃𝙸𝚁𝙰𝚁 𝙻𝙾𝚂 𝙲𝚁𝙴́𝙳𝙸𝚃𝙾𝚂 𝙳𝙴𝙻 𝙱𝙰𝙽𝙲𝙾 𝚄𝚂𝙰 𝙴𝙻 𝙲𝙾𝙼𝙰𝙽𝙳𝙾 
+                      .retirar cantidad`;
 
         // URL de la foto que quieres enviar
         let foto = 'https://telegra.ph/file/41e99ff3c6938e1070d16.jpg'; // Cambia esta URL a la foto deseada
@@ -33,7 +39,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         user.banco = (user.banco || 0) + cantidad;
         user.depositos = (user.depositos || 0) + 1;
         
-        conn.reply(m.chat, `*Has depositado ${cantidad} créditos en tu banco*. Te quedan ${user.limit} créditos en tu perfil.`, m);
+        conn.reply(m.chat, `*Has depositado ${cantidad} créditos en tu banco*. Te quedan ${user.limit} créditos en tu perfil.\n\n .banco  para ver el banco `, m);
     }
 
     // Comando .retirar
@@ -49,7 +55,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         user.limit += cantidad;
         user.retiros = (user.retiros || 0) + 1;
         
-        conn.reply(m.chat, `*Has retirado ${cantidad} créditos de tu banco*. Te quedan ${user.limit} créditos en tu perfil.`, m);
+        conn.reply(m.chat, `*Has retirado ${cantidad} créditos de tu banco*. Te quedan ${user.limit} créditos en tu perfil.\n\n .banco para ver cuantos créditos tienes en el banco`, m);
     }
 }
 
