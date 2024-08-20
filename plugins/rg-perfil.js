@@ -40,6 +40,10 @@ let handler = async (m, { conn, usedPrefix }) => {
         let prem = global.prems.includes(who.split`@`[0]);
         let sn = createHash('md5').update(who).digest('hex');
 
+        // Calcular el top de créditos
+        let sortedUsers = Object.values(global.db.data.users).sort((a, b) => b.limit - a.limit);
+        let topPosition = sortedUsers.findIndex(u => u.jid === who) + 1;
+
         // Definir estado basado en si el usuario está baneado o no
         let estado = banned ? 'BANEADO [❌]' : 'LIBRE [✅]';
 
@@ -52,9 +56,10 @@ let handler = async (m, { conn, usedPrefix }) => {
 *[📅] EDAD →* ${age} años
 *[🔗] ID →* ${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}
 *[💬] NICKNAME →* ${username}
-*[💰] CRÉDITOS →* ${user.limit}
+*[💰] CRÉDITOS →* ${limit}
 *[💵] CRÉDITOS EN EL BANCO →* ${user.banco || 0}
 *[🌟] NIVEL →* ${level || 1}
+*[🔱] TOP →* ${topPosition || 'N/A'}
 *[💎] PREMIUM →* ${premiumStatus}
 *[🔒] ESTADO →* ${estado}
 
@@ -65,7 +70,9 @@ SI QUIERES GUARDAR TUS CRÉDITOS EN EL BANCO USA EL COMANDO
 .depositar cantidad 
 
 SI QUIERES RETIRAR LOS CRÉDITOS DEL BANCO USA EL COMANDO 
-.retirar cantidad`;
+.retirar cantidad
+
+.top  para ver el top de créditos`;
         
         conn.sendFile(m.chat, pp, 'pp.jpg', str, fkontak, false, { contextInfo: { mentionedJid }});
     }
