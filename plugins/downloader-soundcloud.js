@@ -3,7 +3,7 @@ let handler = async (m, { conn }) => {
     let users = Object.entries(global.db.data.users)
         .filter(([jid, user]) => user.registered)
         .sort(([, a], [, b]) => b.limit - a.limit)
-        .slice(0, 50); // Top 50 usuarios
+        .slice(0, 29); // Top 50 usuarios
 
     let str = '▂▃▄▅▆▇█▓▒░ 𝐓𝐎𝐏 👑 ░▒▓█▇▆▅▄▃▂\n\n';
 
@@ -22,8 +22,8 @@ let handler = async (m, { conn }) => {
     conn.reply(m.chat, str.trim(), m);
 }
 
-handler.help = ['topcreditos'];
+handler.help = ['top'];
 handler.tags = ['econ'];
-handler.command = /^topcreditos$/i;
+handler.command = /^top$/i;
 
 export default handler;
