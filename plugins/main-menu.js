@@ -77,6 +77,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 │  𓋜 *.retirar cantidad*
 │  𓋜 *.banco*
 │  𓋜 *.perfil*
+│  𓋜 *.top*
 ╰──ꕤ
 
 ╭──ꕤ「 *Info 🌸* 」ꕤ
