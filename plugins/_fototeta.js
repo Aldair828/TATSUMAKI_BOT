@@ -1,3 +1,4 @@
+let ro = 3000
 let handler = async (m, { conn, usedPrefix, command}) => {
     let time = global.db.data.users[m.sender].lastrob + 7200000
     if (new Date - global.db.data.users[m.sender].lastrob < 7200000) 
@@ -15,9 +16,7 @@ let handler = async (m, { conn, usedPrefix, command}) => {
         throw `*Este usuario no se encuentra registrado en mi base de datos*`
 
     let users = global.db.data.users[who]
-    
-    // Robar créditos aleatoriamente entre 10 y 14
-    let robCredits = Math.floor(Math.random() * 5) + 10 // Genera un número aleatorio entre 10 y 14
+    let robCredits = Math.floor(Math.random() * ro)
 
     if (users.creditos < robCredits) 
         return m.reply(`😿 @${who.split`@`[0]} tiene menos de *${robCredits} créditos* No robes a un pobre :v`, null, { mentions: [who] })    
@@ -46,4 +45,4 @@ function msToTime(duration) {
     minutes = (minutes < 10) ? "0" + minutes : minutes
     seconds = (seconds < 10) ? "0" + seconds : seconds
     return hours + " Hora(s) " + minutes + " Minuto(s)"
-               }
+}
