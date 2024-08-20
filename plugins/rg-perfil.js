@@ -58,8 +58,14 @@ let handler = async (m, { conn, usedPrefix }) => {
 *[💎] PREMIUM →* ${premiumStatus}
 *[🔒] ESTADO →* ${estado}
 
+*[🔢] NÚMERO DE SERIE:* ${sn}
 
-*[🔢] NÚMERO DE SERIE:* ${sn}`;
+
+SI QUIERES GUARDAR TUS CRÉDITOS EN EL BANCO USA EL COMANDO 
+.depositar cantidad 
+
+SI QUIERES RETIRAR LOS CRÉDITOS DEL BANCO USA EL COMANDO 
+.retirar cantidad`;
         
         conn.sendFile(m.chat, pp, 'pp.jpg', str, fkontak, false, { contextInfo: { mentionedJid }});
     }
