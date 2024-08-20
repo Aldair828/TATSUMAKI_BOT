@@ -1,47 +1,76 @@
 let handler = async (m, { conn }) => {
-    const consejos = [
-        {
-            autor: 'ALDAIR',
-            texto: 'DEJALA IR, TAL VEZ NO FUE FELIZ CONTIGO PERO CON OTRO SI LO HARÁ'
-        },
-        {
-            autor: 'ALDAIR',
-            texto: 'PARA EL QUE SEGUIR PELEANDO POR UNA MUJER QUE HECHO PERDER TODO'
-        },
-        {
-            autor: 'ALDAIR',
-            texto: 'QUIÉRETE, VALÓRATE TAL VEZ PARA ELLA NO ERES LO SUFICIENTE PERO PARA OTRA SI LO SERÁS'
+    // Lista de animales con sus emojis, créditos y probabilidades
+    const animales = [
+        { emoji: '🦊', nombre: 'Zorro', creditos: 2, probabilidad: 10 },
+        { emoji: '🐗', nombre: 'Jabalí', creditos: 3, probabilidad: 5 },
+        { emoji: '🐷', nombre: 'Cerdo', creditos: 1, probabilidad: 20 },
+        { emoji: '🐔', nombre: 'Pollo', creditos: 1, probabilidad: 20 },
+        { emoji: '🦆', nombre: 'Pato', creditos: 1, probabilidad: 20 },
+        { emoji: '🐦', nombre: 'Pájaro', creditos: 1, probabilidad: 20 },
+        { emoji: '🐵', nombre: 'Mono', creditos: 2, probabilidad: 10 },
+        { emoji: '🐘', nombre: 'Elefante', creditos: 5, probabilidad: 3 },
+        { emoji: '🐮', nombre: 'Vaca', creditos: 2, probabilidad: 10 },
+        { emoji: '🐯', nombre: 'Tigre', creditos: 4, probabilidad: 4 },
+        { emoji: '🐭', nombre: 'Ratón', creditos: 1, probabilidad: 20 },
+        { emoji: '🐴', nombre: 'Caballo', creditos: 3, probabilidad: 5 },
+        { emoji: '🐧', nombre: 'Pingüino', creditos: 3, probabilidad: 5 }
+    ];
+
+    // Función para seleccionar animales aleatoriamente según la probabilidad
+    function seleccionarAnimal() {
+        let totalProbabilidad = animales.reduce((total, animal) => total + animal.probabilidad, 0);
+        let random = Math.floor(Math.random() * totalProbabilidad);
+        for (let animal of animales) {
+            if (random < animal.probabilidad) {
+                return animal;
+            }
+            random -= animal.probabilidad;
         }
-    ];
+    }
 
-    const videos = [
-        'https://telegra.ph/file/621bec5d60a335133bca9.mp4',
-        'https://telegra.ph/file/5fe2cc44044ed6bae64a7.mp4',
-        'https://telegra.ph/file/e20cbc5e138898fe2da20.mp4',
-        'https://telegra.ph/file/2835e814a4497a8fdfb9a.mp4',
-        'https://telegra.ph/file/3c77dbe1ea67383c7f531.mp4'
-    ];
+    // Selección aleatoria de 3 animales
+    let capturados = [];
+    for (let i = 0; i < 3; i++) {
+        capturados.push(seleccionarAnimal());
+    }
 
-    // Selecciona un consejo aleatorio
-    let randomIndex = Math.floor(Math.random() * consejos.length);
-    let consejo = consejos[randomIndex];
+    // Suma de los créditos capturados
+    let totalCreditos = capturados.reduce((total, animal) => total + animal.creditos, 0);
+    let mensajeCaptura = `Cazaste:\n\n${capturados.map(a => `${a.emoji}`).join(' + ')}\n\n`;
 
-    // Selecciona un vídeo aleatorio
-    let videoIndex = Math.floor(Math.random() * videos.length);
-    let videoUrl = videos[videoIndex];
+    // Muestra los animales capturados y sus créditos
+    mensajeCaptura += capturados.map(a => `${a.nombre} ${a.emoji} ${a.creditos} crédito${a.creditos > 1 ? 's' : ''}`).join('\n') + '\n\n';
+    mensajeCaptura += `Desea reclamar lo capturado? Si / No`;
 
-    const consejoMessage = `*AUTOR:* ${consejo.autor}\n\n*CONSEJO:* ${consejo.texto}\n\n\n VALORATE NELSON`;
+    // Envío del mensaje con las opciones
+    await conn.reply(m.chat, mensajeCaptura, m);
 
-    // Envía el mensaje con el consejo y el vídeo
-    await conn.sendMessage(m.chat, { 
-        video: { url: videoUrl }, 
-        caption: consejoMessage 
-    }, { quoted: m });
+    // Esperar la respuesta del usuario
+    const filter = response => {
+        return ['si', 'no'].includes(response.text.toLowerCase());
+    };
+
+    // Recibir respuesta
+    conn.on('chat-update', async (chatUpdate) => {
+        let response = chatUpdate.messages && chatUpdate.messages[0];
+        if (!response) return;
+
+        if (response.key.fromMe || response.sender !== m.sender) return;
+
+        let text = response.message.conversation.toLowerCase();
+
+        if (text === 'si') {
+            global.db.data.users[m.sender].limit += totalCreditos;
+            conn.reply(m.chat, `¡Felicidades! Has reclamado ${totalCreditos} créditos.`, m);
+        } else if (text === 'no') {
+            conn.reply(m.chat, `Los animales fueron liberados.`, m);
+        }
+    });
 }
 
-handler.help = ['consejo']
-handler.tags = ['info']
-handler.command = ['consejo']
+handler.help = ['cazar']
+handler.tags = ['game']
+handler.command = /^cazar$/i
 handler.register = true
-handler.group = false 
-export default handler;
+
+export default handler
