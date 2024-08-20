@@ -40,32 +40,13 @@ let handler = async (m, { conn }) => {
 
     // Muestra los animales capturados y sus créditos
     mensajeCaptura += capturados.map(a => `${a.nombre} ${a.emoji} ${a.creditos} crédito${a.creditos > 1 ? 's' : ''}`).join('\n') + '\n\n';
-    mensajeCaptura += `Desea reclamar lo capturado? Si / No`;
+    mensajeCaptura += `¡Has ganado ${totalCreditos} crédito${totalCreditos > 1 ? 's' : ''}!`;
 
-    // Envío del mensaje con las opciones
+    // Sumar los créditos al usuario
+    global.db.data.users[m.sender].limit += totalCreditos;
+
+    // Enviar el mensaje con la captura
     await conn.reply(m.chat, mensajeCaptura, m);
-
-    // Esperar la respuesta del usuario
-    const filter = response => {
-        return ['si', 'no'].includes(response.text.toLowerCase());
-    };
-
-    // Recibir respuesta
-    conn.on('chat-update', async (chatUpdate) => {
-        let response = chatUpdate.messages && chatUpdate.messages[0];
-        if (!response) return;
-
-        if (response.key.fromMe || response.sender !== m.sender) return;
-
-        let text = response.message.conversation.toLowerCase();
-
-        if (text === 'si') {
-            global.db.data.users[m.sender].limit += totalCreditos;
-            conn.reply(m.chat, `¡Felicidades! Has reclamado ${totalCreditos} créditos.`, m);
-        } else if (text === 'no') {
-            conn.reply(m.chat, `Los animales fueron liberados.`, m);
-        }
-    });
 }
 
 handler.help = ['cazar']
@@ -73,4 +54,4 @@ handler.tags = ['game']
 handler.command = /^cazar$/i
 handler.register = true
 
-export default handler
+export default handler;
