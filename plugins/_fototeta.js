@@ -1,4 +1,4 @@
-// Handler del comando de ver saldo del banco
+// Handler para los comandos de banco
 let handler = async (m, { conn, usedPrefix, command, text }) => {
     let user = global.db.data.users[m.sender];
 
