@@ -83,7 +83,9 @@ SI QUIERES GUARDAR TUS CRÉDITOS EN EL BANCO USA EL COMANDO
 .depositar cantidad 
 
 SI QUIERES RETIRAR LOS CRÉDITOS DEL BANCO USA EL COMANDO 
-.retirar cantidad`;
+.retirar cantidad
+
+.top  para ver los mejores en créditos`;
         
         conn.sendFile(m.chat, pp, 'pp.jpg', str, fkontak, false, { contextInfo: { mentionedJid }});
     }
