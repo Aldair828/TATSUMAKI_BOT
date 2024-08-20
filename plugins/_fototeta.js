@@ -1,59 +1,48 @@
-// Handler del comando de robar
-let handler = async (m, { conn, usedPrefix }) => {
-    // Definir el tiempo de espera de 20 segundos (20,000 milisegundos)
-    let cooldown = 20000;
+// Handler del comando de ver saldo del banco
+let handler = async (m, { conn, usedPrefix, command, text }) => {
     let user = global.db.data.users[m.sender];
-    let time = user.lastrob + cooldown;
 
-    if (new Date - user.lastrob < cooldown) 
-        return conn.reply(m.chat, `*⏱️¡Espera ${msToTime(time - new Date())} para volver a robar!*`, m);
+    // Comando .banco
+    if (command === 'banco') {
+        let saldoBanco = user.banco || 0;
+        conn.reply(m.chat, `*Saldo en tu banco: ${saldoBanco} créditos*`, m);
+    }
 
-    let who;
-    if (m.isGroup) 
-        who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : false;
-    else 
-        who = m.chat;
+    // Comando .depositar
+    else if (command === 'depositar') {
+        if (!text || isNaN(text)) return conn.reply(m.chat, `Uso: ${usedPrefix}${command} <cantidad>`, m);
+        
+        let cantidad = parseInt(text);
+        if (cantidad <= 0) return conn.reply(m.chat, 'La cantidad debe ser mayor que 0', m);
+        
+        if (user.creditos < cantidad) return conn.reply(m.chat, 'No tienes suficientes créditos para depositar', m);
+        
+        user.creditos -= cantidad;
+        user.banco = (user.banco || 0) + cantidad;
+        
+        conn.reply(m.chat, `*Has depositado ${cantidad} créditos en tu banco*`, m);
+    }
 
-    if (!who) 
-        return conn.reply(m.chat, 'Uso: `.robar @usuario`', m);
-
-    let targetUser = global.db.data.users[who];
-
-    // Verificar si el usuario objetivo está registrado
-    if (!targetUser) 
-        return conn.reply(m.chat, '*Este usuario no se encuentra registrado en mi base de datos*', m);
-
-    // Robar créditos aleatoriamente entre 5 y 15
-    let limit = Math.floor(Math.random() * 11) + 5; // Genera un número aleatorio entre 5 y 15
-
-    if (targetUser.creditos < limit) 
-        return conn.reply(m.chat, `😿 @${who.split`@`[0]} tiene menos de *${limit} créditos* No robes a un pobre :v`, null, { mentions: [who] });
-
-    // Transferir créditos
-    user.creditos += limit;
-    targetUser.creditos -= limit;
-
-    // Actualizar el tiempo del último robo
-    user.lastrob = new Date * 1;
-
-    conn.reply(m.chat, `*✧ Robaste ${limit} créditos a @${who.split`@`[0]}*`, null, { mentions: [who] });
+    // Comando .retirar
+    else if (command === 'retirar') {
+        if (!text || isNaN(text)) return conn.reply(m.chat, `Uso: ${usedPrefix}${command} <cantidad>`, m);
+        
+        let cantidad = parseInt(text);
+        if (cantidad <= 0) return conn.reply(m.chat, 'La cantidad debe ser mayor que 0', m);
+        
+        if ((user.banco || 0) < cantidad) return conn.reply(m.chat, 'No tienes suficientes créditos en tu banco', m);
+        
+        user.banco -= cantidad;
+        user.creditos += cantidad;
+        
+        conn.reply(m.chat, `*Has retirado ${cantidad} créditos de tu banco*`, m);
+    }
 }
 
-handler.help = ['robar @user']
+handler.help = ['banco', 'depositar', 'retirar']
 handler.tags = ['econ']
-handler.command = /^robar$/i
+handler.command = /^banco|depositar|retirar$/i
 handler.group = true
 handler.register = true
 
 export default handler
-
-function msToTime(duration) {
-    var milliseconds = parseInt((duration % 1000) / 100),
-    seconds = Math.floor((duration / 1000) % 60),
-    minutes = Math.floor((duration / (1000 * 60)) % 60),
-    hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-    hours = (hours < 10) ? "0" + hours : hours;
-    minutes = (minutes < 10) ? "0" + minutes : minutes;
-    seconds = (seconds < 10) ? "0" + seconds : seconds;
-    return minutes + " Minuto(s) " + seconds + " Segundo(s)";
-}
