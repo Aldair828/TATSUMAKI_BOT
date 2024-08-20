@@ -1,4 +1,3 @@
-let ro = 3000
 let handler = async (m, { conn, usedPrefix, command}) => {
     let time = global.db.data.users[m.sender].lastrob + 7200000
     if (new Date - global.db.data.users[m.sender].lastrob < 7200000) 
@@ -16,16 +15,18 @@ let handler = async (m, { conn, usedPrefix, command}) => {
         throw `*Este usuario no se encuentra registrado en mi base de datos*`
 
     let users = global.db.data.users[who]
-    let robCredits = Math.floor(Math.random() * ro)
+    
+    // Robar créditos aleatoriamente entre 10 y 14
+    let robLimit = Math.floor(Math.random() * 5) + 10 // Genera un número aleatorio entre 10 y 14
 
-    if (users.creditos < robCredits) 
-        return m.reply(`😿 @${who.split`@`[0]} tiene menos de *${robCredits} créditos* No robes a un pobre :v`, null, { mentions: [who] })    
+    if (users.limit < robLimit) 
+        return m.reply(`😿 @${who.split`@`[0]} tiene menos de *${robLimit} ${limit}* No robes a un pobre :v`, null, { mentions: [who] })    
 
-    // Robar Créditos
-    global.db.data.users[m.sender].creditos += robCredits
-    global.db.data.users[who].creditos -= robCredits 
+    // Robar ${limit}
+    global.db.data.users[m.sender].limit += robLimit
+    global.db.data.users[who].limit -= robLimit 
 
-    m.reply(`*✧ Robaste ${robCredits} créditos a @${who.split`@`[0]}*`, null, { mentions: [who] })
+    m.reply(`*✧ Robaste ${robLimit} ${limit} a @${who.split`@`[0]}*`, null, { mentions: [who] })
     global.db.data.users[m.sender].lastrob = new Date * 1
 }
 
