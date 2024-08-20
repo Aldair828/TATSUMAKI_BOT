@@ -4,7 +4,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
     // Comando .banco
     if (command === 'banco') {
-        let saldoBanco = user.banco || 0;
+        let saldoBanco = user.limit || 0;
         conn.reply(m.chat, `*Saldo en tu banco: ${saldoBanco} créditos*`, m);
     }
 
@@ -15,12 +15,12 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         let cantidad = parseInt(text);
         if (cantidad <= 0) return conn.reply(m.chat, 'La cantidad debe ser mayor que 0', m);
         
-        if (user.creditos < cantidad) return conn.reply(m.chat, 'No tienes suficientes créditos para depositar', m);
+        if (user.limit < cantidad) return conn.reply(m.chat, 'No tienes suficientes créditos para depositar', m);
         
-        user.creditos -= cantidad;
+        user.limit -= cantidad;
         user.banco = (user.banco || 0) + cantidad;
         
-        conn.reply(m.chat, `*Has depositado ${cantidad} créditos en tu banco*. Ahora tienes ${user.creditos} créditos en tu perfil.`, m);
+        conn.reply(m.chat, `*Has depositado ${cantidad} créditos en tu banco*. Ahora tienes ${user.limit} créditos en tu perfil.`, m);
     }
 
     // Comando .retirar
@@ -33,9 +33,9 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         if ((user.banco || 0) < cantidad) return conn.reply(m.chat, 'No tienes suficientes créditos en tu banco', m);
         
         user.banco -= cantidad;
-        user.creditos += cantidad;
+        user.limit += cantidad;
         
-        conn.reply(m.chat, `*Has retirado ${cantidad} créditos de tu banco*. Ahora tienes ${user.creditos} créditos en tu perfil.`, m);
+        conn.reply(m.chat, `*Has retirado ${cantidad} créditos de tu banco*. Ahora tienes ${user.limit} créditos en tu perfil.`, m);
     }
 }
 
