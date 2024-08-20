@@ -68,6 +68,17 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
 ᧔♡᧓  *L I S T A  -  M E N Ú S*  ᧔♡᧓
 
+╭──ꕤ「 *COMANDOS NUEVOS*」ꕤ
+│  𓋜 *.cazar*
+│  𓋜 *.slot cantidad*
+│  𓋜 *.ruleta 10 negro / rojo*
+│  𓋜 *.crimen*
+│  𓋜 *.depositar cantidad*
+│  𓋜 *.retirar cantidad*
+│  𓋜 *.banco*
+│  𓋜 *.perfil*
+╰──ꕤ
+
 ╭──ꕤ「 *Info 🌸* 」ꕤ
 │  𓋜 *.owner*
 │  𓋜 *.grupos*
