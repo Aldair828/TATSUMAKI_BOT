@@ -1,66 +1,41 @@
-import axios from 'axios'
-import fetch from 'node-fetch'
+// Handler para banear y desbanear al bot
+let handler = async (m, { conn, usedPrefix, command }) => {
+    // Verifica si el comando es .ban o .unban
+    if (command === 'ban') {
+        // Agregar el ID del grupo y el ID del bot al baneo
+        let groupId = m.chat;
+        if (!global.db.data.groups) global.db.data.groups = {};
+        if (!global.db.data.groups[groupId]) global.db.data.groups[groupId] = {};
 
-let handler = async (m, { conn, args, text, isPrems, isOwner, usedPrefix, command }) => {
-  if (!args || !args[0]) return conn.reply(m.chat, `*• Ingresa un enlace Spotify*`, m)
-  let user = global.db.data.users[m.sender]
-  await m.react('🕓')
-  try {
-    let response = await axios.get(`https://api.cafirexos.com/api/spotifyinfo?url=${args[0]}`)
-    let { title, artist, album, year, thumbnail, url } = response.data.spty.resultado
-    let downloadLink = response.data.spty.download.audio
-    let img = await (await fetch(thumbnail)).buffer()
+        global.db.data.groups[groupId].banned = true;
+        conn.reply(m.chat, '*El bot ha sido baneado en este grupo y no enviará mensajes hasta que se desbanee.*', m);
+    } else if (command === 'unban') {
+        // Quitar el baneo del bot
+        let groupId = m.chat;
+        if (!global.db.data.groups) global.db.data.groups = {};
+        if (!global.db.data.groups[groupId]) global.db.data.groups[groupId] = {};
 
-    let txt = `*乂  S P O T I F Y  -  D O W N L O A D*\n\n`
-        txt += `	✩   *Titulo* : ${title}\n`
-        txt += `	✩   *Artista* : ${artist}\n`
-        txt += `	✩   *Album* : ${album}\n`
-        txt += `	✩   *Fecha de lanzamiento ∙* ${year}\n\n`
-        txt += `*- ↻ El audio se esta enviando espera un momento, soy lenta. . .*`
-await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt, m)
-await conn.sendFile(m.chat, downloadLink, title + '.mp3', `
-    `.trim(), m, false, { mimetype: 'audio/mpeg', asDocument: user.useDocument })
-await m.react('✅')
-} catch {
-try {
-let response = await axios.get(`https://api.botcahx.eu.org/api/download/spotify?url=${args[0]}&apikey=${botcahx}`)
-    let { title, artist, thumbnail, url, duration, preview } = response.data.result.data
-    let downloadLink = response.data.result.data.url
-    let img = await (await fetch(thumbnail)).buffer()
+        global.db.data.groups[groupId].banned = false;
+        conn.reply(m.chat, '*El bot ha sido desbaneado y puede enviar mensajes nuevamente.*', m);
+    }
+}
 
-    let txt = `*乂  S P O T I F Y  -  D O W N L O A D*\n\n`
-        txt += `	✩   *Titulo* : ${title}\n`
-        txt += `	✩   *Artista* : ${artist}\n`
-        txt += `	✩   *Duración* : ${duration}\n\n`
-        txt += `*- ↻ El audio se esta enviando espera un momento, soy lenta. . .*`
-await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt, m)
-await conn.sendFile(m.chat, downloadLink, title + '.mp3', `
-    `.trim(), m, false, { mimetype: 'audio/mpeg', asDocument: user.useDocument })
-await m.react('✅')
-} catch {
-try {
-    let response = await axios.get(`https://www.guruapi.tech/api/spotifyinfo?text=${args[0]}`)
-    let { title, artist, album, year, thumbnail, url } = response.data.spty.results
-    let downloadLink = response.data.spty.download.audio
-    let img = await (await fetch(thumbnail)).buffer()
+// Middleware para manejar los mensajes
+let messageHandler = async (m, { conn }) => {
+    let groupId = m.chat;
+    if (!global.db.data.groups || !global.db.data.groups[groupId] || global.db.data.groups[groupId].banned) {
+        // Si el grupo está en la lista de baneos o el bot está baneado, no envíe mensajes
+        if (m.fromMe) return; // Si el mensaje es del bot, simplemente no hacer nada
+        return; // No enviar el mensaje si está baneado
+    }
+    // Si el grupo no está baneado, procesar el mensaje normalmente
+}
 
-    let txt = `*乂  S P O T I F Y  -  D O W N L O A D*\n\n`
-        txt += `	✩   *Titulo* : ${title}\n`
-        txt += `	✩   *Artista* : ${artist}\n`
-        txt += `	✩   *Album* : ${album}\n`
-        txt += `	✩   *Fecha de lanzamiento ∙* ${year}\n\n`
-        txt += `*- ↻ El audio se esta enviando espera un momento, soy lenta. . .*`
+// Configura los comandos y el middleware
+handler.help = ['ban', 'unban']
+handler.tags = ['admin']
+handler.command = /^ban|unban$/i
+handler.group = true
+handler.admin = true // Solo administradores pueden usar estos comandos
 
-await await conn.sendFile(m.chat, img, 'thumbnail.jpg', txt, m)
-await conn.sendFile(m.chat, downloadLink, title + '.mp3', `
-    `.trim(), m, false, { mimetype: 'audio/mpeg', asDocument: user.useDocument })
-await m.react('✅')
-} catch {
-await m.react('✖️')
-}}}}
-handler.tags = ['downloader']
-handler.help = ['spotifydl *<url spotify>*']
-handler.command = ['spotifydl']
-//handler.limit = 1
-handler.register = true
-export default handler
+export { handler, messageHandler }
