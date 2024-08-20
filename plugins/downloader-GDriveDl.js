@@ -1,4 +1,15 @@
 let handler = async (m, { conn }) => {
+    // Verifica si el usuario tiene un tiempo de espera activo
+    let user = global.db.data.users[m.sender];
+    let tiempoActual = new Date().getTime();
+    let tiempoRestante = user.lastCaza ? (user.lastCaza + 30 * 60 * 1000) - tiempoActual : 0;
+
+    if (tiempoRestante > 0) {
+        let minutosRestantes = Math.floor(tiempoRestante / 60000);
+        let segundosRestantes = Math.floor((tiempoRestante % 60000) / 1000);
+        return conn.reply(m.chat, `Debes esperar ${minutosRestantes} minutos y ${segundosRestantes} segundos antes de cazar de nuevo.`, m);
+    }
+
     // Lista de animales con sus emojis, créditos y probabilidades
     const animales = [
         { emoji: '🦊', nombre: 'Zorro', creditos: 2, probabilidad: 10 },
@@ -43,15 +54,18 @@ let handler = async (m, { conn }) => {
     mensajeCaptura += `¡Has ganado ${totalCreditos} crédito${totalCreditos > 1 ? 's' : ''}!`;
 
     // Sumar los créditos al usuario
-    global.db.data.users[m.sender].limit += totalCreditos;
+    user.limit += totalCreditos;
+
+    // Actualizar el tiempo de la última caza
+    user.lastCaza = tiempoActual;
 
     // Enviar el mensaje con la captura
     await conn.reply(m.chat, mensajeCaptura, m);
 }
 
-handler.help = ['cazar']
-handler.tags = ['game']
-handler.command = /^cazar$/i
-handler.register = true
+handler.help = ['cazar'];
+handler.tags = ['game'];
+handler.command = /^cazar$/i;
+handler.register = true;
 
 export default handler;
