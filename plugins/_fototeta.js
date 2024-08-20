@@ -10,7 +10,8 @@ let handler = async (m, { conn, usedPrefix, command}) => {
         who = m.chat
 
     if (!who) 
-        throw `${lenguajeGB['smsAvisoMG']()}𝙀𝙏𝙄𝙌𝙐𝙀𝙏𝘼 𝘼 𝘼𝙇𝙂𝙐𝙄𝙀𝙉 𝙋𝘼𝙍𝘼 𝙍𝙊𝘽𝘼𝙍`
+        throw `𝙀𝙏𝙄𝙌𝙐𝙀𝙏𝘼 𝘼 𝘼𝙇𝙂𝙐𝙄𝙀𝙉 𝙋𝘼𝙍𝘼 𝙍𝙊𝘽𝘼𝙍`
+
     if (!(who in global.db.data.users)) 
         throw `*Este usuario no se encuentra registrado en mi base de datos*`
 
@@ -20,13 +21,13 @@ let handler = async (m, { conn, usedPrefix, command}) => {
     let robLimit = Math.floor(Math.random() * 5) + 10 // Genera un número aleatorio entre 10 y 14
 
     if (users.limit < robLimit) 
-        return m.reply(`😿 @${who.split`@`[0]} tiene menos de *${robLimit} ${limit}* No robes a un pobre :v`, null, { mentions: [who] })    
+        return m.reply(`😿 @${who.split`@`[0]} tiene menos de *${robLimit} créditos* No robes a un pobre :v`, null, { mentions: [who] })    
 
-    // Robar ${limit}
+    // Robar créditos
     global.db.data.users[m.sender].limit += robLimit
     global.db.data.users[who].limit -= robLimit 
 
-    m.reply(`*✧ Robaste ${robLimit} ${limit} a @${who.split`@`[0]}*`, null, { mentions: [who] })
+    m.reply(`*✧ Robaste ${robLimit} créditos a @${who.split`@`[0]}*`, null, { mentions: [who] })
     global.db.data.users[m.sender].lastrob = new Date * 1
 }
 
