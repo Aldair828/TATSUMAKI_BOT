@@ -52,7 +52,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 *[📅] EDAD →* ${age} años
 *[🔗] ID →* ${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}
 *[💬] NICKNAME →* ${username}
-*[💰] CRÉDITOS →* ${registered ? limit : 'No se encuentra registrado'}
+*[💰] CRÉDITOS EN PERFIL →* ${user.creditos}
 *[💵] CRÉDITOS EN BANCO →* ${user.banco || 0}
 *[🌟] NIVEL →* ${level || 1}
 *[💎] PREMIUM →* ${premiumStatus}
