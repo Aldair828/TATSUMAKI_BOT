@@ -18,7 +18,9 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
                       .depositar cantidad
                       
                       𝙿𝙰𝚁𝙰 𝚁𝙴𝚃𝙸𝚁𝙰𝚁 𝙻𝙾𝚂 𝙲𝚁𝙴́𝙳𝙸𝚃𝙾𝚂 𝙳𝙴𝙻 𝙱𝙰𝙽𝙲𝙾 𝚄𝚂𝙰 𝙴𝙻 𝙲𝙾𝙼𝙰𝙽𝙳𝙾 
-                      .retirar cantidad`;
+                      .retirar cantidad
+                      
+                      .top  para ver los mejores en créditos`;
 
         // URL de la foto que quieres enviar
         let foto = 'https://telegra.ph/file/41e99ff3c6938e1070d16.jpg'; // Cambia esta URL a la foto deseada
