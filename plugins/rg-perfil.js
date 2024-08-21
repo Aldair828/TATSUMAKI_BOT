@@ -66,7 +66,6 @@ let handler = async (m, { conn, usedPrefix }) => {
 
 *[👤] NOMBRE →* ${name}
 *[📅] EDAD →* ${age} años
-*[🌍] PAÍS →* ${country || 'No especificado'}
 *[🔗] ID →* ${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}
 *[💬] NICKNAME →* ${username}
 *[💸] CRÉDITOS →* ${limit}
