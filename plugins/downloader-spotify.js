@@ -1,42 +1,60 @@
-import { getRandomInt } from '../lib/utils.js'; // Asegúrate de tener una función que genere números aleatorios
-
-let handler = async (m, { conn, usedPrefix }) => {
-    const animals = [
-        { emoji: '🐶', credits: 1 },
-        { emoji: '🐱', credits: 3 },
-        { emoji: '🐭', credits: 1 },
-        { emoji: '🦊', credits: 3 },
-        { emoji: '🐻', credits: 1 },
-        { emoji: '🐼', credits: 3 },
-        { emoji: '🐨', credits: 1 }
-    ];
-
-    // Probabilidad de moño 🎀 (1% de probabilidad, o 1 en 100)
-    const probabilityOfBow = 0.01; // 1%
-
+let handler = async (m, { conn }) => {
+    // Verifica si el usuario tiene un tiempo de espera activo
     let user = global.db.data.users[m.sender];
-    let prize;
-    let creditsGained;
-    let message;
+    let tiempoActual = new Date().getTime();
+    let tiempoRestante = user.lastCofre ? (user.lastCofre + 30 * 60 * 1000) - tiempoActual : 0;
 
-    // Determinar si se gana el moño o un animal
-    if (Math.random() < probabilityOfBow) {
-        prize = '🎀';
-        message = `ENHORABUENAAAAA te ganaste el moño 🎀\n\nPuedes reclamar 500 créditos a este número: +51 925 015 528\n\n¿Qué esperas?`;
-    } else {
-        const randomIndex = getRandomInt(0, animals.length - 1);
-        prize = animals[randomIndex].emoji;
-        creditsGained = animals[randomIndex].credits;
-        user.limit += creditsGained; // Agregar créditos al perfil del usuario
-        message = `¡Has ganado ${prize}! Has obtenido ${creditsGained} crédito${creditsGained > 1 ? 's' : ''}. Tus créditos han sido actualizados.`;
+    if (tiempoRestante > 0) {
+        let minutosRestantes = Math.floor(tiempoRestante / 60000);
+        let segundosRestantes = Math.floor((tiempoRestante % 60000) / 1000);
+        return conn.reply(m.chat, `Debes esperar ${minutosRestantes} minutos y ${segundosRestantes} segundos antes de abrir otro cofre.`, m);
     }
 
-    // Enviar el resultado al usuario
-    conn.reply(m.chat, message, m);
+    // Lista de animales con sus emojis y créditos
+    const animales = [
+        { emoji: '🐶', creditos: 1 },
+        { emoji: '🐱', creditos: 3 },
+        { emoji: '🐭', creditos: 1 },
+        { emoji: '🦊', creditos: 3 },
+        { emoji: '🐻', creditos: 1 },
+        { emoji: '🐼', creditos: 3 },
+        { emoji: '🐨', creditos: 1 }
+    ];
+
+    // Probabilidad de moño 🎀 (1% de probabilidad)
+    const probabilityOfBow = 0.01; // 1%
+
+    // Función para determinar el premio
+    function seleccionarPremio() {
+        if (Math.random() < probabilityOfBow) {
+            return { emoji: '🎀', creditos: 0 };
+        } else {
+            const randomIndex = Math.floor(Math.random() * animales.length);
+            return animales[randomIndex];
+        }
+    }
+
+    // Selección del premio
+    let premio = seleccionarPremio();
+    let mensaje;
+    
+    if (premio.emoji === '🎀') {
+        mensaje = `ENHORABUENAAAAA te ganaste el moño 🎀\n\nPuedes reclamar 500 créditos a este número: +51 925 015 528\n\n¿Qué esperas?`;
+    } else {
+        user.limit += premio.creditos; // Agregar créditos al perfil del usuario
+        mensaje = `¡Has ganado ${premio.emoji}! Has obtenido ${premio.creditos} crédito${premio.creditos > 1 ? 's' : ''}. Tus créditos han sido actualizados.`;
+    }
+
+    // Actualizar el tiempo de la última apertura del cofre
+    user.lastCofre = tiempoActual;
+
+    // Enviar el mensaje con el resultado
+    await conn.reply(m.chat, mensaje, m);
 }
 
 handler.help = ['cofre'];
-handler.tags = ['fun'];
+handler.tags = ['game'];
 handler.command = /^cofre$/i;
+handler.register = true;
 
 export default handler;
