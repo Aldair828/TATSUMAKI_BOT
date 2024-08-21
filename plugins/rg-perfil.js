@@ -24,7 +24,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     
     // Verificar si el usuario está registrado
     if (!user.registered) {
-        conn.reply(m.chat, 'Por favor, regístrate usando el comando `.reg nombre.edad` antes de usar este comando`.', m);
+        conn.reply(m.chat, 'Por favor, regístrate usando el comando `.reg nombre.edad.pais` antes de usar este comando.', m);
         return;
     }
 
@@ -34,7 +34,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     } catch (e) {
         // Manejar errores si es necesario
     } finally {
-        let { name, limit, lastclaim, registered, regTime, age, banned, level, premiumTime } = global.db.data.users[who];
+        let { name, limit, lastclaim, registered, regTime, age, banned, level, premiumTime, country } = global.db.data.users[who];
         let mentionedJid = [who];
         let username = conn.getName(who);
         let prem = global.prems.includes(who.split`@`[0]);
@@ -66,6 +66,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 
 *[👤] NOMBRE →* ${name}
 *[📅] EDAD →* ${age} años
+*[🌍] PAÍS →* ${country || 'No especificado'}
 *[🔗] ID →* ${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}
 *[💬] NICKNAME →* ${username}
 *[💸] CRÉDITOS →* ${limit}
