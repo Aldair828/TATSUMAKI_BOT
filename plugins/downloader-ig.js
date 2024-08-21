@@ -27,35 +27,33 @@ let handler = async (m, { conn, args }) => {
         let res = await fetch('https://opentdb.com/api.php?amount=1&type=boolean');
         if (!res.ok) return;
         let json = await res.json();
-        let pregunta = json.results[0].question;
+        let pregunta = json.results[0].question.replace(/&quot;/g, '"').replace(/&#039;/g, "'");
         let respuesta = json.results[0].correct_answer.toLowerCase();
 
         // Enviar la pregunta al usuario
         conn.reply(m.chat, `🔮 Apuesta: ${apuesta} créditos\n\nResponde correctamente el siguiente acertijo en 30 segundos:\n\n${pregunta}`, m);
 
         // Esperar la respuesta del usuario
+        const filter = msg => msg.sender === m.sender;
         let isCorrect = false;
 
-        conn.on('chat-update', async (chat) => {
-            if (!chat.hasNewMessage) return;
-            if (chat.key.remoteJid !== m.chat) return;
-            let msg = chat.messages.all()[0];
-            let text = msg.message.conversation.toLowerCase();
+        const collector = conn.createMessageCollector(m.chat, filter, { time: 30000 });
 
-            if (text === respuesta) {
+        collector.on('collect', msg => {
+            if (msg.text.toLowerCase() === respuesta) {
                 isCorrect = true;
                 user.limit += apuesta; // Duplicar la apuesta ganada
                 conn.reply(m.chat, `¡Correcto! Has ganado ${apuesta} créditos.`, m);
+                collector.stop();
             }
         });
 
-        // Esperar 30 segundos antes de finalizar
-        await Timeout.set(30000);
-
-        if (!isCorrect) {
-            user.limit -= apuesta; // Perder la apuesta
-            conn.reply(m.chat, `⏱️ Se acabó el tiempo. Has perdido ${apuesta} créditos.`, m);
-        }
+        collector.on('end', () => {
+            if (!isCorrect) {
+                user.limit -= apuesta; // Perder la apuesta
+                conn.reply(m.chat, `⏱️ Se acabó el tiempo o la respuesta fue incorrecta. Has perdido ${apuesta} créditos.`, m);
+            }
+        });
 
     } catch (e) {
         console.log(e);
