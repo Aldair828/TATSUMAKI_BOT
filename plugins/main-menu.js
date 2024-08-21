@@ -44,7 +44,10 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ྀི𓊆 _tatsumaki_ 𓊇ྀི
 
 *Bienvenido* @${name} 
-*Este es el menú de _TATSUMAKI_BOT_*
+*Te Saluda Los Creadores Del Bot*
+
+Aldair: +51925015528
+Angela: +527772130823
 
 *Puede seguir el canal del bot:* https://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x
 
@@ -78,6 +81,9 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 │  𓋜 *.banco*
 │  𓋜 *.perfil*
 │  𓋜 *.top*
+│  𓋜 *.comprarwaifu*
+│  𓋜 *.miswaifus*
+│  𓋜 *.venderwaifu*
 ╰──ꕤ
 
 ╭──ꕤ「 *Info 🌸* 」ꕤ
