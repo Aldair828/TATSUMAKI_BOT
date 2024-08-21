@@ -1,69 +1,62 @@
-import fetch from 'node-fetch';
-import Timeout from 'await-timeout';
+let handler = async (m, { conn, args, usedPrefix, command }) => {
+    let user = global.db.data.users[m.sender];
+    let who = m.mentionedJid && m.mentionedJid[0];
 
-let handler = async (m, { conn, args }) => {
-    try {
-        let user = global.db.data.users[m.sender];
+    // Comando para invitar a ser pareja
+    if (command === 'pareja') {
+        if (!who) return conn.reply(m.chat, `Etiqueta a alguien para invitar a ser tu pareja.\n\nUso: ${usedPrefix}pareja @usuario`, m);
+        
+        if (user.pareja) return conn.reply(m.chat, `Ya tienes pareja con @${user.pareja.split('@')[0]}. Usa ${usedPrefix}romperpareja para terminar la relación.`, m, { mentions: [user.pareja] });
 
-        // Verificar si el usuario está registrado
-        if (!user.registered) {
-            conn.reply(m.chat, 'Por favor, regístrate usando el comando `.reg nombre.edad` antes de usar este comando.', m);
-            return;
+        let target = global.db.data.users[who];
+        if (target.pareja) return conn.reply(m.chat, `@${who.split('@')[0]} ya tiene una pareja.`, m, { mentions: [who] });
+
+        conn.reply(who, `@${m.sender.split('@')[0]} quiere ser tu pareja. Responde con ${usedPrefix}aceptar o ${usedPrefix}rechazar.`, m, { mentions: [m.sender] });
+
+        // Guardar la solicitud en una propiedad temporal
+        target.parejaSolicitud = m.sender;
+    }
+
+    // Comando para aceptar o rechazar la solicitud de pareja
+    if (command === 'aceptar' || command === 'rechazar') {
+        if (!user.parejaSolicitud) return conn.reply(m.chat, `No tienes ninguna solicitud de pareja pendiente.`, m);
+
+        let requester = global.db.data.users[user.parejaSolicitud];
+
+        if (command === 'aceptar') {
+            user.pareja = user.parejaSolicitud;
+            requester.pareja = m.sender;
+            conn.reply(m.chat, `¡Felicidades! Ahora eres pareja de @${user.pareja.split('@')[0]}.`, m, { mentions: [user.pareja] });
+        } else if (command === 'rechazar') {
+            conn.reply(m.chat, `Has rechazado la solicitud de @${user.parejaSolicitud.split('@')[0]}.`, m, { mentions: [user.parejaSolicitud] });
         }
 
-        // Verificar si el usuario ha ingresado una cantidad de créditos
-        let apuesta = parseInt(args[0]);
-        if (!apuesta || apuesta <= 0) {
-            conn.reply(m.chat, 'Debes ingresar una cantidad válida de créditos para apostar.', m);
-            return;
-        }
+        // Limpiar la solicitud
+        delete user.parejaSolicitud;
+    }
 
-        if (user.limit < apuesta) {
-            conn.reply(m.chat, `No tienes suficientes créditos para apostar ${apuesta} créditos.`, m);
-            return;
-        }
+    // Comando para romper con la pareja actual
+    if (command === 'romperpareja') {
+        if (!user.pareja) return conn.reply(m.chat, `No tienes pareja actualmente.`, m);
 
-        // Obtener un acertijo aleatorio de la API
-        let res = await fetch('https://opentdb.com/api.php?amount=1&type=boolean');
-        if (!res.ok) return;
-        let json = await res.json();
-        let pregunta = json.results[0].question.replace(/&quot;/g, '"').replace(/&#039;/g, "'");
-        let respuesta = json.results[0].correct_answer.toLowerCase();
+        let pareja = global.db.data.users[user.pareja];
+        pareja.pareja = null;
+        user.pareja = null;
 
-        // Enviar la pregunta al usuario
-        conn.reply(m.chat, `🔮 Apuesta: ${apuesta} créditos\n\nResponde correctamente el siguiente acertijo en 30 segundos:\n\n${pregunta}`, m);
+        conn.reply(m.chat, `Has roto la relación con @${user.pareja.split('@')[0]}.`, m, { mentions: [user.pareja] });
+    }
 
-        // Esperar la respuesta del usuario
-        const filter = msg => msg.sender === m.sender;
-        let isCorrect = false;
+    // Comando para mostrar la pareja actual del usuario
+    if (command === 'mipareja') {
+        if (!user.pareja) return conn.reply(m.chat, `No tienes pareja actualmente.`, m);
 
-        const collector = conn.createMessageCollector(m.chat, filter, { time: 30000 });
-
-        collector.on('collect', msg => {
-            if (msg.text.toLowerCase() === respuesta) {
-                isCorrect = true;
-                user.limit += apuesta; // Duplicar la apuesta ganada
-                conn.reply(m.chat, `¡Correcto! Has ganado ${apuesta} créditos.`, m);
-                collector.stop();
-            }
-        });
-
-        collector.on('end', () => {
-            if (!isCorrect) {
-                user.limit -= apuesta; // Perder la apuesta
-                conn.reply(m.chat, `⏱️ Se acabó el tiempo o la respuesta fue incorrecta. Has perdido ${apuesta} créditos.`, m);
-            }
-        });
-
-    } catch (e) {
-        console.log(e);
-        conn.reply(m.chat, 'Hubo un error al procesar tu solicitud.', m);
+        conn.reply(m.chat, `Tu pareja actual es @${user.pareja.split('@')[0]}.`, m, { mentions: [user.pareja] });
     }
 };
 
-handler.help = ['acertijo [cantidad de créditos]'];
-handler.tags = ['games', 'econ'];
-handler.command = /^(acertijo)$/i;
+handler.help = ['pareja @user', 'aceptar', 'rechazar', 'romperpareja', 'mipareja'];
+handler.tags = ['social'];
+handler.command = /^(pareja|aceptar|rechazar|romperpareja|mipareja)$/i;
 handler.register = true;
 
 export default handler;
