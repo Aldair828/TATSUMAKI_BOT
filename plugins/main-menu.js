@@ -84,6 +84,8 @@ Angela: +527772130823
 │  𓋜 *.comprarwaifu*
 │  𓋜 *.miswaifus*
 │  𓋜 *.venderwaifu*
+│  𓋜 *.prestamo
+│  𓋜 *.pagar cantidad
 ╰──ꕤ
 
 ╭──ꕤ「 *Info 🌸* 」ꕤ
