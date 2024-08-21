@@ -10,7 +10,7 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
             return;
         }
 
-        // Comando para comprar una waifu
+        // Verificar el comando de compra
         if (command === 'comprarwaifu') {
             let res = await fetch('https://api.waifu.pics/sfw/waifu');
             if (!res.ok) return;
@@ -26,20 +26,14 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
 
             user.limit -= waifuPrice;
             user.waifus = user.waifus || [];
-            user.waifus.push({ url: json.url, precio: waifuPrice }); // Almacenar la waifu con el precio en la base de datos del usuario
+            user.waifus.push(json.url); // Almacenar la URL de la waifu en la base de datos del usuario
 
             conn.sendFile(m.chat, json.url, 'thumbnail.jpg', `Has comprado una waifu por ${waifuPrice} créditos.`, m);
         }
 
-        // Comando para vender una waifu con precio especificado
+        // Verificar el comando de venta
         if (command === 'venderwaifu') {
-            if (args.length < 2) {
-                conn.reply(m.chat, 'Uso correcto: `.venderwaifu [número] [cantidad]`', m);
-                return;
-            }
-
             let waifuIndex = parseInt(args[0]) - 1;
-            let precioVenta = parseInt(args[1]);
 
             if (!user.waifus || user.waifus.length === 0) {
                 conn.reply(m.chat, 'No tienes waifus para vender.', m);
@@ -51,52 +45,27 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
                 return;
             }
 
-            if (![5, 10, 15, 30].includes(precioVenta)) {
-                conn.reply(m.chat, 'El precio de venta debe ser 5, 10, 15, o 30 créditos.', m);
-                return;
-            }
-
-            let probabilidad = determinarProbabilidad(precioVenta); // Determinar la probabilidad de venta
+            let sellPrice = determinarPrecio(); // Determinar el precio de venta basado en la probabilidad
+            let probabilidad = determinarProbabilidad(sellPrice); // Determinar la probabilidad de venta
 
             if (Math.random() * 100 <= probabilidad) {
-                user.limit += precioVenta;
+                user.limit += sellPrice;
                 user.waifus.splice(waifuIndex, 1); // Eliminar la waifu de la lista del usuario
-                conn.reply(m.chat, `¡Venta exitosa! Has vendido una waifu por ${precioVenta} créditos.`, m);
+                conn.reply(m.chat, `¡Venta exitosa! Has vendido una waifu por ${sellPrice} créditos.`, m);
             } else {
                 conn.reply(m.chat, `Lo siento, no pudiste vender la waifu esta vez. Inténtalo de nuevo más tarde.`, m);
             }
         }
 
-        // Comando para mostrar las waifus que tiene el usuario
+        // Mostrar las waifus que tiene el usuario
         if (command === 'miswaifus') {
             if (!user.waifus || user.waifus.length === 0) {
                 conn.reply(m.chat, 'No tienes waifus. Compra una con el comando `.comprarwaifu`.', m);
                 return;
             }
 
-            let waifuList = user.waifus.map((waifu, i) => `${i + 1}. ${waifu.url} (Comprada por ${waifu.precio} créditos)`).join('\n');
-            conn.reply(m.chat, `Estas son tus waifus:\n\n${waifuList}\n\nUsa \`.venderwaifu [número] [cantidad]\` para vender una waifu.`, m);
-        }
-
-        // Comando para mostrar la tienda de waifus
-        if (command === 'tiendawaifu') {
-            let allUsers = Object.entries(global.db.data.users)
-                .filter(([jid, user]) => user.waifus && user.waifus.length > 0);
-
-            if (allUsers.length === 0) {
-                conn.reply(m.chat, 'No hay waifus en la tienda actualmente. Compra una usando `.comprarwaifu`.', m);
-                return;
-            }
-
-            let str = '▂▃▄▅▆▇█▓▒░ 𝐓𝐈𝐄𝐍𝐃𝐀 𝐖𝐀𝐈𝐅𝐔 ░▒▓█▇▆▅▄▃▂\n\n';
-
-            allUsers.forEach(([jid, user]) => {
-                user.waifus.forEach((waifu, index) => {
-                    str += `*[👤] 𝚄𝚂𝚄𝙰𝚁𝙸𝙾:* ${conn.getName(jid)}\n*[📱] 𝙽𝚄𝙼𝙴𝚁𝙾:* https://wa.me/${jid.split('@')[0]}\n*[💰] 𝙿𝚁𝙴𝙲𝙸𝙾:* ${waifu.precio} créditos\n*[🔗] 𝚄𝚁𝙻:* ${waifu.url}\n\n`;
-                });
-            });
-
-            conn.reply(m.chat, str.trim(), m);
+            let waifuList = user.waifus.map((url, i) => `${i + 1}. ${url}`).join('\n');
+            conn.reply(m.chat, `Estas son tus waifus:\n\n${waifuList}\n\nUsa \`.venderwaifu [número]\` para vender una waifu.`, m);
         }
 
     } catch (e) {
@@ -109,6 +78,23 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
 function obtenerPrecioAleatorio() {
     const precios = [10, 15, 20];
     return precios[Math.floor(Math.random() * precios.length)];
+}
+
+// Función para determinar el precio de venta basado en probabilidades
+function determinarPrecio() {
+    const precios = [5, 10, 15, 30];
+    const probabilidades = [0.45, 0.30, 0.20, 0.05];
+    let random = Math.random();
+    let acumulado = 0;
+
+    for (let i = 0; i < precios.length; i++) {
+        acumulado += probabilidades[i];
+        if (random <= acumulado) {
+            return precios[i];
+        }
+    }
+
+    return precios[0]; // Por defecto
 }
 
 // Función para determinar la probabilidad de venta según el precio
@@ -143,9 +129,9 @@ function determinarProbabilidad(precio) {
     }
 }
 
-handler.help = ['comprarwaifu', 'venderwaifu [número] [cantidad]', 'miswaifus', 'tiendawaifu'];
+handler.help = ['comprarwaifu', 'venderwaifu [número]', 'miswaifus'];
 handler.tags = ['img', 'econ'];
-handler.command = /^(comprarwaifu|venderwaifu|miswaifus|tiendawaifu)$/i;
+handler.command = /^(comprarwaifu|venderwaifu|miswaifus)$/i;
 handler.register = true;
 
 export default handler;
