@@ -29,7 +29,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
                 `600  =  tiempo a pagar 4 horas\n` +
                 `1200  =  tiempo a pagar 5 horas\n` +
                 `2400  =  tiempo a pagar 6 horas\n` +
-                `4800  =  tiempo a pagar 7 horas`, m);
+                `4800  =  tiempo a pagar 7 horas\n\n Ejemplo: .prestamo 100`, m);
         }
 
         // Verificar si ya tiene un préstamo pendiente
