@@ -5,7 +5,7 @@ let handler = async (m, { conn }) => {
         .sort(([, a], [, b]) => b.limit - a.limit)
         .slice(0, 29); // Top 50 usuarios
 
-    let str = '▂▃▄▅▆▇█▓▒░ 𝐓𝐎𝐏 👑 ░▒▓█▇▆▅▄▃▂\n\n';
+    let str = 'PUEDES PEDIR UN PRESTAMO CON EL COMANDO  .prestamo\n\n▂▃▄▅▆▇█▓▒░ 𝐓𝐎𝐏 👑 ░▒▓█▇▆▅▄▃▂\n\n';
 
     users.forEach(([jid, user], index) => {
         let rank;
