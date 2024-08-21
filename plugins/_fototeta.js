@@ -1,4 +1,3 @@
-// Handler para los comandos de banco
 let handler = async (m, { conn, usedPrefix, command, text }) => {
     let user = global.db.data.users[m.sender];
 
@@ -12,18 +11,12 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
                       `➢ *[👤] 𝚄𝚂𝚄𝙰𝚁𝙸𝙾:* @${m.sender.split('@')[0]}\n` +
                       `➢ *[💸] 𝙲𝚁𝙴́𝙳𝙸𝚃𝙾𝚂:* ${saldoBanco} créditos\n` +
                       `➢ *[🔰] 𝙳𝙴𝙿𝙾́𝚂𝙸𝚃𝙾𝚂:* ${depositos} veces\n` +
-                      `➢ *[👁‍🗨] 𝚁𝙴𝚃𝙸𝚁𝙾𝚂:* ${retiros} veces
-                      
-                      𝙿𝙰𝚁𝙰 𝙳𝙴𝙿𝙾𝚂𝙸𝚃𝙰𝚁 𝚃𝚄𝚂 𝙲𝚁𝙴́𝙳𝙸𝚃𝙾𝚂 𝙴𝙽 𝙴𝙻 𝙱𝙰𝙽𝙲𝙾 𝚄𝚂𝙰 𝙴𝙻 𝙲𝙾𝙼𝙰𝙽𝙳𝙾
-                      .depositar cantidad
-                      
-                      𝙿𝙰𝚁𝙰 𝚁𝙴𝚃𝙸𝚁𝙰𝚁 𝙻𝙾𝚂 𝙲𝚁𝙴́𝙳𝙸𝚃𝙾𝚂 𝙳𝙴𝙻 𝙱𝙰𝙽𝙲𝙾 𝚄𝚂𝙰 𝙴𝙻 𝙲𝙾𝙼𝙰𝙽𝙳𝙾 
-                      .retirar cantidad
-                      
-                      .top  para ver los mejores en créditos`;
+                      `➢ *[👁‍🗨] 𝚁𝙴𝚃𝙸𝚁𝙾𝚂:* ${retiros} veces\n\n` +
+                      `𝙿𝙰𝚁𝙰 𝙳𝙴𝙿𝙾𝚂𝙸𝚃𝙰𝚁 𝚃𝚄𝚂 𝙲𝚁𝙴́𝙳𝙸𝚃𝙾𝚂 𝙴𝙽 𝙴𝙻 𝙱𝙰𝙽𝙲𝙾 𝚄𝚂𝙰 𝙴𝙻 𝙲𝙾𝙼𝙰𝙽𝙳𝙾\n${usedPrefix}depositar <cantidad>\n\n` +
+                      `𝙿𝙰𝚁𝙰 𝚁𝙴𝚃𝙸𝚁𝙰𝚁 𝙻𝙾𝚂 𝙲𝚁𝙴́𝙳𝙸𝚃𝙾𝚂 𝙳𝙴𝙻 𝙱𝙰𝙽𝙲𝙾 𝚄𝚂𝙰 𝙴𝙻 𝙲𝙾𝙼𝙰𝙽𝙳𝙾\n${usedPrefix}retirar <cantidad>\n\n` +
+                      `${usedPrefix}top para ver los mejores en créditos`;
 
-        // URL de la foto que quieres enviar
-        let foto = 'https://telegra.ph/file/41e99ff3c6938e1070d16.jpg'; // Cambia esta URL a la foto deseada
+        let foto = 'https://telegra.ph/file/41e99ff3c6938e1070d16.jpg'; // URL de la foto
 
         conn.sendFile(m.chat, foto, 'banco.jpg', mensaje, m);
     }
@@ -41,7 +34,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         user.banco = (user.banco || 0) + cantidad;
         user.depositos = (user.depositos || 0) + 1;
         
-        conn.reply(m.chat, `*Has depositado ${cantidad} créditos en tu banco*. Te quedan ${user.limit} créditos en tu perfil.\n\n .banco  para ver el banco `, m);
+        conn.reply(m.chat, `*Has depositado ${cantidad} créditos en tu banco*. Te quedan ${user.limit} créditos en tu perfil.\n\nUsa ${usedPrefix}banco para ver tu saldo en el banco.`, m);
     }
 
     // Comando .retirar
@@ -57,14 +50,27 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         user.limit += cantidad;
         user.retiros = (user.retiros || 0) + 1;
         
-        conn.reply(m.chat, `*Has retirado ${cantidad} créditos de tu banco*. Te quedan ${user.limit} créditos en tu perfil.\n\n .banco para ver cuantos créditos tienes en el banco`, m);
+        conn.reply(m.chat, `*Has retirado ${cantidad} créditos de tu banco*. Te quedan ${user.limit} créditos en tu perfil.\n\nUsa ${usedPrefix}banco para ver tu saldo en el banco.`, m);
     }
 }
 
-handler.help = ['banco', 'depositar', 'retirar']
-handler.tags = ['econ']
-handler.command = /^banco|depositar|retirar$/i
-handler.group = true
-handler.register = true
+// Asegurando que los créditos en el banco no se puedan robar
+let robarHandler = async (m, { conn, usedPrefix, command, text }) => {
+    let user = global.db.data.users[m.sender];
 
-export default handler
+    // Evitar que se roben los créditos del banco
+    if (command === 'robar') {
+        conn.reply(m.chat, 'No puedes robar créditos del banco, solo puedes robar los créditos que los usuarios tienen en su perfil.', m);
+    }
+}
+
+handler.help = ['banco', 'depositar', 'retirar'];
+handler.tags = ['econ'];
+handler.command = /^banco|depositar|retirar$/i;
+handler.group = true;
+handler.register = true;
+
+// Registrar el manejador de robos para prevenir que se roben los créditos del banco
+conn.on('chat-update', robarHandler);
+
+export default handler;
