@@ -14,8 +14,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     // Comando .prestamo
     if (command === 'prestamo') {
         // Verificar si el usuario está en el rango "Plata"
-        if (user.limit < 100 || user.limit >= 300) {
-            return conn.reply(m.chat, 'Este comando puede ser usado llegando al top plata', m);
+        if (user.limit < 20 || user.limit >= 300) {
+            return conn.reply(m.chat, 'Este comando puede ser usado pasando los 20 creditos.', m);
         }
 
         // Verificar el monto del préstamo
