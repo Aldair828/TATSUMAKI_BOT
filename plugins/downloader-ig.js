@@ -45,7 +45,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             descuentoActivo: false
         };
 
-        conn.reply(m.chat, `Has recibido un préstamo de ${monto} créditos. Debes pagarlo en ${prestamos[monto] / (60 * 60 * 1000)} horas.`, m);
+        conn.reply(m.chat, `Has recibido un préstamo de ${monto} créditos. Debes pagarlo en ${prestamos[monto] / (60 * 60 * 1000)} horas.\n\n.pagar < cantidad >  para pagar el prestamo`, m);
 
         // Configurar el temporizador para verificar el pago del préstamo
         setTimeout(() => {
