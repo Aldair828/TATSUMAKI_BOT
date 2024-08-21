@@ -1,6 +1,9 @@
 let handler = async (m, { conn, usedPrefix, command, text }) => {
     let user = global.db.data.users[m.sender];
 
+    // Inicializar el registro de préstamos si no existe
+    if (!global.db.data.prestamos) global.db.data.prestamos = [];
+
     // Tabla de préstamos y tiempos de pago
     const prestamos = {
         100: { tiempo: 2 * 60 * 60 * 1000, maxUsuarios: Infinity }, // Todos los usuarios pueden pedirlo
@@ -92,7 +95,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             user.prestamo = {}; // Eliminar el préstamo
 
             // Eliminar el préstamo del registro
-            global.db.data.prestamos = global.db.data.prestamos.filter(p => p.usuario !== m.sender || p.monto !== 100);
+            global.db.data.prestamos = global.db.data.prestamos.filter(p => p.usuario !== m.sender || p.monto !== user.prestamo.monto);
 
             conn.reply(m.chat, 'Su préstamo fue pagado con éxito. No tiene deudas.', m);
         } else {
