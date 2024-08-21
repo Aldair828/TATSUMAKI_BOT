@@ -8,7 +8,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   let user = global.db.data.users[m.sender]
   let name2 = conn.getName(m.sender)
   if (user.registered === true) return m.reply(`🍭 Ya estás registrado.\n\n*¿Quiere volver a registrarse?*\n\nUse este comando para eliminar su registro.\n*${usedPrefix}unreg* <Número de serie>`)
-  if (!Reg.test(text)) return m.reply(`🍭 Formato incorrecto.\n\nUso del comando: *${usedPrefix + command} nombre.edad.pais*\nEjemplo: *${usedPrefix + command} ${name2}.16.México*`)
+  if (!Reg.test(text)) return m.reply(`🍭 Formato incorrecto.\n\nUso del comando: *${usedPrefix + command} nombre.edad.pais*\nEjemplo: *${usedPrefix + command} ${name2}.17.Peru*`)
   let [_, name, age, country] = text.match(Reg)
   if (!name) return m.reply('🍭 El nombre no puede estar vacío.')
   if (!age) return m.reply('🍭 La edad no puede estar vacía.')
