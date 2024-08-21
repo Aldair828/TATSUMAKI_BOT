@@ -10,14 +10,14 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
             return;
         }
 
-        // Verificar el comando de compra
+        // Comando para comprar una waifu
         if (command === 'comprarwaifu') {
             let res = await fetch('https://api.waifu.pics/sfw/waifu');
             if (!res.ok) return;
             let json = await res.json();
             if (!json.url) return;
 
-            let waifuPrice = 10; // Precio fijo para cada waifu
+            let waifuPrice = obtenerPrecioAleatorio(); // Precio aleatorio de 10, 15, o 20 créditos
 
             if (user.limit < waifuPrice) {
                 conn.reply(m.chat, `No tienes suficientes créditos para comprar esta waifu. Necesitas ${waifuPrice} créditos.`, m);
@@ -26,12 +26,12 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
 
             user.limit -= waifuPrice;
             user.waifus = user.waifus || [];
-            user.waifus.push(json.url); // Almacenar la URL de la waifu en la base de datos del usuario
+            user.waifus.push({ url: json.url, precio: waifuPrice }); // Almacenar la waifu con el precio en la base de datos del usuario
 
             conn.sendFile(m.chat, json.url, 'thumbnail.jpg', `Has comprado una waifu por ${waifuPrice} créditos.`, m);
         }
 
-        // Verificar el comando de venta
+        // Comando para vender una waifu
         if (command === 'venderwaifu') {
             let waifuIndex = parseInt(args[0]) - 1;
 
@@ -57,15 +57,36 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
             }
         }
 
-        // Mostrar las waifus que tiene el usuario
+        // Comando para mostrar las waifus que tiene el usuario
         if (command === 'miswaifus') {
             if (!user.waifus || user.waifus.length === 0) {
                 conn.reply(m.chat, 'No tienes waifus. Compra una con el comando `.comprarwaifu`.', m);
                 return;
             }
 
-            let waifuList = user.waifus.map((url, i) => `${i + 1}. ${url}`).join('\n');
+            let waifuList = user.waifus.map((waifu, i) => `${i + 1}. ${waifu.url} (Comprada por ${waifu.precio} créditos)`).join('\n');
             conn.reply(m.chat, `Estas son tus waifus:\n\n${waifuList}\n\nUsa \`.venderwaifu [número]\` para vender una waifu.`, m);
+        }
+
+        // Comando para mostrar la tienda de waifus
+        if (command === 'tiendawaifu') {
+            let allUsers = Object.entries(global.db.data.users)
+                .filter(([jid, user]) => user.waifus && user.waifus.length > 0);
+
+            if (allUsers.length === 0) {
+                conn.reply(m.chat, 'No hay waifus en la tienda actualmente. Compra una usando `.comprarwaifu`.', m);
+                return;
+            }
+
+            let str = '▂▃▄▅▆▇█▓▒░ 𝐓𝐈𝐄𝐍𝐃𝐀 𝐖𝐀𝐈𝐅𝐔 ░▒▓█▇▆▅▄▃▂\n\n';
+
+            allUsers.forEach(([jid, user]) => {
+                user.waifus.forEach((waifu, index) => {
+                    str += `*[👤] 𝚄𝚂𝚄𝙰𝚁𝙸𝙾:* ${conn.getName(jid)}\n*[📱] 𝙽𝚄𝙼𝙴𝚁𝙾:* https://wa.me/${jid.split('@')[0]}\n*[💰] 𝙿𝚁𝙴𝙲𝙸𝙾:* ${waifu.precio} créditos\n*[🔗] 𝚄𝚁𝙻:* ${waifu.url}\n\n`;
+                });
+            });
+
+            conn.reply(m.chat, str.trim(), m);
         }
 
     } catch (e) {
@@ -73,6 +94,12 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
         conn.reply(m.chat, 'Hubo un error al procesar tu solicitud.', m);
     }
 };
+
+// Función para obtener un precio aleatorio de compra (10, 15, o 20 créditos)
+function obtenerPrecioAleatorio() {
+    const precios = [10, 15, 20];
+    return precios[Math.floor(Math.random() * precios.length)];
+}
 
 // Función para determinar el precio de venta basado en probabilidades
 function determinarPrecio() {
@@ -123,9 +150,9 @@ function determinarProbabilidad(precio) {
     }
 }
 
-handler.help = ['comprarwaifu', 'venderwaifu [número]', 'miswaifus'];
+handler.help = ['comprarwaifu', 'venderwaifu [número]', 'miswaifus', 'tiendawaifu'];
 handler.tags = ['img', 'econ'];
-handler.command = /^(comprarwaifu|venderwaifu|miswaifus)$/i;
+handler.command = /^(comprarwaifu|venderwaifu|miswaifus|tiendawaifu)$/i;
 handler.register = true;
 
 export default handler;
