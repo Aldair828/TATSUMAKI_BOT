@@ -50,7 +50,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     if (command === 'mipareja') {
         if (!user.pareja) return conn.reply(m.chat, `No tienes pareja actualmente.`, m);
 
-        conn.reply(m.chat, `Tu pareja actual es @${user.pareja.split('@')[0]}.`, m, { mentions: [user.pareja] });
+        conn.reply(m.chat, `Estas en una relación con @${user.pareja.split('@')[0]}\n\nNo seas infiel ❤❤❤`, m, { mentions: [user.pareja] });
     }
 };
 
