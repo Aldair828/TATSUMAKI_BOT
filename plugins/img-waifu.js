@@ -45,13 +45,16 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
                 return;
             }
 
-            let waifuUrl = user.waifus[waifuIndex];
-            let sellPrice = 5; // Precio de venta fijo para cada waifu
-            user.limit += sellPrice;
+            let sellPrice = determinarPrecio(); // Determinar el precio de venta basado en la probabilidad
+            let probabilidad = determinarProbabilidad(sellPrice); // Determinar la probabilidad de venta
 
-            user.waifus.splice(waifuIndex, 1); // Eliminar la waifu de la lista del usuario
-
-            conn.reply(m.chat, `Has vendido una waifu y has ganado ${sellPrice} créditos.`, m);
+            if (Math.random() * 100 <= probabilidad) {
+                user.limit += sellPrice;
+                user.waifus.splice(waifuIndex, 1); // Eliminar la waifu de la lista del usuario
+                conn.reply(m.chat, `¡Venta exitosa! Has vendido una waifu por ${sellPrice} créditos.`, m);
+            } else {
+                conn.reply(m.chat, `Lo siento, no pudiste vender la waifu esta vez. Inténtalo de nuevo más tarde.`, m);
+            }
         }
 
         // Mostrar las waifus que tiene el usuario
@@ -70,6 +73,55 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
         conn.reply(m.chat, 'Hubo un error al procesar tu solicitud.', m);
     }
 };
+
+// Función para determinar el precio de venta basado en probabilidades
+function determinarPrecio() {
+    const precios = [5, 10, 15, 30];
+    const probabilidades = [0.45, 0.30, 0.20, 0.05];
+    let random = Math.random();
+    let acumulado = 0;
+
+    for (let i = 0; i < precios.length; i++) {
+        acumulado += probabilidades[i];
+        if (random <= acumulado) {
+            return precios[i];
+        }
+    }
+
+    return precios[0]; // Por defecto
+}
+
+// Función para determinar la probabilidad de venta según el precio
+function determinarProbabilidad(precio) {
+    switch (precio) {
+        case 5:
+        case 6:
+        case 7:
+            return 90;
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+            return 80;
+        case 15:
+            return 70;
+        case 16:
+            return 60;
+        case 17:
+            return 50;
+        case 18:
+            return 40;
+        case 19:
+            return 30;
+        case 30:
+            return 5;
+        default:
+            return 0; // Sin probabilidad
+    }
+}
 
 handler.help = ['comprarwaifu', 'venderwaifu [número]', 'miswaifus'];
 handler.tags = ['img', 'econ'];
