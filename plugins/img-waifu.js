@@ -28,7 +28,7 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
             user.waifus = user.waifus || [];
             user.waifus.push(json.url); // Almacenar la URL de la waifu en la base de datos del usuario
 
-            conn.sendFile(m.chat, json.url, 'thumbnail.jpg', `Has comprado una waifu por ${waifuPrice} créditos.`, m);
+            conn.sendFile(m.chat, json.url, 'thumbnail.jpg', `Has comprado una waifu por ${waifuPrice} créditos.\n\n .miswaifus  Para ver tus waifus\n\n .venderwaifu número de la waifu   Para vender tus waifus `, m);
         }
 
         // Verificar el comando de venta
