@@ -2,7 +2,7 @@ let handler = async (m, { conn }) => {
     // Verifica si el usuario tiene un tiempo de espera activo
     let user = global.db.data.users[m.sender];
     let tiempoActual = new Date().getTime();
-    let tiempoRestante = user.lastCofre ? (user.lastCofre + 30 * 60 * 1000) - tiempoActual : 0;
+    let tiempoRestante = user.lastCofre ? (user.lastCofre + 20 * 60 * 1000) - tiempoActual : 0;
 
     if (tiempoRestante > 0) {
         let minutosRestantes = Math.floor(tiempoRestante / 60000);
