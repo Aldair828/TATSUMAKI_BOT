@@ -1,4 +1,4 @@
-import Scraper from 'ruhend-scraper'
+import { igdl } from 'ruhend-scraper'
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
     if (!args[0]) {
@@ -6,21 +6,24 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     }
 
     try {
-        let res = await Scraper.igdl(args[0])
+        let res = await igdl(args[0])
         let txt = `╭─⬣「 *Instagram Download* 」⬣\n`
         txt += `│  ≡◦ *📄 Tipo* : ${res.type}\n`
         txt += `│  ≡◦ *💬 Descripción* : ${res.description || "No disponible"}\n`
         txt += `╰─⬣`
 
         for (let media of res.data) {
-            await conn.sendMessage(m.chat, { video: { url: media.url }, caption: txt }, { quoted: m })
+            // Pausa de 2 segundos entre cada archivo enviado
+            await new Promise(resolve => setTimeout(resolve, 2000))
+            if (media.url.endsWith('.mp4')) {
+                await conn.sendMessage(m.chat, { video: { url: media.url }, caption: txt }, { quoted: m })
+            } else if (media.url.endsWith('.jpg') || media.url.endsWith('.jpeg') || media.url.endsWith('.png')) {
+                await conn.sendMessage(m.chat, { image: { url: media.url }, caption: txt }, { quoted: m })
+            }
         }
-    } catch {
-        try {
-            conn.reply(m.chat, '🚩 Ocurrió un error al intentar descargar el video.', m)
-        } catch {
-            console.error('Error al enviar el mensaje de error.')
-        }
+    } catch (e) {
+        console.error(e)
+        conn.reply(m.chat, '🚩 Ocurrió un error al intentar descargar el contenido de Instagram.', m)
     }
 }
 
