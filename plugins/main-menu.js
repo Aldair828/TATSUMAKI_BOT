@@ -87,6 +87,7 @@ Angela: +527772130823
 │  𓋜 *.prestamo*
 │  𓋜 *.pagar cantidad*
 │  𓋜 *.transferir @user cantidad*
+│  𓋜 *.tiktok https://vm.tiktok.com/ZMr7Xp92d/*
 ╰──ꕤ
 
 ╭──ꕤ「 *Info 🌸* 」ꕤ
