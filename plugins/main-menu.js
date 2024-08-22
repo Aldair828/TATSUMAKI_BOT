@@ -260,7 +260,7 @@ Puede seguir el canal del bot: https://whatsapp.com/channel/0029VafZvB6J3jv3qCnq
 `.trim()
 
     let videoPath = './storage/img/miniurl.mp4' // Asegúrate de que esta ruta es válida para el video que deseas enviar
-    await conn.sendFile(m.chat, videoPath, 'menu.mp4', menuText, m)
+    await conn.sendFile(m.chat, videoPath, 'miniurl.mp4', menuText, m)
 
   } catch (e) {
     conn.reply(m.chat, 'Lo sentimos, el menú tiene un error.', m)
