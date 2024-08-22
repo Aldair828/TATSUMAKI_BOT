@@ -87,7 +87,7 @@ Angela: +527772130823
 │  𓋜 *.prestamo*
 │  𓋜 *.pagar cantidad*
 │  𓋜 *.transferir @user cantidad*
-│  𓋜 *.tiktok https://vm.tiktok.com/ZMr7Xp92d/*
+│  𓋜 *.tiktok* https://vm.tiktok.com/ZMr7Xp92d/
 ╰──ꕤ
 
 ╭──ꕤ「 *Info 🌸* 」ꕤ
@@ -179,25 +179,7 @@ Angela: +527772130823
 ╭──ꕤ「 *On / Off 💥* 」ꕤ
 │  𓋜 *.enable*
 │  𓋜 *.disable*
-╰──ꕤ
-
-╭──ꕤ「 *Descargas 📥* 」ꕤ
-│  𓋜 *.aptoide <búsqueda>*
-│  𓋜 *.facebook <url fb>*
-│  𓋜 *.gdrive <url gdrive>*
-│  𓋜 *.gitclone <url git>*
-│  𓋜 *.instagram <url ig>*
-│  𓋜 *.mediafire <url mf>*
-│  𓋜 *.pindl <pin url>*
-│  𓋜 *.soundcloud *<búsqueda>**
-│  𓋜 *.spotify <búsqueda>*
-│  𓋜 *.spotifydl *<url spotify>**
-│  𓋜 *.tiktok <url tt>*
-│  𓋜 *.tiktokimg *<url>**
-│  𓋜 *.tiktokuser *<usuario>**
-│  𓋜 *.ytmp3 <yt url>*
-│  𓋜 *.ytmp4 <yt url>*
-╰──ꕤ
+╰╰──
 
 ╭──ꕤ「 *Herramientas 🧰* 」ꕤ
 │  𓋜 *.google <búsqueda>*
