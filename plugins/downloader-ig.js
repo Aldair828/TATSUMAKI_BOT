@@ -1,30 +1,34 @@
-import { igdl } from "ruhend-scraper"
+import Scraper from 'ruhend-scraper'
 
-let handler = async (m, { args, conn }) => { 
-if (!args[0]) {
-return conn.reply(m.chat, '🍟 *Ingresa un link de Instagram*', m, rcanal)}
-try {
-await m.react(rwait)
-conn.reply(m.chat, `🕒 *Enviando El Video...*`, m, {
-contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, showAdAttribution: true,
-title: packname,
-body: wm,
-previewType: 0, thumbnail: icons,
-sourceUrl: channel }}})      
-let res = await igdl(args[0])
-let data = res.data       
-for (let media of data) {
-await new Promise(resolve => setTimeout(resolve, 2000))           
-await conn.sendFile(m.chat, media.url, 'instagram.mp4', '🍟 *Tu video de instagram.*\n' + textbot, fkontak)
-}} catch {
-await m.react(error)
-conn.reply(m.chat, '🚩 Ocurrió un error.', m, fake)}}
+let handler = async (m, { conn, args, usedPrefix, command }) => {
+    if (!args[0]) {
+        return conn.reply(m.chat, `🍟 Ingresa un enlace de Instagram junto al comando.\n\nEjemplo:\n${usedPrefix + command} https://www.instagram.com/p/xyz/`, m)
+    }
+
+    try {
+        let res = await Scraper.igdl(args[0])
+        let txt = `╭─⬣「 *Instagram Download* 」⬣\n`
+        txt += `│  ≡◦ *📄 Tipo* : ${res.type}\n`
+        txt += `│  ≡◦ *💬 Descripción* : ${res.description || "No disponible"}\n`
+        txt += `╰─⬣`
+
+        for (let media of res.data) {
+            await conn.sendMessage(m.chat, { video: { url: media.url }, caption: txt }, { quoted: m })
+        }
+    } catch {
+        try {
+            conn.reply(m.chat, '🚩 Ocurrió un error al intentar descargar el video.', m)
+        } catch {
+            console.error('Error al enviar el mensaje de error.')
+        }
+    }
+}
 
 handler.command = ['instagram', 'ig']
 handler.tags = ['descargas']
-handler.help = ['instagram', 'ig']
+handler.help = ['instagram <url ig>']
 handler.estrellas = 1
-handler.group = true;
+handler.group = true
 handler.register = true
 
 export default handler
