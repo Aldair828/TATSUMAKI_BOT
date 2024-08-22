@@ -90,7 +90,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 }
 
 // Interceptar las ganancias del usuario para descontar el préstamo si es necesario
-let handlerCt    if (user.prestamo && user.prestamo.descuentoActivo) {
+let handlerCreditInterceptor = async (user, creditsGained) => {
+    if (user.prestamo && user.prestamo.descuentoActivo) {
         if (creditsGained >= user.prestamo.monto) {
             user.limit += (creditsGained - user.prestamo.monto); // Restar el monto del préstamo y dejar el resto
             user.prestamo = {}; // Borrar el préstamo
@@ -109,3 +110,4 @@ handler.group = true;
 handler.register = true;
 
 export default handler;
+
