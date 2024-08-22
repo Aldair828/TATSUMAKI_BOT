@@ -71,7 +71,7 @@ Angela: +527772130823
 
 ᧔♡᧓  *L I S T A  -  M E N Ú S*  ᧔♡᧓
 
-╭──ꕤ「 *COMANDOS NUEVOS*」ꕤ
+╭──ꕤ「 *COMANDOS ECONOMÍA*」ꕤ
 │  𓋜 *.cazar*
 │  𓋜 *.slot cantidad*
 │  𓋜 *.ruleta 10 negro / rojo*
@@ -84,8 +84,9 @@ Angela: +527772130823
 │  𓋜 *.comprarwaifu*
 │  𓋜 *.miswaifus*
 │  𓋜 *.venderwaifu*
-│  𓋜 *.prestamo
-│  𓋜 *.pagar cantidad
+│  𓋜 *.prestamo*
+│  𓋜 *.pagar cantidad*
+│  𓋜 *.transferir @user cantidad*
 ╰──ꕤ
 
 ╭──ꕤ「 *Info 🌸* 」ꕤ
