@@ -10,7 +10,10 @@ const handler = async (m, { conn, command, args, text, usedPrefix }) => {
     try { 
         // Buscar la canción en YouTube
         const yt_play = await search(args.join(' '));
+        console.log(yt_play);  // Verificar qué se obtiene de la búsqueda
+
         const song = yt_play[0];  // Seleccionar la primera canción en los resultados
+        if (!song) throw 'No se encontró la canción. Intenta con otro nombre.';
 
         // Construir el mensaje de respuesta con la información de la canción
         const info = `*𓆩 𓃠 𓆪 ✧═══ INFORMACIÓN DE LA CANCIÓN ═══✧ 𓆩 𓃠 𓆪*
@@ -24,6 +27,15 @@ const handler = async (m, { conn, command, args, text, usedPrefix }) => {
 
         // Enviar mensaje con información y botón
         await conn.sendButton(m.chat, '🎶 Canción Encontrada 🎶', info, song.thumbnail, [['Descargar Audio 🎧', `${usedPrefix}yta ${song.url}`], ['Descargar Video 🎥', `${usedPrefix}ytv ${song.url}`]], m);
+
+        // Descargar el audio directamente y enviarlo
+        const audioBuffer = await ytdl(song.url, {
+            filter: 'audioonly',
+            quality: 'highestaudio',
+            format: 'mp3'
+        });
+
+        await conn.sendFile(m.chat, audioBuffer, `${song.title}.mp3`, null, m);
 
         // Crear lista de opciones de descarga
         let listSections = [];             
@@ -41,8 +53,8 @@ const handler = async (m, { conn, command, args, text, usedPrefix }) => {
         await conn.sendList(m.chat, `Elige cómo deseas descargar *${text}*`, 'Opciones de Descarga', 'Elige una opción:', listSections, m);
 
     } catch (e) {
-        // Manejo de errores
-        await conn.reply(m.chat, `Hubo un error al procesar tu solicitud. Inténtalo nuevamente.`, m);
+        // Manejo de errores con detalles específicos
+        await conn.reply(m.chat, `Hubo un error al procesar tu solicitud: ${e.message}`, m);
         console.error(e);
     }
 }
