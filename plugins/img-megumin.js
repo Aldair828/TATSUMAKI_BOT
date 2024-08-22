@@ -1,17 +1,20 @@
-import fetch from 'node-fetch'
+let handler = async (m, { conn, isOwner }) => {
+    if (!isOwner) {
+        return conn.reply(m.chat, 'Este comando solo puede ser utilizado por el owner.', m);
+    }
 
-let handler = async (m, { conn, usedPrefix, command }) => {
-try {
-let res = await fetch('https://api.waifu.pics/sfw/megumin')
-if (!res.ok) return
-let json = await res.json()
-if (!json.url) return
-await conn.sendFile(m.chat, json.url, 'thumbnail.jpg', null, m)
-} catch {
-}}
-handler.help = ['megumin']
-handler.tags = ['img']
-handler.command = ['megumin']
-handler.register = true 
-//handler.limit = 1
-export default handler
+    let users = Object.entries(global.db.data.users);
+
+    users.forEach(([jid, user]) => {
+        user.limit = 20; // Restablece los créditos a 20
+    });
+
+    conn.reply(m.chat, 'Se han reiniciado todos los créditos a 20 para todos los usuarios.', m);
+}
+
+handler.help = ['topcero'];
+handler.tags = ['econ'];
+handler.command = /^topcero$/i;
+handler.rowner = true; // Solo el owner puede usar este comando
+
+export default handler;
