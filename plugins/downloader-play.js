@@ -28,14 +28,21 @@ const handler = async (m, { conn, command, args, text, usedPrefix }) => {
         // Enviar mensaje con información y botón
         await conn.sendButton(m.chat, '🎶 Canción Encontrada 🎶', info, song.thumbnail, [['Descargar Audio 🎧', `${usedPrefix}yta ${song.url}`], ['Descargar Video 🎥', `${usedPrefix}ytv ${song.url}`]], m);
 
-        // Descargar el audio directamente y enviarlo
-        const audioBuffer = await ytdl(song.url, {
+        // Descargar el audio directamente y convertirlo a buffer
+        const audioStream = ytdl(song.url, {
             filter: 'audioonly',
             quality: 'highestaudio',
-            format: 'mp3'
         });
 
-        await conn.sendFile(m.chat, audioBuffer, `${song.title}.mp3`, null, m);
+        // Convertir el stream de audio a un buffer
+        let chunks = [];
+        audioStream.on('data', chunk => chunks.push(chunk));
+        audioStream.on('end', async () => {
+            const audioBuffer = Buffer.concat(chunks);
+
+            // Enviar el audio como mensaje de voz
+            await conn.sendMessage(m.chat, { audio: audioBuffer, mimetype: 'audio/mp4' }, { quoted: m });
+        });
 
         // Crear lista de opciones de descarga
         let listSections = [];             
