@@ -45,8 +45,7 @@ const handler = async (m, { conn, command, args, text, usedPrefix }) => {
         });
 
         // Crear lista de opciones de descarga
-        let listSections = [];             
-        listSections.push({
+        const listSections = [{
             title: '📡 TIPOS DE DESCARGAS',
             rows: [
                 { title: "Descargar Audio (Opción 1)", rowId: `${usedPrefix}yta ${song.url}` },
@@ -54,7 +53,7 @@ const handler = async (m, { conn, command, args, text, usedPrefix }) => {
                 { title: "Descargar Video (Opción 1)", rowId: `${usedPrefix}ytv ${song.url}` },
                 { title: "Descargar Video DOC", rowId: `${usedPrefix}ytmp4doc ${song.url}` }
             ]
-        });
+        }];
 
         // Enviar la lista de opciones
         await conn.sendList(m.chat, `Elige cómo deseas descargar *${text}*`, 'Opciones de Descarga', 'Elige una opción:', listSections, m);
