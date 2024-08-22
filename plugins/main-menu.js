@@ -275,7 +275,7 @@ Angela: +527772130823
 .trim()
 
     let pp = './storage/img/miniurl.jpg' // Asegúrate de que esta ruta es válida para la imagen que deseas enviar
-    await conn.sendFile(m.chat, pp, 'thumbnail.jpg', menuText, m, null)
+    await conn.sendAi(m.chat, botname, textbot, txt, img, img, canal, m)
 
   } catch (e) {
     conn.reply(m.chat, 'Lo sentimos, el menú tiene un error.', m)
