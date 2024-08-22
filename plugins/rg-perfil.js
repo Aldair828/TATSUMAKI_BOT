@@ -28,7 +28,7 @@ let handler = async (m, { conn, usedPrefix }) => {
         return;
     }
 
-    let pp = 'https://telegra.ph/file/2180abd039f16b246d23f.jpg';
+    let pp = 'https://telegra.ph/file/37e80f39f8e371743c4cf.jpg';
     try {
         pp = await conn.getProfilePicture(who);
     } catch (e) {
