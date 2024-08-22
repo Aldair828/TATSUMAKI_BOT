@@ -9,7 +9,7 @@ let img = catalogo
     forwardedNewsletterMessageInfo: {
       newsletterJid: "120363283344753953@newsletter",
       serverMessageId: 100,
-      newsletterName: 'Tatsumaki_Bot',
+      newsletterName: 'ＴＡＴＳＵＭＡＫＩ___ＢＯＴ',
     },
 	    externalAdReply: {
 				    showAdAttribution: true,
