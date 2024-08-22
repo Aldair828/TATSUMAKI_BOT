@@ -40,7 +40,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     let rtotalreg = Object.values(global.db.data.users).filter(user => user.registered == true).length
 
     // Texto del nuevo menú
-    let menuText =
+    let menuText =`
 'ྀི𓊆 _tatsumaki_ 𓊇ྀ
 
 *Bienvenido* @${name} 
@@ -272,7 +272,7 @@ Angela: +527772130823
 
 ➽  *DEVELOPER 👨🏻‍💻: MEOW - ANGELA* 
 *" https://wa.me/+527772130823 "*
-'.trim()
+`.trim()
 
     let pp = './storage/img/miniurl.jpg' // Asegúrate de que esta ruta es válida para la imagen que deseas enviar
     await conn.sendFile(m.chat, pp, 'thumbnail.jpg', menuText, canal, m, null)
