@@ -12,13 +12,13 @@ let handler = async (m, { conn }) => {
 
     // Lista de animales con sus emojis y créditos
     const animales = [
-        { emoji: '🐶', creditos: 1 },
-        { emoji: '🐱', creditos: 3 },
-        { emoji: '🐭', creditos: 1 },
-        { emoji: '🦊', creditos: 3 },
-        { emoji: '🐻', creditos: 1 },
-        { emoji: '🐼', creditos: 3 },
-        { emoji: '🐨', creditos: 1 }
+        { emoji: '🐶', creditos: 1000 },
+        { emoji: '🐱', creditos: 1000 },
+        { emoji: '🐭', creditos: 1000 },
+        { emoji: '🦊', creditos: 1000 },
+        { emoji: '🐻', creditos: 1000 },
+        { emoji: '🐼', creditos: 1000 },
+        { emoji: '🐨', creditos: 1000 }
     ];
 
     // Probabilidad de moño 🎀 (1% de probabilidad)
