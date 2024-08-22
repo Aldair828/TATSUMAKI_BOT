@@ -1,54 +1,70 @@
 import { igdl } from 'ruhend-scraper'
+import axios from 'axios'
+import fetch from 'node-fetch'
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
     if (!args[0]) {
-        return conn.reply(m.chat, `🍟 Ingresa un enlace de Instagram junto al comando.\n\nEjemplo:\n${usedPrefix + command} https://www.instagram.com/p/xyz/`, m)
+        m.reply(`🍟 Ingresa un enlace del vídeo de Instagram junto al comando.\n\nEjemplo:\n${usedPrefix + command} https://www.instagram.com/p/CO4JbLJHqxt/`)
+        return
     }
 
     try {
-        // Reacción inicial para confirmar que el comando se está procesando
-        await m.react('⏳')
-
-        // Realizar la descarga usando el scraper
         let res = await igdl(args[0])
-
-        // Verifica si se obtuvo una respuesta válida
-        if (!res || !res.data || res.data.length === 0) {
-            await m.react('❌')
-            return conn.reply(m.chat, '🚩 No se encontró ningún contenido para descargar.', m)
-        }
+        let { title, duration, thumbnail, size, quality, url } = res.data[0]
 
         let txt = `╭─⬣「 *Instagram Download* 」⬣\n`
-        txt += `│  ≡◦ *📄 Tipo* : ${res.type}\n`
-        txt += `│  ≡◦ *💬 Descripción* : ${res.description || "No disponible"}\n`
+        txt += `│  ≡◦ *📚 Título* : ${title}\n`
+        txt += `│  ≡◦ *🕜 Duración* : ${duration} Segundos\n`
+        txt += `│  ≡◦ *🪴 Calidad* : ${quality}\n`
+        txt += `│  ≡◦ *🌵 Tamaño* : ${convertBytesToMB(size)}\n`
         txt += `╰─⬣`
 
-        for (let media of res.data) {
-            // Pausa de 2 segundos entre cada archivo enviado
-            await new Promise(resolve => setTimeout(resolve, 2000))
+        await conn.sendMessage(m.chat, { video: { url }, caption: txt }, { quoted: m })
+    } catch (e) {
+        try {
+            const api = await fetch(`https://api-starlights-team.koyeb.app/api/instagram?url=${args[0]}`)
+            const data = await api.json()
 
-            // Enviar video o imagen basado en la URL
-            if (media.url.endsWith('.mp4')) {
-                await conn.sendMessage(m.chat, { video: { url: media.url }, caption: txt }, { quoted: m })
-            } else if (media.url.endsWith('.jpg') || media.url.endsWith('.jpeg') || media.url.endsWith('.png')) {
-                await conn.sendMessage(m.chat, { image: { url: media.url }, caption: txt }, { quoted: m })
+            if (data.status) {
+                const { title, duration, quality, url } = data.data
+                let txt = `╭─⬣「 *Instagram Download* 」⬣\n`
+                txt += `│  ≡◦ *📚 Título* : ${title}\n`
+                txt += `│  ≡◦ *🕜 Duración* : ${duration} Segundos\n`
+                txt += `│  ≡◦ *🪴 Calidad* : ${quality}\n`
+                txt += `╰─⬣`
+
+                await conn.sendMessage(m.chat, { video: { url }, caption: txt }, { quoted: m })
+            }
+        } catch (e) {
+            try {
+                const api1 = await fetch(`https://delirius-api-oficial.vercel.app/api/instagram?url=${args[0]}`)
+                const data1 = await api1.json()
+
+                if (data1.status) {
+                    const { title, duration, size, quality, url } = data1.data
+                    let txt = `╭─⬣「 *Instagram Download* 」⬣\n`
+                    txt += `│  ≡◦ *📚 Título* : ${title}\n`
+                    txt += `│  ≡◦ *🕜 Duración* : ${duration} Segundos\n`
+                    txt += `│  ≡◦ *🪴 Calidad* : ${quality}\n`
+                    txt += `│  ≡◦ *🌵 Tamaño* : ${convertBytesToMB(size)}\n`
+                    txt += `╰─⬣`
+
+                    await conn.sendMessage(m.chat, { video: { url }, caption: txt }, { quoted: m })
+                }
+            } catch (e) {
+                m.reply('🚩 Error al procesar el enlace de Instagram.')
             }
         }
-
-        // Reaccionar con éxito
-        await m.react('✅')
-    } catch (e) {
-        console.error(e)
-        await m.react('❌')
-        conn.reply(m.chat, '🚩 Ocurrió un error al intentar descargar el contenido de Instagram.', m)
     }
 }
 
-handler.command = ['instagram', 'ig']
-handler.tags = ['descargas']
 handler.help = ['instagram <url ig>']
-handler.estrellas = 1
-handler.group = true
+handler.tags = ['downloader']
+handler.command = ['instagram', 'ig', 'instagramdl', 'instadl']
 handler.register = true
 
 export default handler
+
+function convertBytesToMB(bytes) {
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB'
+    }
