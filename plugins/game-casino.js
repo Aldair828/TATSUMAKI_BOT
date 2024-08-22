@@ -1,5 +1,5 @@
 let handler = async (m, { conn, args, text, usedPrefix, command }) => {
-    const ruletaresultado = "https://telegra.ph/file/29e0baa0e7bd8939ed7a3.jpg";
+    const ruletaresultado = "https://telegra.ph/file/e2ffffc08ea9ef797ae56.jpg";
 
     let amount = parseInt(args[0]);
     let color = args[1]?.toLowerCase();
