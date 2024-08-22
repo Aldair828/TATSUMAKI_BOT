@@ -40,7 +40,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     let rtotalreg = Object.values(global.db.data.users).filter(user => user.registered == true).length
 
     // Texto del nuevo menú
-    let menuText = `
+    let menuText = 
 ྀི𓊆 _tatsumaki_ 𓊇ྀི
 
 *Bienvenido* @${name} 
@@ -271,11 +271,11 @@ Angela: +527772130823
 *" https://wa.me/+51925015528 "*
 
 ➽  *DEVELOPER 👨🏻‍💻: MEOW - ANGELA* 
-*" https://wa.me/+527772130823 "*`
+*" https://wa.me/+527772130823 "*
 .trim()
 
     let pp = './storage/img/miniurl.jpg' // Asegúrate de que esta ruta es válida para la imagen que deseas enviar
-    await conn.sendAi(m.chat, botname, textbot, txt, img, img, canal, m)
+    await conn.sendFile(m.chat, pp, 'thumbnail.jpg', menuText, canal, m, null)
 
   } catch (e) {
     conn.reply(m.chat, 'Lo sentimos, el menú tiene un error.', m)
