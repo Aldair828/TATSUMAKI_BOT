@@ -39,9 +39,9 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         ];
 
         // Definir probabilidades
-        const probabilidadComunes = 50; // 50% de probabilidad
-        const probabilidadRaros = 30; // 30% de probabilidad
-        const probabilidadMiticos = 15; // 15% de probabilidad
+        const probabilidadComunes = 60; // 60% de probabilidad
+        const probabilidadRaros = 25; // 25% de probabilidad
+        const probabilidadMiticos = 10; // 10% de probabilidad
         const probabilidadLegendarios = 5; // 5% de probabilidad
 
         // Seleccionar Pokémon basado en probabilidad
@@ -66,6 +66,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         }
 
         user.pokemon = pokemon.name;
+        user.lastClaim = null; // Resetear el reclamo
         let message = `🎉 ¡Has ganado a ${pokemon.name}!\n\n`;
         message += `🔹 Tipo: ${user.pokemonType}\n`;
         message += `💵 Créditos diarios: ${user.dailyCredits} créditos\n\n`;
@@ -92,7 +93,8 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         return m.reply(topMessage);
     } else if (command === 'soltarpokemon') {
         if (!user.pokemon) return m.reply('No tienes un Pokémon para liberar.');
-        
+        if (user.lastClaim) return m.reply('No puedes liberar tu Pokémon hasta que pasen 24 horas desde el último reclamo.');
+
         user.limit += 50; // Créditos al liberar
         let pokemonLiberado = user.pokemon;
         user.pokemon = null;
