@@ -93,9 +93,11 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         return m.reply(topMessage);
     } else if (command === 'soltarpokemon') {
         if (!user.pokemon) return m.reply('No tienes un Pokémon para liberar.');
-        if (user.lastClaim) return m.reply('No puedes liberar tu Pokémon hasta que pasen 24 horas desde el último reclamo.');
+        if (user.lastClaim && new Date() - user.lastClaim < 86400000) return m.reply('No puedes liberar tu Pokémon hasta que pasen 24 horas desde el último reclamo.');
 
-        user.limit += 50; // Créditos al liberar
+        if (user.limit < 50) return m.reply('No tienes suficientes créditos para liberar a tu Pokémon.');
+
+        user.limit -= 50; // Restar 50 créditos al liberar
         let pokemonLiberado = user.pokemon;
         user.pokemon = null;
         user.pokemonType = null;
