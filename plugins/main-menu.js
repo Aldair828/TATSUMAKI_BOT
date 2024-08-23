@@ -39,6 +39,9 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     let totalreg = Object.keys(global.db.data.users).length
     let rtotalreg = Object.values(global.db.data.users).filter(user => user.registered == true).length
 
+    // Determinar si hay códigos disponibles
+    let availableCodes = global.db.data.codes && Object.keys(global.db.data.codes).length > 0;
+
     // Texto del nuevo menú
     let menuText = `
 'ྀི𓊆 _tatsumaki_ 𓊇ྀ
@@ -51,6 +54,7 @@ Angela: +527772130823
 
 *Puede seguir el canal del bot:* https://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x
 
+*Códigos para canjear:* ${availableCodes ? 'Ahí un código que todavía no se ha reclamado. Entra al canal y reclámalo.' : 'No hay códigos disponibles todavía.'}
 
 *🔰SU INFORMACIÓN BÁSICA🔰*
 
