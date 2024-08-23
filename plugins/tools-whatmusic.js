@@ -7,35 +7,35 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
         // Definir los Pokémon por rareza
         const comunes = [
-            { name: 'Pikachu', image: 'https://example.com/pikachu.png' },
-            { name: 'Eevee', image: 'https://example.com/eevee.png' },
-            { name: 'Bulbasaur', image: 'https://example.com/bulbasaur.png' },
-            { name: 'Charmander', image: 'https://example.com/charmander.png' },
-            { name: 'Squirtle', image: 'https://example.com/squirtle.png' },
+            { name: 'Pikachu', image: 'https://telegra.ph/file/6ac8ef7ec24986ad4785d.jpg' },
+            { name: 'Eevee', image: 'https://telegra.ph/file/71e395a44f2824166f04c.jpg' },
+            { name: 'Bulbasaur', image: 'https://telegra.ph/file/c3fe08a153c494758b622.jpg' },
+            { name: 'Charmander', image: 'https://telegra.ph/file/6863ea1e46b7707fff13c.jpg' },
+            { name: 'Squirtle', image: 'https://telegra.ph/file/d9a4c95297b1b15f09336.jpg' },
         ];
 
         const raros = [
-            { name: 'Gengar', image: 'https://example.com/gengar.png' },
-            { name: 'Jolteon', image: 'https://example.com/jolteon.png' },
-            { name: 'Dragonair', image: 'https://example.com/dragonair.png' },
-            { name: 'Gyarados', image: 'https://example.com/gyarados.png' },
-            { name: 'Lapras', image: 'https://example.com/lapras.png' },
+            { name: 'Gengar', image: 'https://telegra.ph/file/f2b979918361d9edf44b8.jpg' },
+            { name: 'Jolteon', image: 'https://telegra.ph/file/98152ea136b083880b148.jpg' },
+            { name: 'Dragonair', image: 'https://telegra.ph/file/c8a076c41511900520e38.jpg' },
+            { name: 'Gyarados', image: 'https://telegra.ph/file/a8c98c518684846e4b965.jpg' },
+            { name: 'Lapras', image: 'https://telegra.ph/file/be9de8153d067917a96ba.jpg' },
         ];
 
         const miticos = [
-            { name: 'Mew', image: 'https://example.com/mew.png' },
-            { name: 'Celebi', image: 'https://example.com/celebi.png' },
-            { name: 'Jirachi', image: 'https://example.com/jirachi.png' },
-            { name: 'Deoxys', image: 'https://example.com/deoxys.png' },
-            { name: 'Manaphy', image: 'https://example.com/manaphy.png' },
+            { name: 'Mew', image: 'https://telegra.ph/file/e61493e7403964fd89be4.jpg' },
+            { name: 'Celebi', image: 'https://telegra.ph/file/5636eacb57fa069969b93.jpg' },
+            { name: 'Jirachi', image: 'https://telegra.ph/file/314d32958fcb03f2b4d36.jpg' },
+            { name: 'Deoxys', image: 'https://telegra.ph/file/4a32fd5baad0a26de6352.jpg' },
+            { name: 'Manaphy', image: 'https://telegra.ph/file/6f1e4daefc56fe9057728.jpg' },
         ];
 
         const legendarios = [
-            { name: 'Zapdos', image: 'https://example.com/zapdos.png' },
-            { name: 'Moltres', image: 'https://example.com/moltres.png' },
-            { name: 'Articuno', image: 'https://example.com/articuno.png' },
-            { name: 'Mewtwo', image: 'https://example.com/mewtwo.png' },
-            { name: 'Rayquaza', image: 'https://example.com/rayquaza.png' },
+            { name: 'Zapdos', image: 'https://telegra.ph/file/e0b6dfac56aef3ddba644.jpg' },
+            { name: 'Moltres', image: 'https://telegra.ph/file/add5ecc5e0e47a7cbc1a9.jpg' },
+            { name: 'Articuno', image: 'https://telegra.ph/file/3fa3b0ae7e7cabc6e3071.jpg' },
+            { name: 'Mewtwo', image: 'https://telegra.ph/file/510b07a4719495069509f.jpg' },
+            { name: 'Rayquaza', image: 'https://telegra.ph/file/b4cdf2a5111919ad4a8ae.jpg' },
         ];
 
         // Definir probabilidades
