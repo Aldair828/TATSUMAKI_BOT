@@ -12,15 +12,18 @@ let handler = async (m, { conn, text }) => {
 
     let finalMessage = `USUARIO ANALIZADO\n\nLos cálculos han arrojado que @${who.split("@")[0]} es ${nro}% Pajero 😏💦.`;
 
+    // Enviar el primer mensaje
     let msg = await conn.reply(m.chat, stages[0], m, { mentions: [who] });
 
+    // Actualizar el mensaje progresivamente
     for (let i = 1; i < stages.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, 2000)); // Espera 2 segundos antes de editar
-        await conn.updateMessage(m.chat, { id: msg.id, text: stages[i], mentions: [who] });
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Espera 2 segundos antes de actualizar
+        await conn.reply(m.chat, stages[i], m, { mentions: [who], quoted: msg });
     }
 
+    // Mostrar el mensaje final después de la última actualización
     await new Promise(resolve => setTimeout(resolve, 2000)); // Espera 2 segundos antes de mostrar el resultado final
-    await conn.updateMessage(m.chat, { id: msg.id, text: finalMessage, mentions: [who] });
+    await conn.reply(m.chat, finalMessage, m, { mentions: [who] });
 }
 
 handler.help = ['pajero @usuario'];
