@@ -81,6 +81,39 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         user.limit += user.dailyCredits;
         return m.reply(`Has reclamado ${user.dailyCredits} créditos de tu Pokémon ${user.pokemon}.`);
     } else if (command === 'toppokemones') {
+        // Definir los Pokémon por rareza
+        const comunes = [
+            { name: 'Pikachu' },
+            { name: 'Eevee' },
+            { name: 'Bulbasaur' },
+            { name: 'Charmander' },
+            { name: 'Squirtle' },
+        ];
+
+        const raros = [
+            { name: 'Gengar' },
+            { name: 'Jolteon' },
+            { name: 'Dragonair' },
+            { name: 'Gyarados' },
+            { name: 'Lapras' },
+        ];
+
+        const miticos = [
+            { name: 'Mew' },
+            { name: 'Celebi' },
+            { name: 'Jirachi' },
+            { name: 'Deoxys' },
+            { name: 'Manaphy' },
+        ];
+
+        const legendarios = [
+            { name: 'Zapdos' },
+            { name: 'Moltres' },
+            { name: 'Articuno' },
+            { name: 'Mewtwo' },
+            { name: 'Rayquaza' },
+        ];
+
         let topMessage = '📜 *Lista de Pokémon por rareza* 📜\n\n';
         topMessage += '⭐️ *Comunes*\n';
         comunes.forEach(p => topMessage += `- ${p.name}\n`);
