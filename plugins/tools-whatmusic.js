@@ -103,7 +103,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         user.pokemonType = null;
         user.dailyCredits = 0;
         user.lastClaim = null;
-        return m.reply(`Has liberado a ${pokemonLiberado} y recibido 50 créditos.`);
+        return m.reply(`Has liberado a ${pokemonLiberado} y se te han descontado 50 créditos.`);
     }
 };
 
