@@ -1,25 +1,36 @@
-import Scraper from "@SumiFX/Scraper"
+let handler = async (m, { conn, text }) => {
+    let code = text.trim().toUpperCase();
 
-let handler = async (m, { conn, args, usedPrefix, command }) => {
-if (!args[0]) return m.reply('🍭 Ingresa el enlace del vídeo de YouTube junto al comando.\n\n`Ejemplo:`\n' + `> *${usedPrefix + command}* https://youtu.be/QSvaCSt8ixs`)
-if (!args[0].match(/youtu/gi)) return conn.reply(m.chat, `Verifica que el enlace sea de YouTube.`, m)
+    if (!code) {
+        return conn.reply(m.chat, 'Por favor, ingrese un código para canjear.', m);
+    }
 
-let user = global.db.data.users[m.sender]
-try {
-let { title, size, quality, thumbnail, dl_url } = await Scraper.ytmp3(args[0])
-if (size.includes('GB') || size.replace(' MB', '') > 200) { return await m.reply('El archivo pesa mas de 200 MB, se canceló la Descarga.')}
-let txt = `╭─⬣「 *YouTube Download* 」⬣\n`
-    txt += `│  ≡◦ *🍭 Titulo ∙* ${title}\n`
-    txt += `│  ≡◦ *🪴 Calidad ∙* ${quality}\n`
-    txt += `│  ≡◦ *⚖ Peso ∙* ${size}\n`
-    txt += `╰─⬣`
-await conn.sendFile(m.chat, thumbnail, 'thumbnail.jpg', txt, m)
-await conn.sendFile(m.chat, dl_url, title + '.mp3', `*🍭 Titulo ∙* ${title}\n*🪴 Calidad ∙* ${quality}`, m, false, { mimetype: 'audio/mpeg', asDocument: user.useDocument })
-} catch {
-}}
-handler.help = ['ytmp3 <yt url>']
-handler.tags = ['downloader']
-handler.command = ['ytmp3', 'yta']
-handler.register = true 
-//handler.limit = 1
-export default handler
+    let codesDB = global.db.data.codes || {};
+    let user = global.db.data.users[m.sender];
+
+    if (!codesDB[code]) {
+        return conn.reply(m.chat, 'Código no válido.', m);
+    }
+
+    if (codesDB[code].claimedBy.includes(m.sender)) {
+        return conn.reply(m.chat, 'Ya has canjeado este código.', m);
+    }
+
+    if (codesDB[code].claimedBy.length >= 5) {
+        return conn.reply(m.chat, 'Este código fue agotado completamente... Espero que el creador ponga otro código.', m);
+    }
+
+    user.limit += codesDB[code].credits;
+    codesDB[code].claimedBy.push(m.sender);
+
+    let remaining = 5 - codesDB[code].claimedBy.length;
+
+    conn.reply(m.chat, `Has canjeado el código con éxito. Has recibido ${codesDB[code].credits} créditos.\nQuedan ${remaining} vacantes para canjear el código.`, m);
+}
+
+handler.help = ['canjear <código>'];
+handler.tags = ['economia'];
+handler.command = /^canjear$/i;
+handler.rowner = false; // Cualquier usuario puede usar este comando
+
+export default handler;
