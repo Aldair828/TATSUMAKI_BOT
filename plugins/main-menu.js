@@ -92,6 +92,10 @@ Angela: +527772130823
 │  𓋜 .pagar cantidad
 │  𓋜 .transferir @user cantidad
 │  𓋜 .tiktok https://vm.tiktok.com/ZMr7Xp92d/
+│  𓋜 .pokemon
+│  𓋜 .premiopokemon
+│  𓋜 .toppokemon 
+│  𓋜 .soltarpokemon
 ╰──ꕤ
 
 ╭──ꕤ「 Info 🌸 」ꕤ
