@@ -3,7 +3,8 @@ let ticketCounter = 1;
 let ticketPrice = 10; // Precio por boleto
 let premios = [1000, 600, 300]; // Premios para los 3 primeros lugares
 let sorteofunActive = false; // Indica si el sorteo está activo
-let startCode = "ALDAIR"; // Código de inicio del sorteo
+let usuariosQueCompraron = new Set();
+let sorteoProgramado;
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
     let user = global.db.data.users[m.sender];
@@ -26,6 +27,14 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
             ticketCounter++;
         }
 
+        usuariosQueCompraron.add(m.sender);
+
+        if (usuariosQueCompraron.size === 10 && !sorteofunActive) {
+            sorteofunActive = true;
+            sorteoProgramado = setTimeout(() => iniciarSorteo(m, conn), 4 * 60 * 60 * 1000); // 4 horas
+            m.reply("🎉 10 usuarios han comprado boletos. ¡El sorteo se realizará en 4 horas!");
+        }
+
         return m.reply(`🎟️ Has comprado ${cantidad} boletos. Buena suerte, ${m.sender.split('@')[0]}!`);
     }
 
@@ -41,52 +50,43 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
     // Información del sorteo
     if (command === 'sorteo') {
-        return m.reply(`🎰 El sorteo se realiza manualmente por el owner del bot usando el comando *${usedPrefix}sorteofun* con el código correcto. ¡Compra boletos antes de que el sorteo inicie!`);
-    }
-
-    // Iniciar el sorteo (solo el owner con código correcto)
-    if (command === 'sorteofun') {
-        if (!isOwner(m.sender)) return m.reply("❌ Solo el owner del bot puede iniciar el sorteo.");
-        if (args[0] !== startCode) return m.reply("❌ Código de inicio incorrecto.");
-        if (sorteofunActive) return m.reply("❌ El sorteo ya está en curso.");
-
-        sorteofunActive = true;
-
-        if (!Object.keys(userTickets).length) {
-            sorteofunActive = false;
-            return m.reply("❌ No hubo boletos vendidos, la lotería se cancela.");
+        if (sorteofunActive) {
+            let tiempoRestante = sorteoProgramado - Date.now();
+            let horas = Math.floor(tiempoRestante / (60 * 60 * 1000));
+            let minutos = Math.floor((tiempoRestante % (60 * 60 * 1000)) / (60 * 1000));
+            return m.reply(`🎰 El sorteo se realizará en ${horas} horas y ${minutos} minutos.`);
+        } else {
+            return m.reply("🎰 El sorteo se realizará automáticamente cuando 10 usuarios hayan comprado boletos.");
         }
-
-        let allTickets = Object.entries(userTickets).flatMap(([user, tickets]) => tickets.map(ticket => ({ user, ticket })));
-        let winners = [];
-
-        while (winners.length < 3 && allTickets.length > 0) {
-            let winner = allTickets.splice(Math.floor(Math.random() * allTickets.length), 1)[0];
-            if (!winners.some(w => w.user === winner.user)) {
-                winners.push(winner);
-            }
-        }
-
-        for (let i = 0; i < winners.length; i++) {
-            global.db.data.users[winners[i].user].limit += premios[i];
-            await conn.reply(m.chat, `🎉 ¡Felicidades <@${winners[i].user}>, has ganado *${premios[i]}* créditos por quedar en el lugar ${i + 1} en la lotería!`, m);
-        }
-
-        // Reiniciar la lotería
-        ticketCounter = 1;
-        userTickets = {};
-        sorteofunActive = false;
     }
 };
 
-handler.help = ['loteria <cantidad de boletos>', 'mistickets', 'sorteo', 'sorteofun <código>'];
+// Función para iniciar el sorteo
+async function iniciarSorteo(m, conn) {
+    let allTickets = Object.entries(userTickets).flatMap(([user, tickets]) => tickets.map(ticket => ({ user, ticket })));
+    let winners = [];
+
+    while (winners.length < 3 && allTickets.length > 0) {
+        let winner = allTickets.splice(Math.floor(Math.random() * allTickets.length), 1)[0];
+        if (!winners.some(w => w.user === winner.user)) {
+            winners.push(winner);
+        }
+    }
+
+    for (let i = 0; i < winners.length; i++) {
+        global.db.data.users[winners[i].user].limit += premios[i];
+        await conn.reply(m.chat, `🎉 ¡Felicidades <@${winners[i].user}>, has ganado *${premios[i]}* créditos por quedar en el lugar ${i + 1} en la lotería!`, m);
+    }
+
+    // Reiniciar la lotería
+    ticketCounter = 1;
+    userTickets = {};
+    usuariosQueCompraron.clear();
+    sorteofunActive = false;
+}
+
+handler.help = ['loteria <cantidad de boletos>', 'mistickets', 'sorteo'];
 handler.tags = ['game'];
-handler.command = ['loteria', 'mistickets', 'sorteo', 'sorteofun'];
+handler.command = ['loteria', 'mistickets', 'sorteo'];
 
 export default handler;
-
-// Función para verificar si el usuario es el owner del bot
-function isOwner(sender) {
-    const ownerNumber = ['1234567890@s.whatsapp.net']; // Reemplaza con el número de teléfono del owner
-    return ownerNumber.includes(sender);
-}
