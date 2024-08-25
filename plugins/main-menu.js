@@ -266,7 +266,7 @@ Angela: +527772130823
 " https://wa.me/+527772130823 "
 `.trim()
 
-    let videoUrl = 'https://telegra.ph/file/dd44a37bfdd17e0edc3bf.mp4' // Reemplaza esto con el enlace directo a tu video
+    let videoUrl = 'https://telegra.ph/file/41fd061d410037d4ea0ed.mp4' // Reemplaza esto con el enlace directo a tu video
     await conn.sendMessage(m.chat, { video: { url: videoUrl, gifPlayback: true }, caption: menuText }, { quoted: m })
 
   } catch (e) {
