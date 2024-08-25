@@ -3,7 +3,7 @@ let ticketCounter = 1;
 let ticketPrice = 10; // Precio por boleto
 let premios = [1000, 600, 300]; // Premios para los 3 primeros lugares
 let sorteofunActive = false; // Indica si el sorteo está activo
-let usuariosQueCompraron = new Set();
+let totalBoletosComprados = 0;
 let sorteoProgramado;
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
@@ -27,12 +27,12 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
             ticketCounter++;
         }
 
-        usuariosQueCompraron.add(m.sender);
+        totalBoletosComprados += cantidad;
 
-        if (usuariosQueCompraron.size === 10 && !sorteofunActive) {
+        if (totalBoletosComprados >= 10 && !sorteofunActive) {
             sorteofunActive = true;
             sorteoProgramado = setTimeout(() => iniciarSorteo(m, conn), 4 * 60 * 60 * 1000); // 4 horas
-            m.reply("🎉 10 usuarios han comprado boletos. ¡El sorteo se realizará en 4 horas!");
+            m.reply("🎉 Se han comprado 10 boletos. ¡El sorteo se realizará en 4 horas!");
         }
 
         return m.reply(`🎟️ Has comprado ${cantidad} boletos. ¡Buena suerte, ${m.sender.split('@')[0]}!`);
@@ -56,7 +56,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
             let minutos = Math.floor((tiempoRestante % (60 * 60 * 1000)) / (60 * 1000));
             return m.reply(`🎰 El sorteo se realizará en ${horas} horas y ${minutos} minutos.`);
         } else {
-            return m.reply("🎰 El sorteo se realizará automáticamente cuando 10 usuarios hayan comprado boletos.");
+            return m.reply(`🎰 Se han comprado ${totalBoletosComprados} boletos. El sorteo se realizará automáticamente cuando se hayan comprado 10 boletos.`);
         }
     }
 };
@@ -81,7 +81,7 @@ async function iniciarSorteo(m, conn) {
     // Reiniciar la lotería
     ticketCounter = 1;
     userTickets = {};
-    usuariosQueCompraron.clear();
+    totalBoletosComprados = 0;
     sorteofunActive = false;
 }
 
