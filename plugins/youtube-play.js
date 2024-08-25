@@ -3,6 +3,7 @@ let ticketCounter = 1;
 let ticketPrice = 10; // Precio por boleto
 let premios = [1000, 600, 300]; // Premios para los 3 primeros lugares
 let sorteofunActive = false; // Indica si el sorteo está activo
+let startCode = "ALDAIR"; // Código de inicio del sorteo
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
     let user = global.db.data.users[m.sender];
@@ -40,12 +41,13 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
     // Información del sorteo
     if (command === 'sorteo') {
-        return m.reply(`🎰 El sorteo se realiza manualmente por el owner del bot usando el comando *${usedPrefix}sorteofun*. ¡Compra boletos antes de que el sorteo inicie!`);
+        return m.reply(`🎰 El sorteo se realiza manualmente por el owner del bot usando el comando *${usedPrefix}sorteofun* con el código correcto. ¡Compra boletos antes de que el sorteo inicie!`);
     }
 
-    // Iniciar el sorteo (solo el owner puede ejecutar esto)
+    // Iniciar el sorteo (solo el owner con código correcto)
     if (command === 'sorteofun') {
         if (!isOwner(m.sender)) return m.reply("❌ Solo el owner del bot puede iniciar el sorteo.");
+        if (args[0] !== startCode) return m.reply("❌ Código de inicio incorrecto.");
         if (sorteofunActive) return m.reply("❌ El sorteo ya está en curso.");
 
         sorteofunActive = true;
@@ -77,7 +79,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     }
 };
 
-handler.help = ['loteria <cantidad de boletos>', 'mistickets', 'sorteo', 'sorteofun'];
+handler.help = ['loteria <cantidad de boletos>', 'mistickets', 'sorteo', 'sorteofun <código>'];
 handler.tags = ['game'];
 handler.command = ['loteria', 'mistickets', 'sorteo', 'sorteofun'];
 
