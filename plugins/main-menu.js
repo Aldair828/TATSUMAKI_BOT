@@ -96,6 +96,9 @@ Angela: +527772130823
 │  𓋜 .premiopokemon
 │  𓋜 .toppokemon 
 │  𓋜 .soltarpokemon
+│  𓋜 .loteria cantidad
+│  𓋜 .mistickets
+│  𓋜 .sorteo
 ╰──ꕤ
 
 ╭──ꕤ「 Info 🌸 」ꕤ
