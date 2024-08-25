@@ -17,9 +17,9 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         let cantidad = parseInt(args[0]);
         let cost = ticketPrice * cantidad;
 
-        if (user.limit < cost) return m.reply('❌ No tienes suficientes *Creditos* para comprar esta cantidad de boletos.');
+        if (user.limit < cost) return m.reply('❌ No tienes suficientes *Créditos* para comprar esta cantidad de boletos.');
 
-        user.limit -= cost;
+        user.limit -= cost; // Restar el costo de los boletos a los créditos del usuario
 
         if (!userTickets[m.sender]) userTickets[m.sender] = [];
         for (let i = 0; i < cantidad; i++) {
@@ -35,7 +35,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
             m.reply("🎉 10 usuarios han comprado boletos. ¡El sorteo se realizará en 4 horas!");
         }
 
-        return m.reply(`🎟️ Has comprado ${cantidad} boletos. Buena suerte, ${m.sender.split('@')[0]}!`);
+        return m.reply(`🎟️ Has comprado ${cantidad} boletos. ¡Buena suerte, ${m.sender.split('@')[0]}!`);
     }
 
     // Ver boletos
