@@ -51,6 +51,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
 Aldair: +51925015528
 Angela: +527772130823
+Abraham: +522482267952
 
 *Puede seguir el canal del bot:* https://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x
 
@@ -268,6 +269,10 @@ Angela: +527772130823
 
 ➽  DEVELOPER 👨🏻‍💻: MEOW - ANGELA 
 " https://wa.me/+527772130823 "
+
+➽  DEVELOPER 👨🏻‍💻: ABRAHAM
+" https://wa.me/+522482267952 "
+
 `.trim()
 
     let videoUrl = 'https://telegra.ph/file/41fd061d410037d4ea0ed.mp4' // Reemplaza esto con el enlace directo a tu video
