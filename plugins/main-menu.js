@@ -213,6 +213,7 @@ Angela: +527772130823
 ╭──ꕤ「 Diversión 🤪 」ꕤ
 │  𓋜 .afk <razón>
 │  𓋜 .dance <@user>
+│  𓋜 .abrazo <@user>
 │  𓋜 .gay
 │  𓋜 .horny
 │  𓋜 .ship
