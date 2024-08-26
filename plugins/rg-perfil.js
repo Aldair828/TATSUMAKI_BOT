@@ -30,7 +30,8 @@ const countryPrefixes = {
 
 // Función para obtener el nombre del país según el prefijo del número
 function getCountryByPrefix(phoneNumber) {
-    let prefix = phoneNumber.getRegionCode();
+    // Extraer el prefijo del número de teléfono
+    let prefix = phoneNumber.getCountryCode();
     return countryPrefixes[prefix] || 'Desconocido';
 }
 
