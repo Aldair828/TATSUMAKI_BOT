@@ -10,15 +10,45 @@ let handler = async (m, { conn, args, text, usedPrefix, command }) => {
     let user = global.db.data.users[m.sender];
 
     if (isNaN(amount) || amount < 10) throw `Para jugar tienes que apostar 10 💎.`;
-    if (!colores.includes(color)) throw 'Debes escojer un color valido: rojo o negro';
-    if (user.limit < amount) throw `¡No tienes suficiente creditos para apostar! Tienes ${user.limit} pero necesitas al menos ${amount} 💎.`;
+    if (!colores.includes(color)) throw 'Debes escoger un color válido: rojo o negro';
+    if (user.limit < amount) throw `¡No tienes suficientes créditos para apostar! Tienes ${user.limit} pero necesitas al menos ${amount} 💎.`;
+
+    // Obtener el multiplicador según el rango del usuario
+    let multiplicador = 1;
+    let rangoMensaje = '';
+    if (user.rango) {
+        switch (user.rango) {
+            case 'bronce':
+                multiplicador = 2;
+                break;
+            case 'plata':
+                multiplicador = 3;
+                break;
+            case 'oro':
+                multiplicador = 4;
+                break;
+            case 'diamante':
+                multiplicador = 5;
+                break;
+            case 'maestro':
+                multiplicador = 6;
+                break;
+            case 'leyenda':
+                multiplicador = 7;
+                break;
+            default:
+                multiplicador = 1;
+        }
+        rangoMensaje = `\n\n𝚃𝙸𝙴𝙽𝙴 𝚁𝙰𝙽𝙶𝙾: ${user.rango.charAt(0).toUpperCase() + user.rango.slice(1)}`;
+    }
 
     let result = '';
     if (colour == color) {
-        user.limit += amount;
+        let amountWithMultiplier = amount * multiplicador;
+        user.limit += amountWithMultiplier;
         result = `*[ 𝙿𝚁𝚄𝙴𝙱𝙰 𝚃𝚄 𝚂𝚄𝙴𝚁𝚃𝙴 ]*\n\n` +
-                 `*𝙻𝙰 𝚁𝚄𝙻𝙴𝚃𝙰 𝙿𝙰𝚁𝙾 𝙴𝙽 𝙴𝙻 𝙲𝙾𝙻𝙾𝚁:* ${colour == 'rojo' ? '🔴' : '⚫'}\n\n` +
-                 `*𝚄𝚂𝚃𝙴𝙳 𝙶𝙰𝙽𝙾:* ${amount} 💎\n` +
+                 `*𝙻𝙰 𝚁𝚄𝙻𝙴𝚃𝙰 𝙿𝙰𝚁𝙾 𝙴𝙽 𝙴𝙻 𝙲𝙾𝙻𝙾𝚁:* ${colour == 'rojo' ? '🔴' : '⚫'}${rangoMensaje}\n\n` +
+                 `*𝚄𝚂𝚃𝙴𝙳 𝙶𝙰𝙽𝙾:* ${amountWithMultiplier} 💎\n` +
                  `*CREDITOS:* ${user.limit}`;
     } else {
         user.limit -= amount;
