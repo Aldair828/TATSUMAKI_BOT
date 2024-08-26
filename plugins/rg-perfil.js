@@ -2,37 +2,36 @@ import { createHash } from 'crypto';
 import PhoneNumber from 'awesome-phonenumber';
 import fetch from 'node-fetch';
 
-// Mapa de prefijos de países de Latinoamérica y sus respectivos nombres
+// Mapa de prefijos de países de Latinoamérica con nombres y banderas
 const countryPrefixes = {
-    "51": "Perú",
-    "1": "Estados Unidos/Canadá",
-    "34": "España",
-    "52": "México",
-    "54": "Argentina",
-    "55": "Brasil",
-    "56": "Chile",
-    "57": "Colombia",
-    "58": "Venezuela",
-    "59": "Guayana",
-    "60": "Malasia",
-    "61": "Australia",
-    "62": "Indonesia",
-    "63": "Filipinas",
-    "64": "Nueva Zelanda",
-    "65": "Singapur",
-    "66": "Tailandia",
-    "67": "Papúa Nueva Guinea",
-    "68": "Brunei",
-    "69": "Sri Lanka",
-    "70": "Nepal",
-    "71": "Maldivas"
+    "54": { name: "Argentina", flag: "🇦🇷" },
+    "591": { name: "Bolivia", flag: "🇧🇴" },
+    "55": { name: "Brasil", flag: "🇧🇷" },
+    "56": { name: "Chile", flag: "🇨🇱" },
+    "57": { name: "Colombia", flag: "🇨🇴" },
+    "506": { name: "Costa Rica", flag: "🇨🇷" },
+    "53": { name: "Cuba", flag: "🇨🇺" },
+    "593": { name: "Ecuador", flag: "🇪🇨" },
+    "503": { name: "El Salvador", flag: "🇸🇻" },
+    "502": { name: "Guatemala", flag: "🇬🇹" },
+    "509": { name: "Haití", flag: "🇭🇹" },
+    "504": { name: "Honduras", flag: "🇭🇳" },
+    "52": { name: "México", flag: "🇲🇽" },
+    "505": { name: "Nicaragua", flag: "🇳🇮" },
+    "507": { name: "Panamá", flag: "🇵🇦" },
+    "595": { name: "Paraguay", flag: "🇵🇾" },
+    "51": { name: "Perú", flag: "🇵🇪" },
+    "1": { name: "República Dominicana", flag: "🇩🇴" }, // República Dominicana comparte el prefijo con EE.UU y Canadá
+    "598": { name: "Uruguay", flag: "🇺🇾" },
+    "58": { name: "Venezuela", flag: "🇻🇪" },
+    // Puedes agregar más países si lo deseas
 };
 
-// Función para obtener el nombre del país según el prefijo del número
+// Función para obtener el nombre del país y la bandera según el prefijo del número
 function getCountryByPrefix(phoneNumber) {
-    // Extraer el prefijo del número de teléfono
     let prefix = phoneNumber.getCountryCode();
-    return countryPrefixes[prefix] || 'Desconocido';
+    let country = countryPrefixes[prefix];
+    return country ? `${country.flag} ${country.name}` : 'Desconocido';
 }
 
 let handler = async (m, { conn, usedPrefix }) => {
@@ -91,7 +90,7 @@ let handler = async (m, { conn, usedPrefix }) => {
         // Verificar si es usuario premium y cuánto tiempo le queda
         let premiumStatus = prem ? `Usuario VIP (Expira en ${premiumTime} días)` : 'Usuario Regular';
 
-        // Obtener el país basado en el prefijo del número de teléfono
+        // Obtener el país y la bandera basado en el prefijo del número de teléfono
         let phoneNumber = new PhoneNumber('+' + who.replace('@s.whatsapp.net', ''));
         let country = getCountryByPrefix(phoneNumber);
         
