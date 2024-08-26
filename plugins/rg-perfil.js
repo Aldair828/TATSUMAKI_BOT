@@ -2,14 +2,30 @@ import { createHash } from 'crypto';
 import PhoneNumber from 'awesome-phonenumber';
 import fetch from 'node-fetch';
 
-// Mapa de prefijos de países y sus respectivos nombres
+// Mapa de prefijos de países de Latinoamérica y sus respectivos nombres
 const countryPrefixes = {
     "51": "Perú",
     "1": "Estados Unidos/Canadá",
     "34": "España",
     "52": "México",
     "54": "Argentina",
-    // Añade más prefijos según sea necesario
+    "55": "Brasil",
+    "56": "Chile",
+    "57": "Colombia",
+    "58": "Venezuela",
+    "59": "Guayana",
+    "60": "Malasia",
+    "61": "Australia",
+    "62": "Indonesia",
+    "63": "Filipinas",
+    "64": "Nueva Zelanda",
+    "65": "Singapur",
+    "66": "Tailandia",
+    "67": "Papúa Nueva Guinea",
+    "68": "Brunei",
+    "69": "Sri Lanka",
+    "70": "Nepal",
+    "71": "Maldivas"
 };
 
 // Función para obtener el nombre del país según el prefijo del número
