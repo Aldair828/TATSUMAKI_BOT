@@ -12,7 +12,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     if (command === 'tienda') {
         let message = '🏬 *Tienda de Rangos* 🏬\n\n';
         for (let [rango, data] of Object.entries(rangos)) {
-            message += `*${rango.charAt(0).toUpperCase() + rango.slice(1)}*\nCosto: ${data.costo} créditos\nMultiplicador: ${data.multiplicador}x\n\n`;
+            message += `*${rango.charAt(0).toUpperCase() + rango.slice(1)}*\nCosto: ${data.costo} créditos\nMultiplicador: ${data.multiplicador}x\n\nLos rangos te benefician en juegos, los premios de múltiplican segun el rango que tienes 🌐`;
         }
         await conn.sendFile(m.chat, 'https://telegra.ph/file/596927b96d010bb6a0f86.jpg', '', message, m);
     } else if (command === 'comprar') {
