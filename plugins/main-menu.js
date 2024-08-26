@@ -93,6 +93,7 @@ Abraham: +522482267952
 │  𓋜 .pagar cantidad
 │  𓋜 .transferir @user cantidad
 │  𓋜 .tiktok https://vm.tiktok.com/ZMr7Xp92d/
+│  𓋜 .tiktoksearch
 │  𓋜 .pokemon
 │  𓋜 .premiopokemon
 │  𓋜 .toppokemon 
