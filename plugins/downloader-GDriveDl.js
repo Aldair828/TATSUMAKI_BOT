@@ -47,14 +47,45 @@ let handler = async (m, { conn }) => {
 
     // Suma de los créditos capturados
     let totalCreditos = capturados.reduce((total, animal) => total + animal.creditos, 0);
-    let mensajeCaptura = `Cazaste:\n\n${capturados.map(a => `${a.emoji}`).join(' + ')}\n\n`;
 
-    // Muestra los animales capturados y sus créditos
-    mensajeCaptura += capturados.map(a => `${a.nombre} ${a.emoji} ${a.creditos} crédito${a.creditos > 1 ? 's' : ''}`).join('\n') + '\n\n';
-    mensajeCaptura += `¡Has ganado ${totalCreditos} crédito${totalCreditos > 1 ? 's' : ''}!`;
+    // Obtener el multiplicador según el rango del usuario
+    let multiplicador = 1;
+    let rangoMensaje = '';
+    if (user.rango) {
+        switch (user.rango) {
+            case 'bronce':
+                multiplicador = 2;
+                break;
+            case 'plata':
+                multiplicador = 3;
+                break;
+            case 'oro':
+                multiplicador = 4;
+                break;
+            case 'diamante':
+                multiplicador = 5;
+                break;
+            case 'maestro':
+                multiplicador = 6;
+                break;
+            case 'leyenda':
+                multiplicador = 7;
+                break;
+            default:
+                multiplicador = 1;
+        }
+        rangoMensaje = `\n\n𝚃𝙸𝙴𝙽𝙴 𝚄𝙽 𝚁𝙰𝙽𝙶𝙾: ${user.rango.charAt(0).toUpperCase() + user.rango.slice(1)}`;
+    }
+
+    // Aplicar el multiplicador de créditos
+    let creditosMultiplicados = totalCreditos * multiplicador;
+
+    // Crear el mensaje de captura
+    let mensajeCaptura = `Cazaste:\n\n${capturados.map(a => `${a.emoji}`).join(' + ')}\n\n`;
+    mensajeCaptura += capturados.map(a => `${a.nombre} ${a.emoji} ${a.creditos} crédito${a.creditos > 1 ? 's' : ''}`).join('\n') + rangoMensaje + `\n\n¡Has ganado ${creditosMultiplicados} crédito${creditosMultiplicados > 1 ? 's' : ''}!`;
 
     // Sumar los créditos al usuario
-    user.limit += totalCreditos;
+    user.limit += creditosMultiplicados;
 
     // Actualizar el tiempo de la última caza
     user.lastCaza = tiempoActual;
