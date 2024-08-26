@@ -10,6 +10,10 @@ let handler = async (m, { conn }) => {
         return conn.reply(m.chat, `Debes esperar ${minutosRestantes} minutos y ${segundosRestantes} segundos antes de abrir otro cofre.`, m);
     }
 
+    // Contador global para determinar cuándo se debe ganar el moño
+    global.moñoCounter = global.moñoCounter || 0;
+    global.moñoCounter += 1;
+
     // Lista de animales con sus emojis y créditos
     const animales = [
         { emoji: '🐶', creditos: 1 },
@@ -21,13 +25,11 @@ let handler = async (m, { conn }) => {
         { emoji: '🐨', creditos: 3 }
     ];
 
-    // Probabilidad de moño 🎀 (1% de probabilidad)
-    const probabilityOfBow = 0.01; // 1%
-
     // Función para determinar el premio
     function seleccionarPremio() {
-        if (Math.random() < probabilityOfBow) {
-            return { emoji: '🎀', creditos: 0 };
+        if (global.moñoCounter >= 60) {
+            global.moñoCounter = 0; // Reiniciar el contador después de ganar el moño
+            return { emoji: '🎀', creditos: 500 };
         } else {
             const randomIndex = Math.floor(Math.random() * animales.length);
             return animales[randomIndex];
@@ -39,7 +41,8 @@ let handler = async (m, { conn }) => {
     let mensaje;
     
     if (premio.emoji === '🎀') {
-        mensaje = `ENHORABUENAAAAA te ganaste el moño 🎀\n\nPuedes reclamar 500 créditos a este número: +51 925 015 528\n\n¿Qué esperas?`;
+        user.limit += premio.creditos; // Agregar 500 créditos al perfil del usuario
+        mensaje = `ENHORABUENAAAAA te ganaste el moño 🎀\n\n¡Has ganado 500 créditos que han sido agregados a tu cuenta!\n\nTus créditos han sido actualizados.`;
     } else {
         user.limit += premio.creditos; // Agregar créditos al perfil del usuario
         mensaje = `¡Has ganado ${premio.emoji}! Has obtenido ${premio.creditos} crédito${premio.creditos > 1 ? 's' : ''}. Tus créditos han sido actualizados.`;
