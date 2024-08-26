@@ -2,7 +2,22 @@ import { createHash } from 'crypto';
 import PhoneNumber from 'awesome-phonenumber';
 import fetch from 'node-fetch';
 
-// Handler del perfil
+// Mapa de prefijos de países y sus respectivos nombres
+const countryPrefixes = {
+    "51": "Perú",
+    "1": "Estados Unidos/Canadá",
+    "34": "España",
+    "52": "México",
+    "54": "Argentina",
+    // Añade más prefijos según sea necesario
+};
+
+// Función para obtener el nombre del país según el prefijo del número
+function getCountryByPrefix(phoneNumber) {
+    let prefix = phoneNumber.getRegionCode();
+    return countryPrefixes[prefix] || 'Desconocido';
+}
+
 let handler = async (m, { conn, usedPrefix }) => {
     let fkontak = {
         "key": {
@@ -34,7 +49,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     } catch (e) {
         // Manejar errores si es necesario
     } finally {
-        let { name, limit, lastclaim, registered, regTime, age, banned, level, premiumTime, country } = global.db.data.users[who];
+        let { name, limit, lastclaim, registered, regTime, age, banned, level, premiumTime } = global.db.data.users[who];
         let mentionedJid = [who];
         let username = conn.getName(who);
         let prem = global.prems.includes(who.split`@`[0]);
@@ -56,18 +71,23 @@ let handler = async (m, { conn, usedPrefix }) => {
         else if (limit >= 100) rank = '🥈 PLATA';
         else rank = '🥉 BRONCE';
 
-        // Definir estado basado en si el usuario está baneado o no
-        let estado = banned ? 'BANEADO [❌]' : 'LIBRE [✅]';
-
         // Verificar si es usuario premium y cuánto tiempo le queda
         let premiumStatus = prem ? `Usuario VIP (Expira en ${premiumTime} días)` : 'Usuario Regular';
+
+        // Obtener el país basado en el prefijo del número de teléfono
+        let phoneNumber = new PhoneNumber('+' + who.replace('@s.whatsapp.net', ''));
+        let country = getCountryByPrefix(phoneNumber);
+        
+        // Definir estado basado en si el usuario está baneado o no
+        let estado = banned ? 'BANEADO [❌]' : 'LIBRE [✅]';
 
         let str = `*PERFIL DE* @${who.split('@')[0]}
 
 *[👤] NOMBRE →* ${name}
 *[📅] EDAD →* ${age} años
-*[🔗] ID →* ${PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')}
+*[🔗] ID →* ${phoneNumber.getNumber('international')}
 *[💬] NICKNAME →* ${username}
+*[🌍] NACIONALIDAD →* ${country}
 *[💸] CRÉDITOS →* ${limit}
 *[💵] CRÉDITOS EN EL BANCO →* ${user.banco || 0}
 *[🌟] NIVEL →* ${level || 1}
@@ -78,15 +98,14 @@ let handler = async (m, { conn, usedPrefix }) => {
 
 *[🔢] NÚMERO DE SERIE:* ${sn}
 
-
 SI QUIERES GUARDAR TUS CRÉDITOS EN EL BANCO USA EL COMANDO 
 .depositar cantidad 
 
 SI QUIERES RETIRAR LOS CRÉDITOS DEL BANCO USA EL COMANDO 
 .retirar cantidad
 
-.top  para ver los mejores en créditos`;
-        
+.top para ver los mejores en créditos`;
+
         conn.sendFile(m.chat, pp, 'pp.jpg', str, fkontak, false, { contextInfo: { mentionedJid }});
     }
 }
