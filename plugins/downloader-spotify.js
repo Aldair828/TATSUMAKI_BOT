@@ -38,14 +38,45 @@ let handler = async (m, { conn }) => {
 
     // Selección del premio
     let premio = seleccionarPremio();
+    
+    // Aplicar multiplicador de acuerdo al rango
+    let multiplicador = 1;
+    let rangoMensaje = '';
+    if (user.rango) {
+        switch (user.rango) {
+            case 'bronce':
+                multiplicador = 2;
+                break;
+            case 'plata':
+                multiplicador = 3;
+                break;
+            case 'oro':
+                multiplicador = 4;
+                break;
+            case 'diamante':
+                multiplicador = 5;
+                break;
+            case 'maestro':
+                multiplicador = 6;
+                break;
+            case 'leyenda':
+                multiplicador = 7;
+                break;
+            default:
+                multiplicador = 1;
+        }
+        rangoMensaje = `\n\n𝚃𝙸𝙴𝙽𝙴 𝚁𝙰𝙽𝙶𝙾: ${user.rango.charAt(0).toUpperCase() + user.rango.slice(1)}`;
+    }
+
     let mensaje;
     
     if (premio.emoji === '🎀') {
-        user.limit += premio.creditos; // Agregar 500 créditos al perfil del usuario
+        user.limit += premio.creditos; // Agregar 500 créditos al perfil del usuario sin multiplicador
         mensaje = `ENHORABUENAAAAA te ganaste el moño 🎀\n\n¡Has ganado 500 créditos que han sido agregados a tu cuenta!\n\nTus créditos han sido actualizados.`;
     } else {
-        user.limit += premio.creditos; // Agregar créditos al perfil del usuario
-        mensaje = `¡Has ganado ${premio.emoji}! Has obtenido ${premio.creditos} crédito${premio.creditos > 1 ? 's' : ''}. Tus créditos han sido actualizados.`;
+        let creditosGanados = premio.creditos * multiplicador;
+        user.limit += creditosGanados; // Agregar créditos con multiplicador al perfil del usuario
+        mensaje = `¡Has ganado ${premio.emoji}! Has obtenido ${creditosGanados} crédito${creditosGanados > 1 ? 's' : ''}. Tus créditos han sido actualizados.${rangoMensaje}`;
     }
 
     // Actualizar el tiempo de la última apertura del cofre
