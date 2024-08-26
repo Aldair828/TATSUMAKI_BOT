@@ -10,7 +10,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     };
 
     if (command === 'tienda') {
-        let message = '🏬 *Tienda de Rangos* 🏬\n\nLos rangos te benefician en los juegos, los premios se multiplican según el rango que tienes 🌐\n\n';
+        let message = '🏬 *Tienda de Rangos* 🏬\n\nLos rangos te benefician en los juegos, los premios se multiplican según el rango que tienes 🌐\n\nEjemplo: .comprar leyenda\n\n';
         for (let [rango, data] of Object.entries(rangos)) {
             message += `*${rango.charAt(0).toUpperCase() + rango.slice(1)}*\nCosto: ${data.costo} créditos\nMultiplicador: ${data.multiplicador}x\n\n`;
         }
