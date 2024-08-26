@@ -1,50 +1,42 @@
-// Mapeo de rangos y beneficios
-const rangos = {
-    '🥉 BRONCE': { multiplicador: 2 },
-    '🥈 PLATA': { multiplicador: 3 },
-    '🥇 ORO': { multiplicador: 4 },
-    '💎 DIAMANTE': { multiplicador: 5 },
-    '🃏 MAESTRO': { multiplicador: 6 },
-    '💮 LEYENDA': { multiplicador: 7 },
+let handler = async (m, { conn, args, usedPrefix, command }) => {
+    let user = global.db.data.users[m.sender];
+    let rangos = {
+        bronce: { costo: 300, multiplicador: 2, image: 'https://example.com/bronce.jpg' },
+        plata: { costo: 600, multiplicador: 3, image: 'https://example.com/plata.jpg' },
+        oro: { costo: 1200, multiplicador: 4, image: 'https://example.com/oro.jpg' },
+        diamante: { costo: 2400, multiplicador: 5, image: 'https://example.com/diamante.jpg' },
+        maestro: { costo: 4800, multiplicador: 6, image: 'https://example.com/maestro.jpg' },
+        leyenda: { costo: 9600, multiplicador: 7, image: 'https://example.com/leyenda.jpg' },
+    };
+
+    if (command === 'tienda') {
+        let message = '🏬 *Tienda de Rangos* 🏬\n\n';
+        for (let [rango, data] of Object.entries(rangos)) {
+            message += `*${rango.charAt(0).toUpperCase() + rango.slice(1)}*\nCosto: ${data.costo} créditos\nMultiplicador: ${data.multiplicador}x\n\n`;
+        }
+        await conn.sendFile(m.chat, 'https://example.com/tienda.jpg', '', message, m);
+    } else if (command === 'comprar') {
+        if (!args[0]) return m.reply(`Por favor, especifica el rango que deseas comprar. Ejemplo: *${usedPrefix}${command} bronce*`);
+
+        let rangoSeleccionado = args[0].toLowerCase();
+
+        if (!rangos[rangoSeleccionado]) return m.reply(`Rango no válido. Los rangos disponibles son: ${Object.keys(rangos).join(', ')}`);
+
+        let rango = rangos[rangoSeleccionado];
+
+        if (user.limit < rango.costo) return m.reply('No tienes suficientes créditos para comprar este rango.');
+
+        user.limit -= rango.costo;
+        user.rango = rangoSeleccionado;
+        user.multiplicador = rango.multiplicador;
+
+        let message = `🎉 ¡Felicidades! Ahora tienes el rango *${rangoSeleccionado.charAt(0).toUpperCase() + rangoSeleccionado.slice(1)}*.\nTus premios ahora se multiplicarán por *${rango.multiplicador}x* en los juegos.`;
+        await conn.sendFile(m.chat, rango.image, '', message, m);
+    }
 };
 
-let handlerComprar = async (m, { conn, args }) => {
-    let user = global.db.data.users[m.sender];
-    if (!args[0] || isNaN(args[0])) {
-        return conn.reply(m.chat, 'Por favor, ingresa el nombre del rango que deseas comprar.', m);
-    }
+handler.help = ['tienda', 'comprar <rango>'];
+handler.tags = ['economy'];
+handler.command = ['tienda', 'comprar'];
 
-    let rango = args[0].toUpperCase();
-    if (!Object.keys(rangos).includes(rango)) {
-        return conn.reply(m.chat, 'Rango no válido. Usa el comando `.tienda` para ver los rangos disponibles.', m);
-    }
-
-    let costo = 100; // Ejemplo de costo para todos los rangos
-    if (user.limit < costo) {
-        return conn.reply(m.chat, 'No tienes suficientes créditos para comprar este rango.', m);
-    }
-
-    user.limit -= costo;
-    user.rango = rango;
-    conn.reply(m.chat, `¡Felicidades! Has comprado el rango ${rango}.`, m);
-}
-
-let handlerTienda = async (m, { conn }) => {
-    let mensaje = '🛒 **TIENDA DE RANGOS**\n\n';
-    for (let [rango, beneficios] of Object.entries(rangos)) {
-        mensaje += `*${rango}*\nBeneficio: Multiplicador de ${beneficios.multiplicador}x en juegos\nCosto: 100 créditos\n\n`;
-    }
-    conn.reply(m.chat, mensaje, m);
-}
-
-handlerComprar.help = ['comprar [rango]'];
-handlerComprar.tags = ['shop'];
-handlerComprar.command = /^comprar$/i;
-handlerComprar.register = true;
-
-handlerTienda.help = ['tienda'];
-handlerTienda.tags = ['shop'];
-handlerTienda.command = /^tienda$/i;
-handlerTienda.register = true;
-
-export { handlerComprar, handlerTienda };
+export default handler;
