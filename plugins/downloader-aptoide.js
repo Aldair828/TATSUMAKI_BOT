@@ -24,6 +24,15 @@ let handler = async (m, { conn, text }) => {
     // Configurar límites de transferencia
     let maxTransfer = esVIP ? 500 : 100;
 
+    // Restricción de tiempo para usuarios VIP
+    let tiempoActual = Date.now();
+    let tiempoUltimaTransferencia = senderUser.lastTransfer || 0;
+    let tiempoRestante = (1800000 - (tiempoActual - tiempoUltimaTransferencia)) / 60000; // 30 minutos en milisegundos
+
+    if (esVIP && tiempoActual - tiempoUltimaTransferencia < 1800000) {
+        return conn.reply(m.chat, `Como usuario VIP, debes esperar ${tiempoRestante.toFixed(1)} minutos antes de poder transferir nuevamente.`, m);
+    }
+
     // Condición para usuarios no VIP: deben tener suficientes créditos
     if (!esVIP && senderUser.limit < cantidad) {
         return conn.reply(m.chat, 'No tienes suficientes créditos para transferir esa cantidad.', m);
@@ -39,6 +48,11 @@ let handler = async (m, { conn, text }) => {
     // Transferir los créditos
     senderUser.limit -= esVIP ? 0 : cantidad; // Si es VIP, no se reduce el límite
     recipientUser.limit += cantidad;
+
+    // Registrar la hora de la transferencia para VIPs
+    if (esVIP) {
+        senderUser.lastTransfer = tiempoActual;
+    }
 
     // Responder con un mensaje de confirmación
     conn.reply(m.chat, `Has transferido ${cantidad} créditos a @${who.split('@')[0]}.`, m, {
