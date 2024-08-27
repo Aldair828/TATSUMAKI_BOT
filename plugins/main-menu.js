@@ -46,7 +46,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     let menuText = `
 *FENIX_BOT*
 
-*Bienvenido* @${name}
+*Bienvenido* @${name} 
 
 *Puede seguir el canal del bot:* https://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x
 
@@ -65,7 +65,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ➢ *[👥] USUARIOS REGISTRADOS:* ${rtotalreg} 
 ➢ *[⏳] TIEMPO ACTIVO:* ${uptime}
 ➢ *[🔐] MODO:* ${global.opts['self'] ? 'Privado' : 'Público'}
-
 
 ᧔♡᧓  *L I S T A  -  M E N Ú S*  ᧔♡᧓
 
@@ -266,15 +265,15 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ➽  DEVELOPER 👨🏻‍💻: Aldair
 " https://wa.me/+51925015528 "
 
-
 `.trim()
 
     let imageUrl = 'https://telegra.ph/file/f26a0a4ab807c3c9387ca.jpg' // Reemplaza esto con el enlace directo a tu imagen
-await conn.sendMessage(m.chat, { image: { url: imageUrl }, caption: menuText }, { quoted: m })
+    await conn.sendMessage(m.chat, { image: { url: imageUrl }, caption: menuText }, { quoted: m })
 
-} catch (e) {
+  } catch (e) {
     conn.reply(m.chat, 'Lo sentimos, el menú tiene un error.', m)
     throw e
+  }
 }
 
 handler.help = ['menu']
