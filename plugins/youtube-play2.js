@@ -9,10 +9,13 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         leyenda: { costo: 9600, multiplicador: 7, image: 'https://telegra.ph/file/b999330af58e361d89abc.jpg' },
     };
 
+    let isVip = global.prems.includes(m.sender.split('@')[0]); // Verificar si el usuario es VIP
+
     if (command === 'tienda') {
         let message = '🏬 *Tienda de Rangos* 🏬\n\nLos rangos te benefician en los juegos, los premios se multiplican según el rango que tienes 🌐\n\nEjemplo: .comprar leyenda\n\n';
         for (let [rango, data] of Object.entries(rangos)) {
-            message += `*${rango.charAt(0).toUpperCase() + rango.slice(1)}*\nCosto: ${data.costo} créditos\nMultiplicador: ${data.multiplicador}x\n\n`;
+            let costoFinal = isVip ? data.costo / 2 : data.costo;
+            message += `*${rango.charAt(0).toUpperCase() + rango.slice(1)}*\nCosto: ${costoFinal} créditos${isVip ? ' (VIP Descuento aplicado)' : ''}\nMultiplicador: ${data.multiplicador}x\n\n`;
         }
         await conn.sendFile(m.chat, 'https://telegra.ph/file/596927b96d010bb6a0f86.jpg', '', message, m);
     } else if (command === 'comprar') {
@@ -23,10 +26,11 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         if (!rangos[rangoSeleccionado]) return m.reply(`Rango no válido. Los rangos disponibles son: ${Object.keys(rangos).join(', ')}`);
 
         let rango = rangos[rangoSeleccionado];
+        let costoFinal = isVip ? rango.costo / 2 : rango.costo;
 
-        if (user.limit < rango.costo) return m.reply('No tienes suficientes créditos para comprar este rango.\n\n.tienda  para ver los precios de los rangos ');
+        if (user.limit < costoFinal) return m.reply('No tienes suficientes créditos para comprar este rango.\n\n.tienda  para ver los precios de los rangos ');
 
-        user.limit -= rango.costo;
+        user.limit -= costoFinal;
         user.rango = rangoSeleccionado;
         user.multiplicador = rango.multiplicador;
 
