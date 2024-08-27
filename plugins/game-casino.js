@@ -4,10 +4,17 @@ let handler = async (m, { conn, args, text, usedPrefix, command }) => {
     let amount = parseInt(args[0]);
     let color = args[1]?.toLowerCase();
     if (args.length < 2 || !color) throw `Error, ingrese el monto y el color rojo o negro. ejemplo .ruleta 10 rojo `;
-    
+
+    let user = global.db.data.users[m.sender];
+
+    // Verificar tiempo de espera
+    let lastRuletaTime = user.lastRuletaTime || 0;
+    let tiempoRestante = (300000 - (new Date - lastRuletaTime)) / 1000; // 300000 ms = 5 minutos
+
+    if (tiempoRestante > 0) throw `Por favor espera ${tiempoRestante.toFixed(0)} segundos antes de volver a jugar.`;
+
     let colores = ['rojo', 'negro'];
     let colour = colores[Math.floor(Math.random() * colores.length)];
-    let user = global.db.data.users[m.sender];
 
     if (isNaN(amount) || amount < 10) throw `Para jugar tienes que apostar 10 💎.`;
     if (!colores.includes(color)) throw 'Debes escoger un color válido: rojo o negro';
@@ -57,6 +64,9 @@ let handler = async (m, { conn, args, text, usedPrefix, command }) => {
                  `*𝚄𝚂𝚃𝙴𝙳 𝙿𝙴𝚁𝙳𝙸𝙾:* ${amount} 💎\n` +
                  `*CREDITOS:* ${user.limit}`;
     }
+
+    // Actualizar el tiempo del último uso
+    user.lastRuletaTime = new Date().getTime();
 
     conn.sendMessage(m.chat, { image: { url: ruletaresultado }, caption: result }, { quoted: m });
 };
