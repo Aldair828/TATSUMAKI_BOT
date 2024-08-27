@@ -35,6 +35,10 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 *💫 NIVEL ➩* ${nivel}
 *🌹SIGUIENTE NIVEL ➩* ${textoSiguienteNivel}
 
+JUEGA LOS SIGUIENTES JUEGOS PARA GANAR XP 
+
+.adivina  adivina un número del 1 al 100
+.ppt  escoje piedra papel o tijera 
 ╚══════✮❁•°❀°•❁✮══════╝
         `.trim();
 
@@ -74,7 +78,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         if (isNaN(adivinanza) || adivinanza < 1 || adivinanza > 100) return m.reply(`Adivina un número entre 1 y 100.`);
 
         if (adivinanza === numero) {
-            let xpGanado = Math.floor(Math.random() * 41) + 60; // XP entre 60 y 100
+            let xpGanado = 500; // XP fijo de 500
             user.xp += xpGanado;
             await conn.reply(m.chat, `¡Felicidades! Adivinaste el número correcto ${numero}. Has ganado ${xpGanado} XP.`, m);
         } else {
