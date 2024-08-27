@@ -11,20 +11,33 @@ let handler = async (m, { conn, text }) => {
     // Obtener el ID del usuario que recibe la transferencia
     let who = mention.replace(/[@]/g, '') + '@s.whatsapp.net';
 
-    // Verificar si el usuario tiene suficientes créditos
-    let senderUser = global.db.data.users[m.sender];
-    if (senderUser.limit < cantidad) {
-        return conn.reply(m.chat, 'No tienes suficientes créditos para transferir esa cantidad.', m);
-    }
-
     // Verificar si el destinatario existe en la base de datos
     let recipientUser = global.db.data.users[who];
     if (!recipientUser) {
         return conn.reply(m.chat, 'El usuario al que intentas transferir no existe o no está registrado.', m);
     }
 
+    // Verificar si el usuario que envía es VIP
+    let senderUser = global.db.data.users[m.sender];
+    let esVIP = senderUser.vipTime > (Date.now() - senderUser.lastVip);
+
+    // Configurar límites de transferencia
+    let maxTransfer = esVIP ? 500 : 100;
+
+    // Condición para usuarios no VIP: deben tener suficientes créditos
+    if (!esVIP && senderUser.limit < cantidad) {
+        return conn.reply(m.chat, 'No tienes suficientes créditos para transferir esa cantidad.', m);
+    }
+
+    // Condición para usuarios VIP: pueden transferir hasta 500 créditos, incluso si no tienen créditos
+    if (esVIP && cantidad > maxTransfer) {
+        return conn.reply(m.chat, `Como usuario VIP, solo puedes transferir hasta ${maxTransfer} créditos.`, m);
+    } else if (!esVIP && cantidad > maxTransfer) {
+        return conn.reply(m.chat, `Solo puedes transferir hasta ${maxTransfer} créditos.`, m);
+    }
+
     // Transferir los créditos
-    senderUser.limit -= cantidad;
+    senderUser.limit -= esVIP ? 0 : cantidad; // Si es VIP, no se reduce el límite
     recipientUser.limit += cantidad;
 
     // Responder con un mensaje de confirmación
