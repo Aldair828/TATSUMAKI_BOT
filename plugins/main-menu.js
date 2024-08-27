@@ -266,6 +266,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ➽  DEVELOPER 👨🏻‍💻: Aldair
 " https://wa.me/+51925015528 "
 
+
 `.trim()
 
     let imageUrl = 'https://telegra.ph/file/f26a0a4ab807c3c9387ca.jpg' // Reemplaza esto con el enlace directo a tu imagen
