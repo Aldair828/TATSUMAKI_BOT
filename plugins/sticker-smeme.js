@@ -38,8 +38,8 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 ╚══════✮❁•°❀°•❁✮══════╝
         `.trim();
 
-        // Enviar respuesta
-        await conn.reply(m.chat, mensaje, m, {
+        // Enviar respuesta con texto e imagen
+        await conn.sendFile(m.chat, 'https://telegra.ph/file/9c80900ea18e0a13443ad.jpg', '', mensaje, m, {
             mentions: [m.sender]
         });
     } else if (command === 'ppt') {
@@ -65,6 +65,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
             resultado = `Perdiste. Elegiste ${eleccionUsuario} y el bot eligió ${eleccionBot}.`;
         }
 
+        // Enviar resultado sin imagen
         await conn.reply(m.chat, resultado, m);
     } else if (command === 'adivina') {
         // Juego de Adivinar el Número
@@ -82,7 +83,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     }
 };
 
-handler.help = ['ppt <piedra/papel/tijera>', 'adivina <número>'];
+handler.help = ['ppt <piedra/papel/tijera>', 'adivina <número>', 'xp'];
 handler.tags = ['game'];
 handler.command = ['ppt', 'adivina', 'xp'];
 
