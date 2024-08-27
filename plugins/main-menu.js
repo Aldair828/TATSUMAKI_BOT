@@ -44,18 +44,11 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
     // Texto del nuevo menú
     let menuText = `
-'ྀི𓊆 _tatsumaki_ 𓊇ྀ
+*FENIX_BOT*
 
-*Bienvenido* @${name} 
-*Te Saluda Los Creadores Del Bot*
-
-Aldair: +51925015528
-Angela: +527772130823
-Abraham: +522482267952
+*Bienvenido* @${name}
 
 *Puede seguir el canal del bot:* https://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x
-
-*Códigos para canjear:* ${availableCodes ? 'Ahí un código que todavía no se ha reclamado. Entra al canal y reclámalo.' : 'No hay códigos disponibles todavía.'}
 
 *🔰SU INFORMACIÓN BÁSICA🔰*
 
@@ -123,10 +116,8 @@ Abraham: +522482267952
 ╰── ꕤ
 
 ╭──ꕤ「 Busquedas 🔎 」ꕤ
-│  𓋜 .mercadolibre <búsqueda>
 │  𓋜 .pinterest
 │  𓋜 .google <búsqueda>
-│  𓋜 .ytsearch <búsqueda>
 ╰──ꕤ
 
 ╭──ꕤ「 Juegos 🎮 」ꕤ
@@ -156,9 +147,7 @@ Abraham: +522482267952
 ╰──ꕤ
 
 ╭──ꕤ「 Stickers 🎇 」ꕤ
-│  𓋜 .quotly <texto>
 │  𓋜 .scat
-│  𓋜 .smeme <texto>
 │  𓋜 .sticker
 │  𓋜 .wm <nombre>|<autor>
 │  𓋜 .tovid <sticker>
@@ -277,21 +266,14 @@ Abraham: +522482267952
 ➽  DEVELOPER 👨🏻‍💻: Aldair
 " https://wa.me/+51925015528 "
 
-➽  DEVELOPER 👨🏻‍💻: MEOW - ANGELA 
-" https://wa.me/+527772130823 "
-
-➽  DEVELOPER 👨🏻‍💻: ABRAHAM
-" https://wa.me/+522482267952 "
-
 `.trim()
 
-    let videoUrl = 'https://telegra.ph/file/41fd061d410037d4ea0ed.mp4' // Reemplaza esto con el enlace directo a tu video
-    await conn.sendMessage(m.chat, { video: { url: videoUrl, gifPlayback: true }, caption: menuText }, { quoted: m })
+    let imageUrl = 'https://telegra.ph/file/f26a0a4ab807c3c9387ca.jpg' // Reemplaza esto con el enlace directo a tu imagen
+await conn.sendMessage(m.chat, { image: { url: imageUrl }, caption: menuText }, { quoted: m })
 
-  } catch (e) {
+} catch (e) {
     conn.reply(m.chat, 'Lo sentimos, el menú tiene un error.', m)
     throw e
-  }
 }
 
 handler.help = ['menu']
