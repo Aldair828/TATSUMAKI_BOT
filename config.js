@@ -26,10 +26,10 @@ global.prems = []
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
 global.packname = ``
-global.author = '{\n "bot": {\n   "name": "Tatsumaki_Bot⛄",\n     "author": "𝙰𝙻𝙳𝙰𝙸𝚁 👾",\n   "status_bot": "active"\n }\n}'
-global.wait = '🐢 *Tatsumaki_Bot⛄*'
-global.botname = 'Tatsumaki_Bot⛄'
-global.textbot = `Powered 𝙱𝚢 𝚃𝚊𝚝𝚜𝚞𝚖𝚊𝚔𝚒_𝙱𝚘𝚝`
+global.author = '{\n "bot": {\n   "name": " Fenix_Bot⛄",\n     "author": "𝙰𝙻𝙳𝙰𝙸𝚁 👾",\n   "status_bot": "active"\n }\n}'
+global.wait = '🐢 *Fenix_Bot⛄*'
+global.botname = 'Fenix_Bot⛄'
+global.textbot = `Powered 𝙱𝚢 𝙵𝚎𝚗𝚒𝚡_𝙱𝚘𝚝`
 global.listo = '*Aqui tiene*'
 global.namechannel = 'тαтѕυмαкι𖤛ɕαηαℓఌᵒᶠⁱᶜⁱᵃˡ'
 
