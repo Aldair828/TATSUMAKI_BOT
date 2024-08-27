@@ -25,7 +25,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
                       .top  para ver los mejores en créditos`;
 
         // URL de la foto que quieres enviar
-        let foto = 'https://telegra.ph/file/23bca37cff43f2da28865.jpg'; // Cambia esta URL a la foto deseada
+        let foto = 'https://telegra.ph/file/cc7c4c7b9cd439e1155bc.jpg'; // Cambia esta URL a la foto deseada
 
         conn.sendFile(m.chat, foto, 'banco.jpg', mensaje, m);
     }
