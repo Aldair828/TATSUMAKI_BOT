@@ -1,38 +1,39 @@
 let handler = async (m, { conn }) => {
-    // Definir los niveles y la XP requerida para cada nivel
-    const niveles = [150, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800];
-    
-    let usuarios = Object.entries(global.db.data.users).map(([id, data]) => {
-        // Calcular el nivel actual según la XP del usuario
-        let xp = data.xp || 0;
-        let nivel = 0;
-        for (let i = 0; i < niveles.length; i++) {
-            if (xp >= niveles[i]) nivel = i + 1;
-            else break;
-        }
+    let users = Object.entries(global.db.data.users)
+        .map(([key, value]) => ({
+            id: key,
+            xp: value.xp,
+            nivel: calcularNivel(value.xp),
+        }))
+        .filter(user => user.xp > 0)
+        .sort((a, b) => b.xp - a.xp)
+        .slice(0, 29); // Mostrar los primeros 29 usuarios
 
-        return {
-            id,
-            xp,
-            nivel
-        };
-    }).sort((a, b) => b.xp - a.xp).slice(0, 29); // Ordenar por XP y tomar los primeros 29
+    let texto = '*🏆 TOP XP 🏆*\n\n';
 
-    let mensaje = `🏆 *TOP XP* 🏆\n\n`;
-    for (let i = 0; i < usuarios.length; i++) {
-        let user = usuarios[i];
-        mensaje += `${i + 1}. *USUARIO:* https://wa.me/${user.id.split('@')[0]}\n`;
-        mensaje += `*NIVEL:* ${user.nivel}\n\n`;
-    }
-
-    // Mencionar a los usuarios
-    await conn.reply(m.chat, mensaje, m, {
-        mentions: usuarios.map(u => u.id)
+    users.forEach((user, index) => {
+        texto += `${index + 1})\n*[👤] USUARIO:* https://wa.me/${user.id.split('@')[0]}\n*[💫] NIVEL:* ${user.nivel}\n\n`;
     });
-};
+
+    await conn.reply(m.chat, texto.trim(), m);
+}
 
 handler.help = ['topxp'];
 handler.tags = ['xp'];
 handler.command = ['topxp'];
 
 export default handler;
+
+// Función para calcular el nivel basado en la XP
+function calcularNivel(xp) {
+    const niveles = [150, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800];
+    let nivel = 0;
+    for (let i = 0; i < niveles.length; i++) {
+        if (xp >= niveles[i]) {
+            nivel = i + 1;
+        } else {
+            break;
+        }
+    }
+    return nivel;
+}
