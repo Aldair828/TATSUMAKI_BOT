@@ -16,6 +16,10 @@ let handlerAdivina = async (m, { conn, args }) => {
         conn.reply(m.chat, `Incorrecto. El número correcto era ${numeroAleatorio}.`, m);
     }
 };
+handlerAdivina.help = ['adivina'];
+handlerAdivina.tags = ['game'];
+handlerAdivina.command = /^adivina$/i;
+handlerAdivina.register = true;
 
 // Juego PPT (Piedra, Papel, Tijeras)
 let handlerPpt = async (m, { conn, args }) => {
@@ -45,6 +49,10 @@ let handlerPpt = async (m, { conn, args }) => {
 
     conn.reply(m.chat, `El bot eligió: ${eleccionBot}\n${resultado}`, m);
 };
+handlerPpt.help = ['ppt'];
+handlerPpt.tags = ['game'];
+handlerPpt.command = /^ppt$/i;
+handlerPpt.register = true;
 
 // Comando XP
 let handlerXp = async (m, { conn }) => {
@@ -76,21 +84,10 @@ let handlerXp = async (m, { conn }) => {
 
     conn.reply(m.chat, mensaje, m);
 };
-
-// Exportar los handlers
-handlerAdivina.help = ['adivina'];
-handlerAdivina.tags = ['game'];
-handlerAdivina.command = /^adivina$/i;
-handlerAdivina.register = true;
-
-handlerPpt.help = ['ppt'];
-handlerPpt.tags = ['game'];
-handlerPpt.command = /^ppt$/i;
-handlerPpt.register = true;
-
 handlerXp.help = ['xp'];
 handlerXp.tags = ['info'];
 handlerXp.command = /^xp$/i;
 handlerXp.register = true;
 
+// Exportar handlers individualmente
 export { handlerAdivina, handlerPpt, handlerXp };
