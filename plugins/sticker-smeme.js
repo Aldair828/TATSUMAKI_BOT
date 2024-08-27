@@ -39,6 +39,9 @@ JUEGA LOS SIGUIENTES JUEGOS PARA GANAR XP
 
 .adivina  adivina un número del 1 al 100
 .ppt  escoje piedra papel o tijera 
+
+se agregará más juegos de XP 
+
 ╚══════✮❁•°❀°•❁✮══════╝
         `.trim();
 
