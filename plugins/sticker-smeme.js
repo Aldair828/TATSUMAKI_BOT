@@ -1,6 +1,9 @@
 let handler = async (m, { conn, args, usedPrefix, command }) => {
     let user = global.db.data.users[m.sender];
     
+    // Función para generar XP aleatorio entre 60 y 100
+    const generarXP = () => Math.floor(Math.random() * 41) + 60;
+
     // Manejo de comando .xp
     if (command === 'xp') {
         const niveles = [150, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800];
@@ -30,8 +33,9 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         
         let numeroAleatorio = Math.floor(Math.random() * 10) + 1;
         if (eleccionUsuario === numeroAleatorio) {
-            user.xp += 100; // Ganar 100 XP por acertar
-            conn.reply(m.chat, `🎉 ¡Felicidades! Adivinaste el número ${numeroAleatorio}. Has ganado 100 XP.`, m);
+            let xpGanado = generarXP(); // Generar XP aleatorio
+            user.xp += xpGanado;
+            conn.reply(m.chat, `🎉 ¡Felicidades! Adivinaste el número ${numeroAleatorio}. Has ganado ${xpGanado} XP.`, m);
         } else {
             conn.reply(m.chat, `❌ No acertaste. El número era ${numeroAleatorio}. ¡Inténtalo de nuevo!`, m);
         }
@@ -53,8 +57,9 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         } else if ((eleccionUsuario === 'piedra' && eleccionBot === 'tijera') ||
                    (eleccionUsuario === 'papel' && eleccionBot === 'piedra') ||
                    (eleccionUsuario === 'tijera' && eleccionBot === 'papel')) {
-            resultado = '¡Ganaste!';
-            user.xp += 50; // Ganar 50 XP por ganar
+            let xpGanado = generarXP(); // Generar XP aleatorio
+            user.xp += xpGanado;
+            resultado = `¡Ganaste! Has ganado ${xpGanado} XP.`;
         } else {
             resultado = '¡Perdiste!';
         }
