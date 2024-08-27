@@ -1,13 +1,16 @@
 let handler = async (m, { conn, args, usedPrefix, command }) => {
     let user = global.db.data.users[m.sender];
     
+    // Inicializar XP si no existe
+    if (!user.xp) user.xp = 0;
+
     // Función para generar XP aleatorio entre 60 y 100
     const generarXP = () => Math.floor(Math.random() * 41) + 60;
 
     // Manejo de comando .xp
     if (command === 'xp') {
         const niveles = [150, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800];
-        let xp = user.xp || 0;
+        let xp = user.xp;
         let nivel = 0;
         
         for (let i = 0; i < niveles.length; i++) {
