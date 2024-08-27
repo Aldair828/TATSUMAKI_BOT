@@ -87,53 +87,33 @@ se agregará más juegos de XP
         } else {
             await conn.reply(m.chat, `Lo siento, el número era ${numero}. Inténtalo de nuevo.`, m);
         }
-    } else if (command === 'pregunta') {
-        // Juego de Preguntas y Respuestas
-        const preguntas = [
-            { pregunta: "¿Cuál es el planeta más cercano al sol?", respuesta: "mercurio" },
-            { pregunta: "¿Quién pintó la Mona Lisa?", respuesta: "leonardo da vinci" },
-            { pregunta: "¿Cuál es la capital de Francia?", respuesta: "parís" },
-            { pregunta: "¿Qué gas es necesario para que haya combustión?", respuesta: "oxígeno" },
-            { pregunta: "¿Cuál es el río más largo del mundo?", respuesta: "amazonas" },
-            { pregunta: "¿Qué instrumento musical tiene 88 teclas?", respuesta: "piano" },
-            { pregunta: "¿En qué continente se encuentra Egipto?", respuesta: "áfrica" },
-            { pregunta: "¿Cuál es el animal más rápido del mundo?", respuesta: "guepardo" },
-            { pregunta: "¿Cuál es el elemento químico con el símbolo O?", respuesta: "oxígeno" },
-            { pregunta: "¿Quién escribió 'Cien años de soledad'?", respuesta: "gabriel garcía márquez" },
-            { pregunta: "¿En qué año llegó el hombre a la luna?", respuesta: "1969" },
-            { pregunta: "¿Cuál es el océano más grande del mundo?", respuesta: "pacífico" },
-            { pregunta: "¿Qué vitamina se obtiene de la exposición al sol?", respuesta: "vitamina d" },
-            { pregunta: "¿Cuál es el país más grande del mundo?", respuesta: "rusia" },
-            { pregunta: "¿Cuál es la capital de Japón?", respuesta: "tokio" },
-            { pregunta: "¿Quién es conocido como el padre de la teoría de la relatividad?", respuesta: "albert einstein" },
-            { pregunta: "¿Cuál es el metal más liviano?", respuesta: "litio" },
-            { pregunta: "¿Qué país es famoso por sus pirámides?", respuesta: "egipto" },
-            { pregunta: "¿En qué continente se encuentra la Amazonia?", respuesta: "américa del sur" },
-            { pregunta: "¿Cuál es el deporte más popular del mundo?", respuesta: "fútbol" }
-        ];
+    } else if (command === 'agregarxp') {
+        // Agregar XP
+        let usuarioObjetivo = m.mentionedJid[0];
+        let cantidad = parseInt(args[1]);
 
-        // Verificar si la pregunta ya ha sido hecha
-        if (!user.preguntaActual) {
-            let indicePregunta = Math.floor(Math.random() * preguntas.length);
-            user.preguntaActual = preguntas[indicePregunta];
-            return conn.reply(m.chat, `Pregunta: ${user.preguntaActual.pregunta}`, m);
-        } else {
-            let respuestaUsuario = args.join(' ').trim().toLowerCase();
+        if (!usuarioObjetivo || isNaN(cantidad)) return m.reply('Debes mencionar a un usuario válido y especificar una cantidad de XP.');
 
-            if (respuestaUsuario === user.preguntaActual.respuesta) {
-                let xpGanado = Math.floor(Math.random() * 41) + 60; // XP entre 60 y 100
-                user.xp += xpGanado;
-                delete user.preguntaActual;
-                return conn.reply(m.chat, `¡Correcto! La respuesta es ${respuestaUsuario}. Has ganado ${xpGanado} XP.`, m);
-            } else {
-                return conn.reply(m.chat, `Incorrecto. Inténtalo de nuevo.`, m);
-            }
-        }
+        let usuario = global.db.data.users[usuarioObjetivo];
+        usuario.xp = (usuario.xp || 0) + cantidad;
+
+        m.reply(`Se han añadido ${cantidad} XP a @${usuarioObjetivo.split('@')[0]}.`, null, { mentions: [usuarioObjetivo] });
+    } else if (command === 'quitarxp') {
+        // Quitar XP
+        let usuarioObjetivo = m.mentionedJid[0];
+        let cantidad = parseInt(args[1]);
+
+        if (!usuarioObjetivo || isNaN(cantidad)) return m.reply('Debes mencionar a un usuario válido y especificar una cantidad de XP.');
+
+        let usuario = global.db.data.users[usuarioObjetivo];
+        usuario.xp = Math.max((usuario.xp || 0) - cantidad, 0);
+
+        m.reply(`Se han quitado ${cantidad} XP a @${usuarioObjetivo.split('@')[0]}.`, null, { mentions: [usuarioObjetivo] });
     }
 };
 
-handler.help = ['ppt <piedra/papel/tijera>', 'adivina <número>', 'xp', 'pregunta'];
+handler.help = ['ppt <piedra/papel/tijera>', 'adivina <número>', 'xp', 'agregarxp @user cantidad', 'quitarxp @user cantidad'];
 handler.tags = ['game'];
-handler.command = ['ppt', 'adivina', 'xp', 'pregunta'];
+handler.command = ['ppt', 'adivina', 'xp', 'agregarxp', 'quitarxp'];
 
 export default handler;
