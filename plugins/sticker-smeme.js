@@ -35,7 +35,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         if (eleccionUsuario === numeroAleatorio) {
             let xpGanado = generarXP(); // Generar XP aleatorio
             user.xp += xpGanado;
-            conn.reply(m.chat, `🎉 ¡Felicidades! Adivinaste el número ${numeroAleatorio}. Has ganado ${xpGanado} XP.`, m);
+            conn.reply(m.chat, `🎉 ¡Felicidades! Adivinaste el número ${numeroAleatorio}. Has ganado ${xpGanado} XP, que se ha añadido a tu cartera de XP.`, m);
         } else {
             conn.reply(m.chat, `❌ No acertaste. El número era ${numeroAleatorio}. ¡Inténtalo de nuevo!`, m);
         }
@@ -59,7 +59,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
                    (eleccionUsuario === 'tijera' && eleccionBot === 'papel')) {
             let xpGanado = generarXP(); // Generar XP aleatorio
             user.xp += xpGanado;
-            resultado = `¡Ganaste! Has ganado ${xpGanado} XP.`;
+            resultado = `¡Ganaste! Has ganado ${xpGanado} XP, que se ha añadido a tu cartera de XP.`;
         } else {
             resultado = '¡Perdiste!';
         }
