@@ -24,7 +24,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
         let rango = rangos[rangoSeleccionado];
 
-        if (user.limit < rango.costo) return m.reply('No tienes suficientes créditos para comprar este rango.');
+        if (user.limit < rango.costo) return m.reply('No tienes suficientes créditos para comprar este rango.\n\n.tienda  para ver los precios de los rangos ');
 
         user.limit -= rango.costo;
         user.rango = rangoSeleccionado;
