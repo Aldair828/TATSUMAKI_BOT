@@ -103,6 +103,15 @@ Abraham: +522482267952
 │  𓋜 .sorteo
 ╰──ꕤ
 
+╭──ꕤ「 XP 」ꕤ
+│  𓋜 .tienda
+│  𓋜 .comprar rango
+│  𓋜 .mirango
+│  𓋜 .xp
+│  𓋜 .ppt piedra / papel / tijera
+│  𓋜 .adivinar 1 - 10
+╰──ꕤ
+
 ╭──ꕤ「 Info 🌸 」ꕤ
 │  𓋜 .owner
 │  𓋜 .grupos
