@@ -48,11 +48,11 @@ let handler = async (m, { conn, usedPrefix }) => {
             }
         },
         "participant": "0@s.whatsapp.net"
-    }
+    };
 
     let user = global.db.data.users[m.sender];
     let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender;
-    
+
     // Verificar si el usuario está registrado
     if (!user.registered) {
         conn.reply(m.chat, 'Por favor, regístrate usando el comando `.reg nombre.edad.pais` antes de usar este comando.', m);
@@ -64,40 +64,46 @@ let handler = async (m, { conn, usedPrefix }) => {
         pp = await conn.getProfilePicture(who);
     } catch (e) {
         // Manejar errores si es necesario
-    } finally {
-        let { name, limit, lastclaim, registered, regTime, age, banned, level, premiumTime } = global.db.data.users[who];
-        let mentionedJid = [who];
-        let username = conn.getName(who);
-        let prem = global.prems.includes(who.split`@`[0]);
-        let sn = createHash('md5').update(who).digest('hex');
+    }
 
-        // Calcular el top de créditos
-        let sortedUsers = Object.entries(global.db.data.users)
-            .filter(([jid, user]) => user.registered)
-            .sort(([, a], [, b]) => b.limit - a.limit);
-        
-        let topPosition = sortedUsers.findIndex(([jid, u]) => jid === who) + 1;
-        
-        // Calcular el rango del usuario
-        let rank;
-        if (limit >= 1700) rank = '💮 LEYENDA';
-        else if (limit >= 1200) rank = '🃏 MAESTRO';
-        else if (limit >= 700) rank = '💎 DIAMANTE';
-        else if (limit >= 300) rank = '🥇 ORO';
-        else if (limit >= 100) rank = '🥈 PLATA';
-        else rank = '🥉 BRONCE';
+    let { name, limit, lastclaim, registered, regTime, age, banned, level, premiumTime } = global.db.data.users[who];
+    let mentionedJid = [who];
+    let username = conn.getName(who);
+    let prem = global.prems.includes(who.split`@`[0]);
+    let sn = createHash('md5').update(who).digest('hex');
 
-        // Verificar si es usuario premium y cuánto tiempo le queda
-        let premiumStatus = prem ? `Usuario VIP (Expira en ${premiumTime} días)` : 'Usuario Regular';
+    // Calcular el top de créditos
+    let sortedUsers = Object.entries(global.db.data.users)
+        .filter(([jid, user]) => user.registered)
+        .sort(([, a], [, b]) => b.limit - a.limit);
 
-        // Obtener el país y la bandera basado en el prefijo del número de teléfono
-        let phoneNumber = new PhoneNumber('+' + who.replace('@s.whatsapp.net', ''));
-        let country = getCountryByPrefix(phoneNumber);
-        
-        // Definir estado basado en si el usuario está baneado o no
-        let estado = banned ? 'BANEADO [❌]' : 'LIBRE [✅]';
+    let topPosition = sortedUsers.findIndex(([jid, u]) => jid === who) + 1;
 
-        let str = `*PERFIL DE* @${who.split('@')[0]}
+    // Calcular el rango del usuario
+    let rank;
+    if (limit >= 1700) rank = '💮 LEYENDA';
+    else if (limit >= 1200) rank = '🃏 MAESTRO';
+    else if (limit >= 700) rank = '💎 DIAMANTE';
+    else if (limit >= 300) rank = '🥇 ORO';
+    else if (limit >= 100) rank = '🥈 PLATA';
+    else rank = '🥉 BRONCE';
+
+    // Verificar si es usuario premium y cuánto tiempo le queda
+    let premiumStatus = prem ? `Usuario VIP (Expira en ${Math.max(0, Math.floor((premiumTime - Date.now()) / (24 * 60 * 60 * 1000)))} días)` : 'Usuario Regular';
+
+    // Obtener el país y la bandera basado en el prefijo del número de teléfono
+    let phoneNumber;
+    try {
+        phoneNumber = new PhoneNumber('+' + who.replace('@s.whatsapp.net', ''));
+    } catch (e) {
+        phoneNumber = { getCountryCode: () => '', getNumber: () => 'Desconocido' };
+    }
+    let country = getCountryByPrefix(phoneNumber);
+
+    // Definir estado basado en si el usuario está baneado o no
+    let estado = banned ? 'BANEADO [❌]' : 'LIBRE [✅]';
+
+    let str = `*PERFIL DE* @${who.split('@')[0]}
 
 *[👤] NOMBRE →* ${name}
 *[📅] EDAD →* ${age} años
@@ -116,9 +122,8 @@ let handler = async (m, { conn, usedPrefix }) => {
 
 .top para ver los mejores en créditos`;
 
-        conn.sendFile(m.chat, pp, 'pp.jpg', str, fkontak, false, { contextInfo: { mentionedJid }});
-    }
-}
+    conn.sendFile(m.chat, pp, 'pp.jpg', str, fkontak, false, { contextInfo: { mentionedJid }});
+};
 
 handler.help = ['profile [@user]'];
 handler.tags = ['xp'];
