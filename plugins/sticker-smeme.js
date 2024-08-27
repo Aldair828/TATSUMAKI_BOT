@@ -80,11 +80,53 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         } else {
             await conn.reply(m.chat, `Lo siento, el número era ${numero}. Inténtalo de nuevo.`, m);
         }
+    } else if (command === 'pregunta') {
+        // Juego de Preguntas y Respuestas
+        const preguntas = [
+            { pregunta: "¿Cuál es el planeta más cercano al sol?", respuesta: "mercurio" },
+            { pregunta: "¿Quién pintó la Mona Lisa?", respuesta: "leonardo da vinci" },
+            { pregunta: "¿Cuál es la capital de Francia?", respuesta: "parís" },
+            { pregunta: "¿Qué gas es necesario para que haya combustión?", respuesta: "oxígeno" },
+            { pregunta: "¿Cuál es el río más largo del mundo?", respuesta: "amazonas" },
+            { pregunta: "¿Qué instrumento musical tiene 88 teclas?", respuesta: "piano" },
+            { pregunta: "¿En qué continente se encuentra Egipto?", respuesta: "áfrica" },
+            { pregunta: "¿Cuál es el animal más rápido del mundo?", respuesta: "guepardo" },
+            { pregunta: "¿Cuál es el elemento químico con el símbolo O?", respuesta: "oxígeno" },
+            { pregunta: "¿Quién escribió 'Cien años de soledad'?", respuesta: "gabriel garcía márquez" },
+            { pregunta: "¿En qué año llegó el hombre a la luna?", respuesta: "1969" },
+            { pregunta: "¿Cuál es el océano más grande del mundo?", respuesta: "pacífico" },
+            { pregunta: "¿Qué vitamina se obtiene de la exposición al sol?", respuesta: "vitamina d" },
+            { pregunta: "¿Cuál es el país más grande del mundo?", respuesta: "rusia" },
+            { pregunta: "¿Cuál es la capital de Japón?", respuesta: "tokio" },
+            { pregunta: "¿Quién es conocido como el padre de la teoría de la relatividad?", respuesta: "albert einstein" },
+            { pregunta: "¿Cuál es el metal más liviano?", respuesta: "litio" },
+            { pregunta: "¿Qué país es famoso por sus pirámides?", respuesta: "egipto" },
+            { pregunta: "¿En qué continente se encuentra la Amazonia?", respuesta: "américa del sur" },
+            { pregunta: "¿Cuál es el deporte más popular del mundo?", respuesta: "fútbol" }
+        ];
+
+        let indicePregunta = Math.floor(Math.random() * preguntas.length);
+        let preguntaSeleccionada = preguntas[indicePregunta];
+
+        if (args.length === 0) {
+            // Enviar pregunta si no se ha dado respuesta
+            return conn.reply(m.chat, `Pregunta: ${preguntaSeleccionada.pregunta}`, m);
+        } else {
+            let respuestaUsuario = args.join(' ').trim().toLowerCase();
+
+            if (respuestaUsuario === preguntaSeleccionada.respuesta) {
+                let xpGanado = Math.floor(Math.random() * 41) + 60; // XP entre 60 y 100
+                user.xp += xpGanado;
+                return conn.reply(m.chat, `¡Correcto! La respuesta es ${preguntaSeleccionada.respuesta}. Has ganado ${xpGanado} XP.`, m);
+            } else {
+                return conn.reply(m.chat, `Incorrecto. La respuesta correcta era ${preguntaSeleccionada.respuesta}.`, m);
+            }
+        }
     }
 };
 
-handler.help = ['ppt <piedra/papel/tijera>', 'adivina <número>', 'xp'];
+handler.help = ['ppt <piedra/papel/tijera>', 'adivina <número>', 'xp', 'pregunta'];
 handler.tags = ['game'];
-handler.command = ['ppt', 'adivina', 'xp'];
+handler.command = ['ppt', 'adivina', 'xp', 'pregunta'];
 
 export default handler;
