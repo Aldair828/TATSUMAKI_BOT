@@ -10,9 +10,13 @@ let handler = async (m, { conn, args, text, usedPrefix, command }) => {
     // Verificar tiempo de espera
     let lastRuletaTime = user.lastRuletaTime || 0;
     let now = new Date().getTime();
-    let tiempoRestante = (300000 - (now - lastRuletaTime)) / 1000; // 300000 ms = 5 minutos
+    let tiempoRestante = 300000 - (now - lastRuletaTime); // 300000 ms = 5 minutos
 
-    if (tiempoRestante > 0) throw `Por favor espera ${tiempoRestante.toFixed(0)} segundos antes de volver a jugar.`;
+    if (tiempoRestante > 0) {
+        let segundosRestantes = Math.floor((tiempoRestante / 1000) % 60);
+        let minutosRestantes = Math.floor((tiempoRestante / 1000) / 60);
+        throw `Por favor espera ${minutosRestantes} minutos y ${segundosRestantes} segundos antes de volver a jugar.`;
+    }
 
     let colores = ['rojo', 'negro'];
     let colour = colores[Math.floor(Math.random() * colores.length)];
@@ -57,8 +61,7 @@ let handler = async (m, { conn, args, text, usedPrefix, command }) => {
         result = `*[ 𝙿𝚁𝚄𝙴𝙱𝙰 𝚃𝚄 𝚂𝚄𝙴𝚁𝚃𝙴 ]*\n\n` +
                  `*𝙻𝙰 𝚁𝚄𝙻𝙴𝚃𝙰 𝙿𝙰𝚁𝙾 𝙴𝙽 𝙴𝙻 𝙲𝙾𝙻𝙾𝚁:* ${colour == 'rojo' ? '🔴' : '⚫'}${rangoMensaje}\n\n` +
                  `*𝚄𝚂𝚃𝙴𝙳 𝙶𝙰𝙽𝙾:* ${amountWithMultiplier} 💎\n` +
-                 `*CREDITOS:* ${user.limit}`; +
-                 `*DEBE ESPERAR 5 MINUTOS PARA VOLVER A JUGAR`
+                 `*CREDITOS:* ${user.limit}`;
     } else {
         user.limit -= amount;
         result = `*[ 𝙿𝚁𝚄𝙴𝙱𝙰 𝚃𝚄 𝚂𝚄𝙴𝚁𝚃𝙴 ]*\n\n` +
