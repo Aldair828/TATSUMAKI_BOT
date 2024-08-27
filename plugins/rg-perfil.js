@@ -59,7 +59,7 @@ let handler = async (m, { conn, usedPrefix }) => {
         return;
     }
 
-    let pp = 'https://telegra.ph/file/37e80f39f8e371743c4cf.jpg';
+    let pp = 'https://telegra.ph/file/cc7c4c7b9cd439e1155bc.jpg';
     try {
         pp = await conn.getProfilePicture(who);
     } catch (e) {
@@ -113,12 +113,6 @@ let handler = async (m, { conn, usedPrefix }) => {
 *[🔒] ESTADO →* ${estado}
 
 *[🔢] NÚMERO DE SERIE:* ${sn}
-
-SI QUIERES GUARDAR TUS CRÉDITOS EN EL BANCO USA EL COMANDO 
-.depositar cantidad 
-
-SI QUIERES RETIRAR LOS CRÉDITOS DEL BANCO USA EL COMANDO 
-.retirar cantidad
 
 .top para ver los mejores en créditos`;
 
