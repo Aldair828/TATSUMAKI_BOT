@@ -1,44 +1,38 @@
-import { sticker } from '../lib/sticker.js'
-import axios from 'axios'
+let handler = async (m, { conn }) => {
+    // Definir los niveles y la XP requerida para cada nivel
+    const niveles = [150, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800];
+    
+    let usuarios = Object.entries(global.db.data.users).map(([id, data]) => {
+        // Calcular el nivel actual según la XP del usuario
+        let xp = data.xp || 0;
+        let nivel = 0;
+        for (let i = 0; i < niveles.length; i++) {
+            if (xp >= niveles[i]) nivel = i + 1;
+            else break;
+        }
 
-let handler = async (m, { conn, text }) => {
-   if (!text) return conn.reply(m.chat, '🍭 Escribe un Texto.', m)
-   if (text.length > 30) return conn.reply(m.chat, 'Solo se permiten 30 caracteres como Máximo.', m)
-   try {
-   let pp = await conn.profilePictureUrl(m.sender, 'image').catch(_ => global.imgbot.noprofileurl)
-   const obj = {
-      "type": "quote",
-      "format": "png",
-      "backgroundColor": "#FFFFFF",
-      "width": 512,
-      "height": 768,
-      "scale": 2,
-      "messages": [{
-         "entities": [],
-         "avatar": true,
-         "from": {
-            "id": 1,
-            "name": m.name,
-            "photo": {
-               "url": pp
-            }
-         },
-         "text": text,
-         "replyMessage": {}
-      }]
-   }
-   const json = await axios.post('https://bot.lyo.su/quote/generate', obj, {
-      headers: {
-         'Content-Type': 'application/json'
-      }
-   })
-   const buffer = Buffer.from(json.data.result.image, 'base64')
-   let stick = await sticker(buffer, false, packname, author)
-   await await conn.sendFile(m.chat, stick, 'sticker.webp', '', m)
-} catch {
-}}
-handler.help = ['quotly <texto>']
-handler.tags = ['sticker']
-handler.command = ['quotly', 'qc']
-handler.register = true 
-export default handler
+        return {
+            id,
+            xp,
+            nivel
+        };
+    }).sort((a, b) => b.xp - a.xp).slice(0, 29); // Ordenar por XP y tomar los primeros 29
+
+    let mensaje = `🏆 *TOP XP* 🏆\n\n`;
+    for (let i = 0; i < usuarios.length; i++) {
+        let user = usuarios[i];
+        mensaje += `${i + 1}. *USUARIO:* https://wa.me/${user.id.split('@')[0]}\n`;
+        mensaje += `*NIVEL:* ${user.nivel}\n\n`;
+    }
+
+    // Mencionar a los usuarios
+    await conn.reply(m.chat, mensaje, m, {
+        mentions: usuarios.map(u => u.id)
+    });
+};
+
+handler.help = ['topxp'];
+handler.tags = ['xp'];
+handler.command = ['topxp'];
+
+export default handler;
