@@ -1,36 +1,31 @@
 let handler = async (m, { conn }) => {
-    try {
-        let users = Object.entries(global.db.data.users)
-            .map(([key, value]) => ({ ...value, jid: key }))
-            .filter(user => user.xp > 0)
-            .sort((a, b) => b.xp - a.xp)
-            .slice(0, 29);
+    let users = Object.entries(global.db.data.users).map(([key, value]) => {
+        return { ...value, id: key };
+    });
 
-        if (users.length === 0) return m.reply('No hay usuarios con XP en este momento.');
+    users.sort((a, b) => b.xp - a.xp);
 
-        let niveles = [150, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800];
-        let text = users.map((user, i) => {
-            let nivel = 0;
-            for (let j = 0; j < niveles.length; j++) {
-                if (user.xp >= niveles[j]) {
-                    nivel = j + 1;
-                } else {
-                    break;
-                }
+    let niveles = [150, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 76800];
+
+    let top = users.slice(0, 29).map((user, index) => {
+        let nivel = 0;
+        for (let i = 0; i < niveles.length; i++) {
+            if (user.xp >= niveles[i]) {
+                nivel = i + 1;
+            } else {
+                break;
             }
+        }
+        return `\n${index + 1})\n*[💮] NOMBRE:* ${user.name || "Usuario desconocido"}\n*[👤] USUARIO:* https://wa.me/${user.id.split('@')[0]}\n*[⭐] XP:* ${user.xp}\n*[💫] NIVEL:* ${nivel}`;
+    }).join('\n');
 
-            return `${i + 1})\n*[💮] NOMBRE:* ${conn.getName(user.jid)}\n*[👤] USUARIO:* https://wa.me/${user.jid.split('@')[0]}\n*[⭐] XP:* ${user.xp}\n*[💫] NIVEL:* ${nivel}\n`;
-        }).join('\n');
+    let mensaje = `🏆 *TOP XP* 🏆\n${top}`;
 
-        await conn.reply(m.chat, text, m);
-    } catch (e) {
-        console.error(e);
-        m.reply('Ocurrió un error al intentar obtener el top de XP.');
-    }
+    await conn.reply(m.chat, mensaje, m);
 };
 
 handler.help = ['topxp'];
 handler.tags = ['xp'];
-handler.command = ['top'];
+handler.command = ['topxp', 'top'];
 
 export default handler;
