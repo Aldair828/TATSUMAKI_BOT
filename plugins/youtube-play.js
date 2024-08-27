@@ -90,6 +90,10 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 24 horas VIP ➩ 50000 XP
 
 Compra usando: ${usedPrefix}comprarvip <horas>
+
+.vip  para ver si eres usuario vip 
+
+beneficios de ser vip - PUEDES TRANSFERIR HASTA 500 CRÉDITOS A CUALQUIER USUARIO AUNQUE NO TENGAS CRÉDITOS 
         `.trim();
 
         await conn.reply(m.chat, tienda, m);
