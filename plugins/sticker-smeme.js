@@ -105,21 +105,21 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
             { pregunta: "¿Cuál es el deporte más popular del mundo?", respuesta: "fútbol" }
         ];
 
-        let indicePregunta = Math.floor(Math.random() * preguntas.length);
-        let preguntaSeleccionada = preguntas[indicePregunta];
-
-        if (args.length === 0) {
-            // Enviar pregunta si no se ha dado respuesta
-            return conn.reply(m.chat, `Pregunta: ${preguntaSeleccionada.pregunta}`, m);
+        // Verificar si la pregunta ya ha sido hecha
+        if (!user.preguntaActual) {
+            let indicePregunta = Math.floor(Math.random() * preguntas.length);
+            user.preguntaActual = preguntas[indicePregunta];
+            return conn.reply(m.chat, `Pregunta: ${user.preguntaActual.pregunta}`, m);
         } else {
             let respuestaUsuario = args.join(' ').trim().toLowerCase();
 
-            if (respuestaUsuario === preguntaSeleccionada.respuesta) {
+            if (respuestaUsuario === user.preguntaActual.respuesta) {
                 let xpGanado = Math.floor(Math.random() * 41) + 60; // XP entre 60 y 100
                 user.xp += xpGanado;
-                return conn.reply(m.chat, `¡Correcto! La respuesta es ${preguntaSeleccionada.respuesta}. Has ganado ${xpGanado} XP.`, m);
+                delete user.preguntaActual;
+                return conn.reply(m.chat, `¡Correcto! La respuesta es ${respuestaUsuario}. Has ganado ${xpGanado} XP.`, m);
             } else {
-                return conn.reply(m.chat, `Incorrecto. La respuesta correcta era ${preguntaSeleccionada.respuesta}.`, m);
+                return conn.reply(m.chat, `Incorrecto. Inténtalo de nuevo.`, m);
             }
         }
     }
