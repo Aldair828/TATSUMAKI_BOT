@@ -50,7 +50,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
         `.trim();
 
-        await conn.sendFile(m.chat, 'https://telegra.ph/file/9c80900ea18e0a13443ad.jpg', '', mensaje, m);
+        await conn.sendFile(m.chat, 'https://telegra.ph/file/af3239e6dfd32fd12c766.jpg', '', mensaje, m);
     } else if (command === 'tiendavip') {
         let tienda = `
 ╔═══════════════════════╗
