@@ -1,92 +1,79 @@
-let userTickets = {};
-let ticketCounter = 1;
-let ticketPrice = 10; // Precio por boleto
-let premios = [1000, 600, 300]; // Premios para los 3 primeros lugares
-let sorteofunActive = false; // Indica si el sorteo está activo
-let totalBoletosComprados = 0;
-let sorteoProgramado;
-
 let handler = async (m, { conn, args, usedPrefix, command }) => {
     let user = global.db.data.users[m.sender];
 
-    // Comprar boletos
-    if (command === 'loteria') {
-        if (!args[0]) return m.reply('🍭 Ingresa la cantidad de *boletos* que deseas comprar.\n\n`Ejemplo:`\n' + `> *${usedPrefix + command}* 5`);
-        if (isNaN(args[0])) return m.reply('🍭 Ingresa una cantidad válida de *boletos*.\n\n`Ejemplo:`\n' + `> *${usedPrefix + command}* 5`);
+    // Inicializar el tiempo de VIP y XP si no existe
+    if (!user.vipTime) user.vipTime = 0;
+    if (!user.xp) user.xp = 0;
 
-        let cantidad = parseInt(args[0]);
-        let cost = ticketPrice * cantidad;
+    const precios = {
+        1: 1000,
+        2: 3000,
+        4: 6000,
+        8: 12000,
+        12: 20000,
+        24: 35000
+    };
 
-        if (user.limit < cost) return m.reply('❌ No tienes suficientes *Créditos* para comprar esta cantidad de boletos.');
+    if (command === 'comprarvip') {
+        let horas = parseInt(args[0]);
 
-        user.limit -= cost; // Restar el costo de los boletos a los créditos del usuario
-
-        if (!userTickets[m.sender]) userTickets[m.sender] = [];
-        for (let i = 0; i < cantidad; i++) {
-            userTickets[m.sender].push(ticketCounter);
-            ticketCounter++;
+        if (!horas || !precios[horas]) {
+            return m.reply(`Uso: ${usedPrefix}comprarvip <horas>\nHoras disponibles: 1, 2, 4, 8, 12, 24`);
         }
 
-        totalBoletosComprados += cantidad;
+        let costo = precios[horas];
 
-        if (totalBoletosComprados >= 10 && !sorteofunActive) {
-            sorteofunActive = true;
-            sorteoProgramado = setTimeout(() => iniciarSorteo(m, conn), 4 * 60 * 60 * 1000); // 4 horas
-            m.reply("🎉 Se han comprado 10 boletos. ¡El sorteo se realizará en 4 horas!");
+        if (user.xp < costo) {
+            return m.reply(`No tienes suficiente XP. Necesitas ${costo} XP para comprar ${horas} horas de VIP.`);
         }
 
-        return m.reply(`🎟️ Has comprado ${cantidad} boletos. ¡Buena suerte, ${m.sender.split('@')[0]}!`);
-    }
+        user.xp -= costo;
+        user.vipTime += horas * 3600000; // Convertir horas a milisegundos
 
-    // Ver boletos
-    if (command === 'mistickets') {
-        if (!userTickets[m.sender] || userTickets[m.sender].length === 0) {
-            return m.reply("ℹ️ Aún no has comprado boletos para la lotería.");
-        }
+        m.reply(`Has comprado ${horas} horas de VIP. ¡Disfruta de tus créditos ilimitados!`);
+    } else if (command === 'vip') {
+        let tiempoRestante = user.vipTime - (Date.now() - user.lastVip || 0);
+        if (tiempoRestante <= 0) tiempoRestante = 0;
 
-        let boletos = userTickets[m.sender].map(t => `#${t}`).join(', ');
-        return m.reply(`Tienes ${userTickets[m.sender].length} boletos: ${boletos}.`);
-    }
+        let horasRestantes = Math.floor(tiempoRestante / 3600000);
+        let minutosRestantes = Math.floor((tiempoRestante % 3600000) / 60000);
 
-    // Información del sorteo
-    if (command === 'sorteo') {
-        if (sorteofunActive) {
-            let tiempoRestante = sorteoProgramado - Date.now();
-            let horas = Math.floor(tiempoRestante / (60 * 60 * 1000));
-            let minutos = Math.floor((tiempoRestante % (60 * 60 * 1000)) / (60 * 1000));
-            return m.reply(`🎰 El sorteo se realizará en ${horas} horas y ${minutos} minutos.`);
-        } else {
-            return m.reply(`🎰 Se han comprado ${totalBoletosComprados} boletos. El sorteo se realizará automáticamente cuando se hayan comprado 10 boletos.`);
-        }
+        let mensaje = `
+╔═══════════════════════╗
+║      ESTADO VIP       ║
+╚═══════════════════════╝
+
+*🌟 Tiempo VIP restante:* ${horasRestantes} horas y ${minutosRestantes} minutos
+*⭐ XP disponible:* ${user.xp}
+
+¡Disfruta de tus créditos ilimitados mientras dure tu VIP!
+
+        `.trim();
+
+        await conn.sendFile(m.chat, 'https://telegra.ph/file/9c80900ea18e0a13443ad.jpg', '', mensaje, m);
+    } else if (command === 'tiendavip') {
+        let tienda = `
+╔═══════════════════════╗
+║      TIENDA VIP       ║
+╚═══════════════════════╝
+
+1 hora VIP ➩ 1000 XP
+2 horas VIP ➩ 3000 XP
+4 horas VIP ➩ 6000 XP
+8 horas VIP ➩ 12000 XP
+12 horas VIP ➩ 20000 XP
+24 horas VIP ➩ 35000 XP
+
+Compra usando: ${usedPrefix}comprarvip <horas>
+        `.trim();
+
+        await conn.reply(m.chat, tienda, m);
     }
 };
 
-// Función para iniciar el sorteo
-async function iniciarSorteo(m, conn) {
-    let allTickets = Object.entries(userTickets).flatMap(([user, tickets]) => tickets.map(ticket => ({ user, ticket })));
-    let winners = [];
-
-    while (winners.length < 3 && allTickets.length > 0) {
-        let winner = allTickets.splice(Math.floor(Math.random() * allTickets.length), 1)[0];
-        if (!winners.some(w => w.user === winner.user)) {
-            winners.push(winner);
-        }
-    }
-
-    for (let i = 0; i < winners.length; i++) {
-        global.db.data.users[winners[i].user].limit += premios[i];
-        await conn.reply(m.chat, `🎉 ¡Felicidades <@${winners[i].user}>, has ganado *${premios[i]}* créditos por quedar en el lugar ${i + 1} en la lotería!`, m);
-    }
-
-    // Reiniciar la lotería
-    ticketCounter = 1;
-    userTickets = {};
-    totalBoletosComprados = 0;
-    sorteofunActive = false;
-}
-
-handler.help = ['loteria <cantidad de boletos>', 'mistickets', 'sorteo'];
-handler.tags = ['game'];
-handler.command = ['loteria', 'mistickets', 'sorteo'];
+handler.help = ['comprarvip <horas>', 'vip', 'tiendavip'];
+handler.tags = ['vip'];
+handler.command = ['comprarvip', 'vip', 'tiendavip'];
 
 export default handler;
+``
