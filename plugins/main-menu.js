@@ -44,7 +44,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
     // Texto del nuevo menú
     let menuText = `
-*FENIX_BOT*
+*🐦‍🔥 FENIX_BOT 🐦‍🔥*
 
 *Bienvenido* @${name} 
 
