@@ -267,7 +267,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
 `.trim()
 
-    let imageUrl = 'https://telegra.ph/file/f26a0a4ab807c3c9387ca.jpg' // Reemplaza esto con el enlace directo a tu imagen
+    let imageUrl = 'https://telegra.ph/file/52034ef36501ddbadfd0b.jpg' // Reemplaza esto con el enlace directo a tu imagen
     await conn.sendMessage(m.chat, { image: { url: imageUrl }, caption: menuText }, { quoted: m })
 
   } catch (e) {
