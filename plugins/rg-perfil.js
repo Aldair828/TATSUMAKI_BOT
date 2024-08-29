@@ -103,9 +103,9 @@ let handler = async (m, { conn, usedPrefix }) => {
     // Definir estado basado en si el usuario está baneado o no
     let estado = banned ? 'BANEADO [❌]' : 'LIBRE [✅]';
 
-    let str = `*[#Fenix_Bot🐦‍🔥]*
+    let str = `*[#Fenix_Bot 🐦‍🔥]*
     
-    *PERFIL DE* @${who.split('@')[0]}
+*PERFIL DE* @${who.split('@')[0]}
 
 *[👤] NOMBRE →* ${name}
 *[📅] EDAD →* ${age} años
@@ -129,6 +129,6 @@ let handler = async (m, { conn, usedPrefix }) => {
 
 handler.help = ['profile [@user]'];
 handler.tags = ['xp'];
-handler.command = /^perfil|profile?$/i;
+handler.command = /^perfil|me|profile?$/i;
 
 export default handler;
