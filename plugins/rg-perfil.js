@@ -59,7 +59,7 @@ let handler = async (m, { conn, usedPrefix }) => {
         return;
     }
 
-    let pp = 'https://telegra.ph/file/cc7c4c7b9cd439e1155bc.jpg';
+    let pp = 'https://telegra.ph/file/679b47aa15fd48459724a.jpg';
     try {
         pp = await conn.getProfilePicture(who);
     } catch (e) {
@@ -103,7 +103,9 @@ let handler = async (m, { conn, usedPrefix }) => {
     // Definir estado basado en si el usuario está baneado o no
     let estado = banned ? 'BANEADO [❌]' : 'LIBRE [✅]';
 
-    let str = `*PERFIL DE* @${who.split('@')[0]}
+    let str = `*[#Fenix_Bot🐦‍🔥]*
+    
+    *PERFIL DE* @${who.split('@')[0]}
 
 *[👤] NOMBRE →* ${name}
 *[📅] EDAD →* ${age} años
