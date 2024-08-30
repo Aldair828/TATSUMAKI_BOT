@@ -1,8 +1,8 @@
 let handler = async (m, { conn, args, usedPrefix, command }) => {
     let user = global.db.data.users[m.sender];
     let rangos = {
-        bronce: { costo: 5000, multiplicador: 2, image: 'https://telegra.ph/file/863e80e02b440834ff5eb.jpg' },
-        plata: { costo: 10000, multiplicador: 3, image: 'https://telegra.ph/file/c58cdeb2117bc86f38fe8.jpg' },
+        bronce: { costo: 5000, multiplicador: 2, image: 'https://telegra.ph/file/fe711151a05b2c875ce4a.jpg' },
+        plata: { costo: 10000, multiplicador: 3, image: 'https://telegra.ph/file/21acf238f453992a88690.jpg' },
         oro: { costo: 50000, multiplicador: 4, image: 'https://telegra.ph/file/364a71a80bbe8a30c89b8.jpg' },
         diamante: { costo: 100000, multiplicador: 5, image: 'https://telegra.ph/file/b5f0262a27d074da6b1a9.jpg' },
         maestro: { costo: 5000000, multiplicador: 6, image: 'https://telegra.ph/file/6d6e37c5a1cf65ad55608.jpg' },
