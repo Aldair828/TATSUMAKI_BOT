@@ -17,7 +17,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
             let costoFinal = isVip ? data.costo / 2 : data.costo;
             message += `*${rango.charAt(0).toUpperCase() + rango.slice(1)}*\nCosto: ${costoFinal} créditos${isVip ? ' (VIP Descuento aplicado)' : ''}\nMultiplicador: ${data.multiplicador}x\n\n`;
         }
-        await conn.sendFile(m.chat, 'https://telegra.ph/file/596927b96d010bb6a0f86.jpg', '', message, m);
+        await conn.sendFile(m.chat, 'https://telegra.ph/file/945915106cf6da013691c.jpg', '', message, m);
     } else if (command === 'comprar') {
         if (!args[0]) return m.reply(`Por favor, especifica el rango que deseas comprar. Ejemplo: *${usedPrefix}${command} bronce*`);
 
