@@ -129,6 +129,6 @@ let handler = async (m, { conn, usedPrefix }) => {
 
 handler.help = ['profile [@user]'];
 handler.tags = ['xp'];
-handler.command = /^perfil|me|profile?$/i;
+handler.command = /^perfil|profile?$/i;
 
 export default handler;
