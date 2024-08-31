@@ -14,15 +14,13 @@ let handler = async (m, { conn, isRowner}) => {
   const chats = Object.entries(conn.chats).filter(([id, data]) => id && data.isChats)
   const groupsIn = chats.filter(([id]) => id.endsWith('@g.us')) 
   const used = process.memoryUsage()
-  let txt = `╭─⬣「 *Info Bot* 」⬣\n`
-      txt += `│  ≡◦ *🏳️ Creador ∙* Aldair\n`
-      txt += `│  ≡◦ *📚 Grupos Unidos ∙* ${groupsIn.length}\n`
-      txt += `│  ≡◦ *👤 Chats Privados ∙* ${chats.length - groupsIn.length}\n`
-      txt += `│  ≡◦ *💬 Total De Chats ∙* ${chats.length}\n`
-      txt += `│  ≡◦ *🐢 Usuarios Registrados ∙* ${totalreg}\n`
-      txt += `│  ≡◦ *😺 Grupos Registrados ∙* ${totalchats}\n`
-      txt += `│  ≡◦ *🕜 Uptime ∙* ${muptime}\n`
-      txt += `╰─⬣`
+  let txt = ` *Info Bot* \n`
+      txt += `*[💮] Creador: Aldair*\n`
+      txt += `*[📚] Grupos Unidos:* ${groupsIn.length}\n`
+      txt += `*[👤] Chats Privados:* ${chats.length - groupsIn.length}\n`
+      txt += `*[💬] Total De Chats:* ${chats.length}\n`
+      txt += `*[🐢] Usuarios Registrados:* ${rtotalreg}\n`
+      txt += `*[🕜] Uptime:* ${muptime}\n`
 await conn.sendFile(m.chat, pp, 'thumbnail.jpg', txt, m)
 }
 handler.help = ['status']
