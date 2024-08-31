@@ -31,7 +31,7 @@ global.wait = '🐢 *Fenix_Bot 🐦‍🔥*'
 global.botname = 'Fenix_Bot 🐦‍🔥'
 global.textbot = `Powered 𝙱𝚢 𝙵𝚎𝚗𝚒𝚡_𝙱𝚘𝚝 🐦‍🔥`
 global.listo = '*Aqui tiene*'
-global.namechannel = 'тαтѕυмαкι𖤛ɕαηαℓఌᵒᶠⁱᶜⁱᵃˡ'
+global.namechannel = '𝙵𝙴𝙽𝙸𝚇_𝙱𝙾𝚃 '
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
@@ -40,7 +40,7 @@ global.miniurl = fs.readFileSync('./storage/img/miniurl.jpg')
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
-global.group = 'https://chat.whatsapp.com/CnN4LfY1LfB5RBbiNWOCct'
+global.group = 'https://chat.whatsapp.com/Eij6yev1O5vIUisQhbfbSw'
 global.canal = 'https://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x'
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
