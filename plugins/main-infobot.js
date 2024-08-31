@@ -19,7 +19,7 @@ let handler = async (m, { conn, isRowner}) => {
       txt += `*[📚] Grupos Unidos:* ${groupsIn.length}\n`
       txt += `*[👤] Chats Privados:* ${chats.length - groupsIn.length}\n`
       txt += `*[💬] Total De Chats:* ${chats.length}\n`
-      txt += `*[🐢] Usuarios Registrados:* ${rtotalreg}\n`
+      txt += `*[🐢] Usuarios Registrados:* ${totalreg}\n`
       txt += `*[🕜] Uptime:* ${muptime}\n`
 await conn.sendFile(m.chat, pp, 'thumbnail.jpg', txt, m)
 }
