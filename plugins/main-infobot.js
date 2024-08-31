@@ -16,7 +16,7 @@ let handler = async (m, { conn, isRowner}) => {
   const used = process.memoryUsage()
   let txt = ` *Info Bot* \n`
       txt += `*𝘈𝘊𝘛𝘜𝘈𝘓𝘐𝘡𝘈𝘊𝘐𝘖𝘕  < 1.1.1 >*\n`
-      txt += `*[💮] Creador: Aldair*\n`
+      txt += `*[💮] Creador: Aldair*\n\n`
       txt += `*[📚] Grupos Unidos:* ${groupsIn.length}\n`
       txt += `*[👤] Chats Privados:* ${chats.length - groupsIn.length}\n`
       txt += `*[💬] Total De Chats:* ${chats.length}\n`
