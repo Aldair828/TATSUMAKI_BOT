@@ -59,7 +59,9 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
 *🔰INFORMACIÓN DEL BOT🔰*
 
-➢ *[👨🏻‍💻] CREADORES:* ALDAIR - MEOW
+*𝘈𝘊𝘛𝘜𝘈𝘓𝘐𝘡𝘈𝘊𝘐𝘖𝘕  < 1.1.1 >*
+
+➢ *[👨🏻‍💻] CREADOR:* ALDAIR
 ➢ *[🤖] NÚMERO OFICIAL:* +522481729896
 ➢ *[💮] ESTADO:* ACTIVO 🟢
 ➢ *[👥] USUARIOS REGISTRADOS:* ${rtotalreg} 
