@@ -39,8 +39,8 @@ let handler = async (m, { conn }) => {
     await conn.sendFile(m.chat, imagenURL, '', mensaje, m);
 };
 
-handler.help = ['administración'];
+handler.help = ['animatrix'];
 handler.tags = ['info'];
-handler.command = /^administración$/i;
+handler.command = /^animatrix$/i;
 
 export default handler;
