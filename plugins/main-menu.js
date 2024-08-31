@@ -262,7 +262,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 │  𓋜 .underwater <mp3/vn>
 ╰──ꕤ
 
-⋘ TATSUMAKI_BOT ⋙
+⋘ FENIX_BOT ⋙
 
 ➽  DEVELOPER 👨🏻‍💻: Aldair
 " https://wa.me/+51925015528 "
