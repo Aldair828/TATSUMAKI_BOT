@@ -6,13 +6,13 @@ const more = String.fromCharCode(8206)
 const readMore = more.repeat(4001)
 let txt = `*Hola!, te invito a unirte a los grupos oficiales de la Bot para convivir con la comunidad :D*
 
-𝚃𝚊𝚝𝚜𝚞𝚖𝚊𝚔𝚒_𝙱𝚘𝚝 🤖
+𝙵𝙴𝙽𝙸𝚇_𝙱𝙾𝚃 🐦‍🔥
 
 *🎌* ${group}
 
 *꒷꒦꒷꒷꒦꒷꒦꒷꒷꒦꒷꒦꒷꒦꒷꒷꒦꒷꒷꒦꒷꒷꒦꒷꒦꒷꒦꒷꒦꒷*
 
-𝚃𝚊𝚝𝚜𝚞𝚖𝚊𝚔𝚒_𝙱𝚘𝚝 🤖
+𝙵𝙴𝙽𝙸𝚇_𝙱𝙾𝚃 🐦‍🔥
 
 Canal :
 *🏷️* ${canal}
