@@ -1,4 +1,4 @@
-import fg from 'api-dylux';
+import axios from 'axios';
 import yts from 'yt-search';
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
@@ -25,25 +25,33 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
         await conn.sendFile(m.chat, vid.thumbnail, 'thumbnail.jpg', txt, m);
 
-        let yt;
+        // Llamando a la API de akuari
+        let apiUrl = `https://api.akuari.my.id/downloader/youtube?link=${encodeURIComponent(vid.url)}`;
+        let response = await axios.get(apiUrl);
+
+        if (response.data.status !== true) {
+            return conn.reply(m.chat, `🚩 Ocurrió un error al procesar la solicitud.`, m);
+        }
+
+        let downloadUrl;
+        let fileName;
+        let mimetype;
+
         if (format === 'mp3') {
-            yt = await fg.yta(vid.url, '128kbps');
+            downloadUrl = response.data.mp3[0].url;
+            fileName = `${vid.title}.mp3`;
+            mimetype = 'audio/mp4';
         } else if (format === 'mp4') {
-            yt = await fg.ytv(vid.url, '360p');
+            downloadUrl = response.data.mp4[0].url;
+            fileName = `${vid.title}.mp4`;
+            mimetype = 'video/mp4';
         } else {
             return conn.reply(m.chat, `🚩 Formato no válido. Usa *mp3* o *mp4*.`, m);
         }
 
-        let { dl_url, size, title } = yt;
-        let limit = format === 'mp3' ? 100 : 300;
-
-        if (parseFloat(size) > limit) {
-            return conn.reply(m.chat, `🚩 El archivo pesa más de ${limit} MB, se canceló la descarga.`, m);
-        }
-
         let messageOptions = format === 'mp3'
-            ? { audio: { url: dl_url }, fileName: `${title}.mp3`, mimetype: 'audio/mp4' }
-            : { document: { url: dl_url }, fileName: `${title}.mp4`, mimetype: 'video/mp4' };
+            ? { audio: { url: downloadUrl }, fileName: fileName, mimetype: mimetype }
+            : { document: { url: downloadUrl }, fileName: fileName, mimetype: mimetype };
 
         await conn.sendMessage(m.chat, messageOptions, { quoted: m });
         await m.react('✅');
