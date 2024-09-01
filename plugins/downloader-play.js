@@ -15,11 +15,17 @@ const handler = async (m, { conn, command, args, text, usedPrefix }) => {
         let source, buffer;
 
         if (command === 'play') {
+            console.log('Descargando audio...');
             ({ source } = await fg.mp3(url));
+            console.log('Enlace de descarga de audio:', source);
             buffer = await getBuffer(source);
+            console.log('Tamaño del buffer de audio:', buffer.byteLength);
         } else if (command === 'play2') {
+            console.log('Descargando video...');
             ({ source } = await fg.mp4(url));
+            console.log('Enlace de descarga de video:', source);
             buffer = await getBuffer(source);
+            console.log('Tamaño del buffer de video:', buffer.byteLength);
         }
 
         if (!buffer || buffer.byteLength === 0) {
@@ -36,6 +42,7 @@ const handler = async (m, { conn, command, args, text, usedPrefix }) => {
                 : { video: buffer, mimetype: 'video/mp4', fileName: `${title}.mp4` };
             
             await conn.sendMessage(m.chat, messageOptions, { quoted: m });
+            console.log(`${command === 'play' ? 'Audio' : 'Video'} enviado correctamente.`);
         }
 
     } catch (error) {
