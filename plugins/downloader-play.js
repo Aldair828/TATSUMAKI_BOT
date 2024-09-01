@@ -1,70 +1,229 @@
-import axios from 'axios';
-import yts from 'yt-search';
+import fetch from 'node-fetch'
+import yts from 'yt-search'
+import ytdl from 'ytdl-core'
+import axios from 'axios'
+import { youtubedl, youtubedlv2 } from '@bochilteam/scraper'
 
-let handler = async (m, { conn, args, usedPrefix, command }) => {
-    if (!args || !args[0]) return conn.reply(m.chat, `🚩 Ingresa el formato y el título de un video o canción de YouTube.\n\n*Ejemplo:*\n*${usedPrefix + command}* mp3 Alan Walker - Sing Me To Sleep`, m);
+var handler = async (m, { conn, command, args, text, usedPrefix }) => {
 
-    let format = args[0].toLowerCase();
-    let query = args.slice(1).join(' ');
-    if (!query) return conn.reply(m.chat, `🚩 Ingresa el título de un video o canción de YouTube.\n\n*Ejemplo:*\n*${usedPrefix + command}* mp3 Alan Walker - Sing Me To Sleep`, m);
+if (!text) return conn.reply(m.chat, `🚩 *Ingrese el nombre de un video de YouTube*\n\nEjemplo, ${usedPrefix + command} Distancia - Kimberly Contreraxx`,  m, rcanal)
 
-    try {
-        await m.react('🕓');
-        let res = await yts(query);
-        let vid = res.videos[0];
-        if (!vid) return conn.reply(m.chat, '🚩 No se encontraron resultados.', m);
+await m.react(rwait)
 
-        let txt = `*YOUTUBE PLAY*\n\n`;
-        txt += `✩ *Título*: ${vid.title}\n`;
-        txt += `✩ *Duración*: ${vid.timestamp}\n`;
-        txt += `✩ *Visitas*: ${vid.views}\n`;
-        txt += `✩ *Autor*: ${vid.author.name}\n`;
-        txt += `✩ *Publicado*: ${vid.ago}\n`;
-        txt += `✩ *Url*: ${vid.url}\n\n`;
-        txt += `*- El archivo se está enviando, espera un momento...*`;
+try {
 
-        await conn.sendFile(m.chat, vid.thumbnail, 'thumbnail.jpg', txt, m);
+conn.reply(m.chat, global.wait, m, {
+contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, showAdAttribution: true,
+title: packname,
+body: wm,
+previewType: 0, thumbnail: icons,
+sourceUrl: channel }}})
 
-        // Llamando a la API de akuari
-        let apiUrl = `https://api.akuari.my.id/downloader/youtube?link=${encodeURIComponent(vid.url)}`;
-        let response = await axios.get(apiUrl);
+const yt_play = await search(args.join(' '))
+let additionalText = ''
+if (command === 'play') {
+additionalText = 'audio'
+} else if (command === 'play2') {
+additionalText = 'video'}
 
-        if (response.data.status !== true) {
-            return conn.reply(m.chat, `🚩 Ocurrió un error al procesar la solicitud.`, m);
-        }
+let texto1 = `🚩 *Título:*
+• ${yt_play[0].title}
 
-        let downloadUrl;
-        let fileName;
-        let mimetype;
+⏱️ *Duración:* 
+• ${secondString(yt_play[0].duration.seconds)}
 
-        if (format === 'mp3') {
-            downloadUrl = response.data.mp3[0].url;
-            fileName = `${vid.title}.mp3`;
-            mimetype = 'audio/mp4';
-        } else if (format === 'mp4') {
-            downloadUrl = response.data.mp4[0].url;
-            fileName = `${vid.title}.mp4`;
-            mimetype = 'video/mp4';
-        } else {
-            return conn.reply(m.chat, `🚩 Formato no válido. Usa *mp3* o *mp4*.`, m);
-        }
+⭐️ *Autor:*
+• ${yt_play[0].author.name}
 
-        let messageOptions = format === 'mp3'
-            ? { audio: { url: downloadUrl }, fileName: fileName, mimetype: mimetype }
-            : { document: { url: downloadUrl }, fileName: fileName, mimetype: mimetype };
+🌸 *Canal:*
+• ${yt_play[0].author.url}
 
-        await conn.sendMessage(m.chat, messageOptions, { quoted: m });
-        await m.react('✅');
-    } catch (error) {
-        console.error(error);
-        await m.react('✖️');
-        conn.reply(m.chat, `🚩 Ocurrió un error durante la descarga.`, m);
-    }
-};
+🔗 *Enlace:*
+• ${yt_play[0].url}
 
-handler.help = ['play2'].map(v => v + " *<formato> <búsqueda>*");
-handler.tags = ['downloader'];
-handler.command = ['play', 'play2'];
-handler.register = true;
+*Enviando ${additionalText}*
+⏱️ Espere un momento`.trim()
+await conn.sendMessage(m.chat, { text: texto1, contextInfo: { externalAdReply: { title: yt_play[0].title, body: dev, thumbnailUrl: yt_play[0].thumbnail, mediaType: 1, showAdAttribution: true, renderLargerThumbnail: true }}} , { quoted: fkontak })
 
-export default handler;
+if (command == 'play') {        
+try {
+let q = '128kbps'
+let v = yt_play[0].url
+const yt = await youtubedl(v).catch(async _ => await youtubedlv2(v))
+const dl_url = await yt.audio[q].download()
+const ttl = await yt.title
+const size = await yt.audio[q].fileSizeH
+await conn.sendMessage(m.chat, { audio: { url: dl_url }, mimetype: 'audio/mpeg', contextInfo: { externalAdReply: { title: ttl, body: dev, thumbnailUrl: yt_play[0].thumbnail, mediaType: 1, showAdAttribution: true, renderLargerThumbnail: true }}} , { quoted: m }) 
+await m.react(done)   
+} catch {
+
+try {
+await m.react(rwait)
+const dataRE = await fetch(`https://api.akuari.my.id/downloader/youtube?link=${yt_play[0].url}`)
+const dataRET = await dataRE.json()
+await conn.sendMessage(m.chat, { audio: { url: dataRET.mp3[1].url }, mimetype: 'audio/mpeg', contextInfo: { externalAdReply: { title: yt_play[0].title, body: dev, thumbnailUrl: yt_play[0].thumbnail, mediaType: 1, showAdAttribution: true, renderLargerThumbnail: true }}} , { quoted: m })
+await m.react(done) 
+} catch {
+
+try {
+await m.react(rwait)
+let humanLol = await fetch(`https://api.lolhuman.xyz/api/ytplay?apikey=${lolkeysapi}&query=${yt_play[0].title}`)
+let humanRET = await humanLol.json()
+await conn.sendMessage(m.chat, { audio: { url: humanRET.result.audio.link }, mimetype: 'audio/mpeg', contextInfo: { externalAdReply: {title: yt_play[0].title, body: dev, thumbnailUrl: yt_play[0].thumbnail, mediaType: 1, showAdAttribution: true, renderLargerThumbnail: true }}} , { quoted: m })
+await m.react(done)      
+} catch {
+
+try {
+await m.react(rwait)
+let lolhuman = await fetch(`https://api.lolhuman.xyz/api/ytaudio2?apikey=${lolkeysapi}&url=${yt_play[0].url}`)    
+let lolh = await lolhuman.json()
+let n = lolh.result.title || 'error'
+m.react(done)
+await conn.sendMessage(m.chat, { audio: { url: lolh.result.link}, mimetype: 'audio/mpeg', contextInfo: { externalAdReply: { title: n, body: dev, thumbnailUrl: yt_play[0].thumbnail, mediaType: 1, showAdAttribution: true, renderLargerThumbnail: true }}} , { quoted: m })  
+await m.react(done)  
+} catch {
+
+try {
+await m.react(rwait)
+let searchh = await yts(yt_play[0].url)
+let __res = searchh.all.map(v => v).filter(v => v.type == "video")
+let infoo = await ytdl.getInfo('https://youtu.be/' + __res[0].videoId)
+let ress = await ytdl.chooseFormat(infoo.formats, { filter: 'audioonly' })
+await m.react(done)
+await conn.sendMessage(m.chat, { audio: { url: ress.url }, mimetype: 'audio/mpeg', contextInfo: { externalAdReply: { title: __res[0].title, body: dev, thumbnailUrl: yt_play[0].thumbnail, mediaType: 1, showAdAttribution: true, renderLargerThumbnail: true }}} , { quoted: m }) 
+await m.react(done)   
+
+} catch {
+}}}}}
+} if (command == 'play2') {
+try {
+await m.react(rwait)
+let qu = '360'
+let q = qu + 'p'
+let v = yt_play[0].url
+const yt = await youtubedl(v).catch(async _ => await youtubedlv2(v))
+const dl_url = await yt.video[q].download()
+const ttl = await yt.title
+const size = await yt.video[q].fileSizeH
+m.react(done)
+await conn.sendMessage(m.chat, { video: { url: dl_url }, fileName: `${ttl}.mp4`, mimetype: 'video/mp4', caption: `🚩 *Título*: ${ttl}\n*Peso:* ${size}`, thumbnail: await fetch(yt.thumbnail) }, { quoted: m })
+await m.react(done) 
+} catch {
+
+try {
+await m.react(rwait)
+let mediaa = await ytMp4(yt_play[0].url)
+await m.react(done)
+await conn.sendMessage(m.chat, { video: { url: mediaa.result }, fileName: `error.mp4`, caption: `🚩 *Título*: ${ttl}\n*Peso:* ${size}`, thumbnail: mediaa.thumb, mimetype: 'video/mp4' }, { quoted: m })   
+await m.react(done)   
+} catch {
+
+try {
+await m.react(rwait)
+let lolhuman = await fetch(`https://api.lolhuman.xyz/api/ytvideo2?apikey=${lolkeysapi}&url=${yt_play[0].url}`)    
+let lolh = await lolhuman.json()
+let n = lolh.result.title || 'error'
+let n2 = lolh.result.link
+let n3 = lolh.result.size
+let n4 = lolh.result.thumbnail
+await conn.sendMessage(m.chat, { video: { url: n2 }, fileName: `${n}.mp4`, mimetype: 'video/mp4', caption: `🚩 *Título*: ${ttl}\n*Peso:* ${size}`, thumbnail: await fetch(n4) }, { quoted: m })
+} catch {
+await m.react(error)
+await conn.reply(m.chat, '🚩 *Ocurrió un fallo*', m, fake) }}}    
+}} catch {
+await m.react(error)
+return conn.reply(m.chat, '🚩 *Inténtelo de nuevo*', m, fake)}
+
+}
+handler.help = ['play', 'play2']
+handler.tags = ['descargas']
+handler.command = ['play', 'play2']
+handler.register = true
+//handler.estrellas = 1
+
+export default handler
+
+async function search(query, options = {}) {
+const search = await yts.search({ query, hl: 'es', gl: 'ES', ...options })
+return search.videos}
+
+function MilesNumber(number) {
+const exp = /(\d)(?=(\d{3})+(?!\d))/g
+const rep = '$1.'
+let arr = number.toString().split(".")
+arr[0] = arr[0].replace(exp, rep)
+return arr[1] ? arr.join('.') : arr[0]}
+
+function secondString(seconds) {
+seconds = Number(seconds)
+var d = Math.floor(seconds / (3600 * 24))
+var h = Math.floor((seconds % (3600 * 24)) / 3600)
+var m = Math.floor((seconds % 3600) / 60)
+var s = Math.floor(seconds % 60)
+var dDisplay = d > 0 ? d + (d == 1 ? ' día, ' : ' días, ') : ''
+var hDisplay = h > 0 ? h + (h == 1 ? " hora, " : " horas, ") : ''
+var mDisplay = m > 0 ? m + (m == 1 ? " minuto, " : " minutos, ") : ''
+var sDisplay = s > 0 ? s + (s == 1 ? ' segundo' : ' segundos') : ''
+return dDisplay + hDisplay + mDisplay + sDisplay}
+
+function bytesToSize(bytes) {
+return new Promise((resolve, reject) => {
+const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+if (bytes === 0) return 'n/a'
+const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10)
+if (i === 0) resolve(`${bytes} ${sizes[i]}`);
+resolve(`${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`)})}
+
+async function ytMp3(url) {
+return new Promise((resolve, reject) => {
+ytdl.getInfo(url).then(async(getUrl) => {
+let result = []
+for(let i = 0; i < getUrl.formats.length; i++) {
+let item = getUrl.formats[i]
+if (item.mimeType == 'audio/webm; codecs=\"opus\"') {
+let { contentLength } = item
+let bytes = await bytesToSize(contentLength)
+result[i] = { audio: item.url, size: bytes }}}
+let resultFix = result.filter(x => x.audio != undefined && x.size != undefined) 
+let tiny = await axios.get(`https://tinyurl.com/api-create.php?url=${resultFix[0].audio}`)
+let tinyUrl = tiny.data;
+let title = getUrl.videoDetails.title;
+let thumb = getUrl.player_response.microformat.playerMicroformatRenderer.thumbnail.thumbnails[0].url
+resolve({ title, result: tinyUrl, result2: resultFix, thumb })}).catch(reject)})}
+
+async function ytMp4(url) {
+return new Promise(async(resolve, reject) => {
+ytdl.getInfo(url).then(async(getUrl) => {
+let result = []
+for(let i = 0; i < getUrl.formats.length; i++) {
+let item = getUrl.formats[i]
+if (item.container == 'mp4' && item.hasVideo == true && item.hasAudio == true) {
+let { qualityLabel, contentLength } = item
+let bytes = await bytesToSize(contentLength)
+result[i] = { video: item.url, quality: qualityLabel, size: bytes }}}
+let resultFix = result.filter(x => x.video != undefined && x.size != undefined && x.quality != undefined) 
+let tiny = await axios.get(`https://tinyurl.com/api-create.php?url=${resultFix[0].video}`)
+let tinyUrl = tiny.data
+let title = getUrl.videoDetails.title
+let thumb = getUrl.player_response.microformat.playerMicroformatRenderer.thumbnail.thumbnails[0].url
+resolve({ title, result: tinyUrl, rersult2: resultFix[0].video, thumb })}).catch(reject)})}
+
+async function ytPlay(query) {
+return new Promise((resolve, reject) => {
+yts(query).then(async(getData) => {
+let result = getData.videos.slice( 0, 5 )
+let url = []
+for (let i = 0; i < result.length; i++) { url.push(result[i].url) }
+let random = url[0]
+let getAudio = await ytMp3(random)
+resolve(getAudio)}).catch(reject)})}
+
+async function ytPlayVid(query) {
+return new Promise((resolve, reject) => {
+yts(query).then(async(getData) => {
+let result = getData.videos.slice( 0, 5 )
+let url = []
+for (let i = 0; i < result.length; i++) { url.push(result[i].url) }
+let random = url[0]
+let getVideo = await ytMp4(random)
+resolve(getVideo)}).catch(reject)})}
