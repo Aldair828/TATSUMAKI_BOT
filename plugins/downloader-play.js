@@ -1,74 +1,43 @@
-let handler = async (m, { conn, args, usedPrefix, command }) => {
-    let chat = global.db.data.chats[m.chat] || {};
-    let user = global.db.data.users[m.sender] || {};
+const handler = async (m, { conn, text, command, usedPrefix }) => {
+// if (m.mentionedJid.includes(conn.user.jid)) return; // Evitar advertir al bot mismo
+const pp = 'https://i.imgur.com/vWnsjh8.jpg'
+let number, ownerNumber, aa, who;
+if (m.isGroup) { 
+who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text; 
+} else who = m.chat;
+  const user = global.db.data.users[who];
+  const usuario = conn.user.jid.split`@`[0] + '@s.whatsapp.net'
+  const bot = global.db.data.settings[conn.user.jid] || {};
+  const dReason = 'Sin motivo';
+  const msgtext = text || dReason 
+  const sdms = msgtext.replace(/@\d+-?\d* /g, '');
+  const warntext = `*❌ Etiquete a una persona o responda a un mensaje del grupo para advertir al usuario*\n\n*Ejemplo:*\n*${usedPrefix + command} @tag*`;
+  if (!who) {
+return m.reply(warntext, m.chat, { mentions: conn.parseMention(warntext) });
+  }
 
-    // Inicializar advertencias si no existen
-    if (!user.warnings) user.warnings = 0;
+for (let i = 0; i < global.owner.length; i++) {
+ownerNumber = global.owner[i][0];
+if (usuario.replace(/@s\.whatsapp\.net$/, '') === ownerNumber) {
+aa = ownerNumber + '@s.whatsapp.net'
+await conn.reply(m.chat, `…`, m, { mentions: [aa] })
+return
+}}
 
-    if (command === 'warn') {
-        if (!args.length) {
-            return m.reply(`Uso: ${usedPrefix}warn <usuario> <mensaje>\nEjemplo: ${usedPrefix}warn @usuario Comportamiento inapropiado.`);
-        }
-
-        let usuario = args[0].replace('@', '').replace(/\D/g, ''); // Extraer solo números del ID
-        let mensaje = args.slice(1).join(' ');
-
-        // Obtener y actualizar las advertencias del usuario advertido
-        let warnedUser = global.db.data.users[usuario] || {};
-        if (!warnedUser.warnings) warnedUser.warnings = 0;
-        warnedUser.warnings++;
-
-        // Guardar los cambios
-        global.db.data.users[usuario] = warnedUser;
-
-        let warning = `
-⚠️ *ADVERTENCIA* ⚠️
-
-@${usuario}, ${mensaje}
-
-*🔔 Advertencias: ${warnedUser.warnings} de 3*
-        `.trim();
-
-        await conn.reply(m.chat, warning, m);
-
-        // Verificar si el usuario ha alcanzado el límite de advertencias
-        if (warnedUser.warnings >= 3) {
-            try {
-                await conn.groupParticipantsUpdate(m.chat, [usuario], 'remove');
-                await conn.reply(m.chat, `🚫 @${usuario} ha sido eliminado del grupo por recibir 3 advertencias.`, m);
-
-                // Restablecer el contador de advertencias
-                warnedUser.warnings = 0;
-                global.db.data.users[usuario] = warnedUser;
-            } catch (e) {
-                await conn.reply(m.chat, `❌ No se pudo eliminar a @${usuario}.`, m);
-            }
-        }
-    } else if (command === 'topactivos') {
-        let topActivos = Object.entries(global.db.data.users)
-            .filter(([key, userData]) => userData.xp > 0)
-            .sort((a, b) => b[1].xp - a[1].xp)
-            .slice(0, 10)
-            .map(([key, userData], index) => {
-                return `${index + 1}. ${key} - XP: ${userData.xp}`;
-            })
-            .join('\n');
-
-        let mensaje = `
-*📈 TOP 10 ACTIVOS 📈*
-
-${topActivos || 'No hay usuarios activos.'}
-        `.trim();
-
-        await conn.reply(m.chat, mensaje, m);
-    }
-
-    // Guardar los cambios en la base de datos
-    global.db.data.users[m.sender] = user;
+  user.warn += 1;
+  await m.reply(`${user.warn == 1 ? `*@${who.split`@`[0]}*` : `*@${who.split`@`[0]}*`} 𝚁𝙴𝙲𝙸𝙱𝙸𝙾 𝚄𝙽𝙰 𝙰𝙳𝚅𝙴𝚁𝚃𝙴𝙽𝙲𝙸𝙰 𝙴𝙽 𝙴𝚂𝚃𝙴 𝙶𝚁𝚄𝙿𝙾!\nMotivo: ${sdms}\n*Advertencias: ${user.warn}/4*`, null, { mentions: [who] },
+  );
+  if (user.warn >= 4) {
+    user.warn = 0;
+    await m.reply(`𝚃𝙴 𝙻𝙾 𝙰𝙳𝚅𝙴𝚁𝚃𝙸 𝚅𝙰𝚁𝙸𝙰𝚂 𝚅𝙴𝙲𝙴𝚂!!\n*@${who.split`@`[0]}* 𝚂𝚄𝙿𝙴𝚁𝙰𝚂𝚃𝙴 𝙻𝙰𝚂 *4* 𝙰𝙳𝚅𝙴𝚁𝚃𝙴𝙽𝙲𝙸𝙰𝚂, 𝙰𝙷𝙾𝚁𝙰 𝚂𝙴𝚁𝙰𝚂 𝙴𝙻𝙸𝙼𝙸𝙽𝙰𝙳𝙾/𝙰 👽`, null, { mentions: [who] },
+    );
+    await conn.groupParticipantsUpdate(m.chat, [who], 'remove');
+  }
+  return !1;
 };
 
-handler.help = ['warn <usuario> <mensaje>', 'topactivos'];
-handler.tags = ['group'];
-handler.command = ['warn', 'topactivos'];
-
+handler.command = ['advertir','advertencia','warn','warning'];
+handler.group = true;
+handler.admin = true;
+handler.botAdmin = true;
 export default handler;
