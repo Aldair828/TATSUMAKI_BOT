@@ -181,12 +181,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 │  𓋜 .invocar <mesaje>
 │  𓋜 .desbanearbot
 │  𓋜 .ds
-╰──ꕤ
-
-╭──ꕤ「 Logo - maker 🌹 」ꕤ
-│  𓋜 .sadcat <texto>
-│  𓋜 .tweet <comentario>
-╰──ꕤ
+╰╰──
 
 ╭──ꕤ「 On / Off 💥 」ꕤ
 │  𓋜 .enable
@@ -219,14 +214,9 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 │  𓋜 .dance <@user>
 │  𓋜 .abrazo <@user>
 │  𓋜 .gay
-│  𓋜 .horny
 │  𓋜 .ship
 │  𓋜 .simi
 │  𓋜 .bot
-╰──ꕤ
-
-╭──ꕤ「 Nsfw 🥵 」ꕤ
-│  𓋜 .xnxxdl <url>
 ╰──ꕤ
 
 ╭──ꕤ「 Creador 🤴🏻 」ꕤ
