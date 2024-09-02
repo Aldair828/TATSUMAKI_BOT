@@ -15,7 +15,9 @@ let handler = async (m, { conn, usedPrefix, isOwner }) => {
             displayName: 'Contactos',
             contacts: [
                 { vcard: vcard1 },
-                { vcard: vcard2 }
+                { vcard: vcard2 }, 
+                { vcard: vcard3 }, 
+                { vcard: vcard4 }
             ]
         }
     }, { quoted: m });
