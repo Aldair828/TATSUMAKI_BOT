@@ -5,34 +5,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     // Inicializar advertencias si no existen
     if (!user.warnings) user.warnings = 0;
 
-    if (command === 'destacar') {
-        if (!args.length) {
-            return m.reply(`Uso: ${usedPrefix}destacar <mensaje>\nEjemplo: ${usedPrefix}destacar Bienvenido al grupo!`);
-        }
-
-        let mensaje = args.join(' ');
-        let destacado = `
-*🔖 MENSAJE DESTACADO 🔖*
-
-${mensaje}
-        `.trim();
-
-        // Fijar el mensaje destacado en el grupo
-        await conn.sendMessage(m.chat, { text: destacado, mentions: [m.sender] }, { quoted: m });
-    } else if (command === 'anuncio') {
-        if (!args.length) {
-            return m.reply(`Uso: ${usedPrefix}anuncio <mensaje>\nEjemplo: ${usedPrefix}anuncio No olviden el evento de esta noche.`);
-        }
-
-        let mensaje = args.join(' ');
-        let anuncio = `
-📢 *ANUNCIO IMPORTANTE* 📢
-
-${mensaje}
-        `.trim();
-
-        await conn.reply(m.chat, anuncio, m);
-    } else if (command === 'warn') {
+    if (command === 'warn') {
         if (!args.length) {
             return m.reply(`Uso: ${usedPrefix}warn <usuario> <mensaje>\nEjemplo: ${usedPrefix}warn @usuario Comportamiento inapropiado.`);
         }
@@ -64,14 +37,32 @@ ${usuario}, ${mensaje}
             await conn.reply(m.chat, `🚫 ${usuario} ha sido eliminado del grupo por recibir 3 advertencias.`, m);
             warnedUser.warnings = 0; // Restablecer el contador de advertencias
         }
+    } else if (command === 'topactivos') {
+        let topActivos = Object.entries(global.db.data.users)
+            .filter(([key, userData]) => userData.xp > 0)
+            .sort((a, b) => b[1].xp - a[1].xp)
+            .slice(0, 10)
+            .map(([key, userData], index) => {
+                return `${index + 1}. ${key} - XP: ${userData.xp}`;
+            })
+            .join('\n');
+
+        let mensaje = `
+*📈 TOP 10 ACTIVOS 📈*
+
+${topActivos || 'No hay usuarios activos.'}
+        `.trim();
+
+        await conn.reply(m.chat, mensaje, m);
     }
 
     // Guardar los cambios en la base de datos
     global.db.data.users[m.sender] = user;
+    global.db.data.users[usuario] = warnedUser;
 };
 
-handler.help = ['destacar <mensaje>', 'anuncio <mensaje>', 'warn <usuario> <mensaje>'];
+handler.help = ['warn <usuario> <mensaje>', 'topactivos'];
 handler.tags = ['group'];
-handler.command = ['destacar', 'anuncio', 'warn'];
+handler.command = ['warn', 'topactivos'];
 
 export default handler;
