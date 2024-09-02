@@ -1,46 +1,70 @@
-module.exports = function(bot) {
-  
-  // Comando .destacar
-  bot.on('message_create', async (msg) => {
-    if (msg.body.startsWith('.destacar')) {
-        const mensaje = msg.body.slice(10).trim();
-        if (mensaje) {
-            const destacado = `🔖 *MENSAJE DESTACADO* 🔖\n\n${mensaje}`;
-            await bot.sendMessage(msg.from, destacado);
-        } else {
-            await bot.sendMessage(msg.from, '❗ *Error*: Debes proporcionar un mensaje para destacar.');
+let handler = async (m, { conn, args, usedPrefix, command }) => {
+    let chat = global.db.data.chats[m.chat] || {};
+    let user = global.db.data.users[m.sender] || {};
+
+    // Inicializar advertencias si no existen
+    if (!user.warnings) user.warnings = 0;
+
+    if (command === 'destacar') {
+        if (!args.length) {
+            return m.reply(`Uso: ${usedPrefix}destacar <mensaje>\nEjemplo: ${usedPrefix}destacar Bienvenido al grupo!`);
+        }
+
+        let mensaje = args.join(' ');
+        let destacado = `
+*🔖 MENSAJE DESTACADO 🔖*
+
+${mensaje}
+        `.trim();
+
+        await conn.reply(m.chat, destacado, m);
+    } else if (command === 'anuncio') {
+        if (!args.length) {
+            return m.reply(`Uso: ${usedPrefix}anuncio <mensaje>\nEjemplo: ${usedPrefix}anuncio No olviden el evento de esta noche.`);
+        }
+
+        let mensaje = args.join(' ');
+        let anuncio = `
+📢 *ANUNCIO IMPORTANTE* 📢
+
+${mensaje}
+        `.trim();
+
+        await conn.reply(m.chat, anuncio, m);
+    } else if (command === 'warn') {
+        if (!args.length) {
+            return m.reply(`Uso: ${usedPrefix}warn <usuario> <mensaje>\nEjemplo: ${usedPrefix}warn @usuario Comportamiento inapropiado.`);
+        }
+
+        let usuario = args[0];
+        let mensaje = args.slice(1).join(' ');
+
+        // Incrementar el contador de advertencias del usuario
+        let warnedUser = global.db.data.users[usuario.replace('@', '')] || {};
+        if (!warnedUser.warnings) warnedUser.warnings = 0;
+        warnedUser.warnings++;
+
+        let warning = `
+⚠️ *ADVERTENCIA* ⚠️
+
+${usuario}, ${mensaje}
+
+*🔔 Advertencias: ${warnedUser.warnings} de 3*
+        `.trim();
+
+        await conn.reply(m.chat, warning, m);
+
+        // Verificar si el usuario ha alcanzado el límite de advertencias
+        if (warnedUser.warnings >= 3) {
+            await conn.groupParticipantsUpdate(m.chat, [usuario], 'remove');
+            await conn.reply(m.chat, `🚫 ${usuario} ha sido eliminado del grupo por recibir 3 advertencias.`, m);
+            warnedUser.warnings = 0; // Restablecer el contador de advertencias
         }
     }
-  });
-
-  // Comando .anuncio
-  bot.on('message_create', async (msg) => {
-    if (msg.body.startsWith('.anuncio')) {
-        const anuncio = msg.body.slice(9).trim();
-        if (anuncio) {
-            const anuncioFinal = `📢 *ANUNCIO IMPORTANTE* 📢\n\n${anuncio}`;
-            await bot.sendMessage(msg.from, anuncioFinal);
-        } else {
-            await bot.sendMessage(msg.from, '❗ *Error*: Debes proporcionar un mensaje para el anuncio.');
-        }
-    }
-  });
-
-  // Comando .warn
-  bot.on('message_create', async (msg) => {
-    if (msg.body.startsWith('.warn')) {
-        const args = msg.body.split(' ');
-        const userMention = args[1];
-        const reason = args.slice(2).join(' ');
-
-        if (userMention) {
-            const warnedUser = msg.mentionedIds[0];
-            const warningMessage = `⚠️ *ADVERTENCIA* ⚠️\n\n@${warnedUser.user}, has sido advertido por:\n\n*Razón:* ${reason || "Comportamiento inapropiado"}`;
-
-            await bot.sendMessage(msg.from, warningMessage, { mentions: [warnedUser] });
-        } else {
-            await bot.sendMessage(msg.from, '❗ *Error*: Debes mencionar a un usuario para advertir y, opcionalmente, proporcionar una razón.');
-        }
-    }
-  });
 };
+
+handler.help = ['destacar <mensaje>', 'anuncio <mensaje>', 'warn <usuario> <mensaje>'];
+handler.tags = ['group'];
+handler.command = ['destacar', 'anuncio', 'warn'];
+
+export default handler;
