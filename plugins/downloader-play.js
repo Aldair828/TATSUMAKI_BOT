@@ -16,10 +16,13 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         // Asegurarse de que el ID de usuario esté en formato correcto
         usuario = usuario.replace('@', '');
 
-        // Incrementar el contador de advertencias del usuario
+        // Obtener y actualizar las advertencias del usuario advertido
         let warnedUser = global.db.data.users[usuario] || {};
         if (!warnedUser.warnings) warnedUser.warnings = 0;
         warnedUser.warnings++;
+
+        // Guardar los cambios
+        global.db.data.users[usuario] = warnedUser;
 
         let warning = `
 ⚠️ *ADVERTENCIA* ⚠️
@@ -58,7 +61,6 @@ ${topActivos || 'No hay usuarios activos.'}
 
     // Guardar los cambios en la base de datos
     global.db.data.users[m.sender] = user;
-    global.db.data.users[usuario] = warnedUser;
 };
 
 handler.help = ['warn <usuario> <mensaje>', 'topactivos'];
