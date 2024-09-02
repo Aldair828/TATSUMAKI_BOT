@@ -10,11 +10,8 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
             return m.reply(`Uso: ${usedPrefix}warn <usuario> <mensaje>\nEjemplo: ${usedPrefix}warn @usuario Comportamiento inapropiado.`);
         }
 
-        let usuario = args[0];
+        let usuario = args[0].replace('@', '').replace(/\D/g, ''); // Extraer solo números del ID
         let mensaje = args.slice(1).join(' ');
-
-        // Asegurarse de que el ID de usuario esté en formato correcto
-        usuario = usuario.replace('@', '');
 
         // Obtener y actualizar las advertencias del usuario advertido
         let warnedUser = global.db.data.users[usuario] || {};
@@ -27,7 +24,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         let warning = `
 ⚠️ *ADVERTENCIA* ⚠️
 
-${usuario}, ${mensaje}
+@${usuario}, ${mensaje}
 
 *🔔 Advertencias: ${warnedUser.warnings} de 3*
         `.trim();
@@ -36,12 +33,17 @@ ${usuario}, ${mensaje}
 
         // Verificar si el usuario ha alcanzado el límite de advertencias
         if (warnedUser.warnings >= 3) {
-            await conn.groupParticipantsUpdate(m.chat, [usuario], 'remove');
-            await conn.reply(m.chat, `🚫 ${usuario} ha sido eliminado del grupo por recibir 3 advertencias.`, m);
+            // Eliminar al usuario del grupo
+            try {
+                await conn.groupParticipantsUpdate(m.chat, [usuario], 'remove');
+                await conn.reply(m.chat, `🚫 @${usuario} ha sido eliminado del grupo por recibir 3 advertencias.`, m);
 
-            // Restablecer el contador de advertencias
-            warnedUser.warnings = 0;
-            global.db.data.users[usuario] = warnedUser;
+                // Restablecer el contador de advertencias
+                warnedUser.warnings = 0;
+                global.db.data.users[usuario] = warnedUser;
+            } catch (e) {
+                await conn.reply(m.chat, `❌ No se pudo eliminar a @${usuario}.`, m);
+            }
         }
     } else if (command === 'topactivos') {
         let topActivos = Object.entries(global.db.data.users)
