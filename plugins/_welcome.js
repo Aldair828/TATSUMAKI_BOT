@@ -11,11 +11,11 @@ export async function before(m, { conn, participants, groupMetadata }) {
   let userId = m.messageStubParameters[0];
   let user = global.db.data.users[userId];
   let creditos = user ? user.creditos : "No tiene registro";
-  let fechaIngreso = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-  let horaIngreso = new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+  let fechaIngreso = `1 de septiembre`;
+  let horaIngreso = `8:34 pm`;
 
   if (chat.bienvenida && m.messageStubType == 27) {
-    let bienvenida = `*_FENIX_BOT  🐦‍🔥_*\n\n𝘽𝙄𝙀𝙉𝙑𝙀𝙉𝙄𝘿𝙊 @${userId.split`@`[0]}  𝘼  *< ${groupMetadata.subject} >*\n\n*╔══════✮•°♛°•✮ ═════╗*\n\n       *TU INFORMACIÓN 📜*\n\n*╚══════✮•°♛°•✮ ═════╝*\n\n*➢ NUMERO:* ${userId.split`@`[0]}\n*➢ NOMBRE:* ${user?.nombre || "Desconocido"}\n*➢ INGRESO:* ${fechaIngreso} ${horaIngreso}`;
+    let bienvenida = `*_FENIX_BOT  🐦‍🔥_*\n\n𝘽𝙄𝙀𝙉𝙑𝙀𝙉𝙄𝘿𝙊 @${userId.split`@`[0]}\n\n𝙂𝙍𝙐𝙋𝙊:\n\n*< ${groupMetadata.subject} >*\n\n*╔══════✮•°♛°•✮ ═════╗*\n\n       *TU INFORMACIÓN 📜*\n\n*╚══════✮•°♛°•✮ ═════╝*\n\n*➢ NUMERO:* ${userId.split`@`[0]}\n*➢ NOMBRE:* ${user?.nombre || "Desconocido"}\n*➢ INGRESO:* ${fechaIngreso} --- ${horaIngreso}`;
 
     await conn.sendAi(m.chat, botname, textbot, bienvenida, img, img, canal);
   }
