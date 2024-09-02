@@ -38,7 +38,10 @@ ${usuario}, ${mensaje}
         if (warnedUser.warnings >= 3) {
             await conn.groupParticipantsUpdate(m.chat, [usuario], 'remove');
             await conn.reply(m.chat, `🚫 ${usuario} ha sido eliminado del grupo por recibir 3 advertencias.`, m);
-            warnedUser.warnings = 0; // Restablecer el contador de advertencias
+
+            // Restablecer el contador de advertencias
+            warnedUser.warnings = 0;
+            global.db.data.users[usuario] = warnedUser;
         }
     } else if (command === 'topactivos') {
         let topActivos = Object.entries(global.db.data.users)
