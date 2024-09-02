@@ -172,9 +172,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 │  𓋜 .kick @user
 │  𓋜 .link
 │  𓋜 .encuesta <pregunta|opciones>
-│  𓋜 .promote 593xxx
 │  𓋜 .promote @usuario
-│  𓋜 .promote responder chat
 │  𓋜 .setppgc
 │  𓋜 .tag
 │  𓋜 .tagall <mesaje>
