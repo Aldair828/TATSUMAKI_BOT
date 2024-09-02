@@ -7,7 +7,7 @@ let handler = async (m, { conn, usedPrefix, isOwner, command, text }) => {
     // Si el comando es 'owner' o variantes
     if (['owner', 'creator', 'creador', 'dueño'].includes(command)) {
         // Construir la lista de VCards con los owners actuales
-        let ownersVcards = global.owner.map(owner => `BEGIN:VCARD\nVERSION:3.0\nN:${owner[1] || 'Desconocido'};;\nFN:${owner[1] || 'Desconocido'}\nORG:Owner\nTEL;waid=${owner[0].replace('@s.whatsapp.net', '')}:${owner[0].replace('@s.whatsapp.net', '')}\nEND:VCARD`);
+        let ownersVcards = global.owner.map(owner => `BEGIN:VCARD\nVERSION:3.0\nN:Owner;;\nFN:Owner\nORG:Owner\nTEL;waid=${owner[0].replace('@s.whatsapp.net', '')}:${owner[0].replace('@s.whatsapp.net', '')}\nEND:VCARD`);
 
         // Enviar los contactos
         await conn.sendMessage(m.chat, {
