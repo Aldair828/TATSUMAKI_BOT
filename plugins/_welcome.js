@@ -14,7 +14,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
   let horaIngreso = new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
 
   if (chat.bienvenida && m.messageStubType == 27) {
-    let bienvenida = `*_FENIX_BOT  🐦‍🔥_*\n\n𝘽𝙄𝙀𝙉𝙑𝙀𝙉𝙄𝘿𝙊 @${userId.split`@`[0]}\n\n𝙂𝙍𝙐𝙋𝙊:\n\n*< ${groupMetadata.subject} >*\n\n*╔══════✮•°♛°•✮ ═════╗*\n\n       *TU INFORMACIÓN 📜*\n\n*╚══════✮•°♛°•✮ ═════╝*\n\n*➢ NUMERO:* ${userId.split`@`[0]}\n*➢ NOMBRE:* ${user?.nombre || "Desconocido"}\n*➢ INGRESO:* ${fechaIngreso} - ${horaIngreso}`;
+    let bienvenida = `*_FENIX_BOT  🐦‍🔥_*\n\n𝘽𝙄𝙀𝙉𝙑𝙀𝙉𝙄𝘿𝙊 @${userId.split`@`[0]}\n\n𝙂𝙍𝙐𝙋𝙊:\n\n*< ${groupMetadata.subject} >*\n\n*╔══════✮•°♛°•✮ ═════╗*\n\n       *TU INFORMACIÓN 📜*\n\n*╚══════✮•°♛°•✮ ═════╝*\n\n*➢ NUMERO:* ${userId.split`@`[0]}\n*➢ NOMBRE:* ${user?.nombre || "Desconocido"}\n*➢ INGRESO:* ${fechaIngreso} - ${horaIngreso}\n\n> 𝘾𝘼𝙉𝘼𝙇 𝙊𝙁𝘾: https://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x`;
 
     await conn.sendAi(m.chat, botname, textbot, bienvenida, img, img, canal);
   }
