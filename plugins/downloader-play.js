@@ -17,7 +17,8 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 ${mensaje}
         `.trim();
 
-        await conn.reply(m.chat, destacado, m);
+        // Fijar el mensaje destacado en el grupo
+        await conn.sendMessage(m.chat, { text: destacado, mentions: [m.sender] }, { quoted: m });
     } else if (command === 'anuncio') {
         if (!args.length) {
             return m.reply(`Uso: ${usedPrefix}anuncio <mensaje>\nEjemplo: ${usedPrefix}anuncio No olviden el evento de esta noche.`);
@@ -39,8 +40,11 @@ ${mensaje}
         let usuario = args[0];
         let mensaje = args.slice(1).join(' ');
 
+        // Asegurarse de que el ID de usuario esté en formato correcto
+        usuario = usuario.replace('@', '');
+
         // Incrementar el contador de advertencias del usuario
-        let warnedUser = global.db.data.users[usuario.replace('@', '')] || {};
+        let warnedUser = global.db.data.users[usuario] || {};
         if (!warnedUser.warnings) warnedUser.warnings = 0;
         warnedUser.warnings++;
 
@@ -61,6 +65,9 @@ ${usuario}, ${mensaje}
             warnedUser.warnings = 0; // Restablecer el contador de advertencias
         }
     }
+
+    // Guardar los cambios en la base de datos
+    global.db.data.users[m.sender] = user;
 };
 
 handler.help = ['destacar <mensaje>', 'anuncio <mensaje>', 'warn <usuario> <mensaje>'];
