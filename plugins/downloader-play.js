@@ -39,7 +39,13 @@ const handler = async (m, { conn, text, command, usedPrefix }) => {
         // Si el usuario alcanza 4 advertencias, eliminar del grupo
         if (user.warn >= 4) {
             user.warn = 0;
-            await m.reply(`𝚃𝙀 𝙇𝙊 𝙰𝙳𝚅𝙀𝚁𝚃𝙄 𝚅𝙰𝚁𝙸𝙰𝚂 𝚅𝙴𝙲𝙴𝚂!!\n*@${who.split`@`[0]}* 𝚂𝚄𝙿𝙀𝚁𝙰𝚂𝚃𝙴 𝙻𝙰𝚂 *4* 𝙰𝙳𝚅𝙀𝚁𝚃𝙴𝙽𝘾𝙄𝘼𝚂, 𝙰𝙷𝙾𝚁𝙰 𝚂𝙴𝚁𝙰𝚂 𝙴𝙻𝙸𝙼𝙸𝙽𝙰𝙳𝙾/𝙰 👽`, null, { mentions: [who] });
+            await m.reply(`
+@${who.split`@`[0]} *FUISTES ADVERTIDO VARIAS VECES*
+
+*SE TE ELIMINARA DEL GRUPO*
+
+*EN PROCESO👨🏻‍💻*
+            `.trim(), null, { mentions: [who] });
             await conn.groupParticipantsUpdate(m.chat, [who], 'remove');
         }
 
