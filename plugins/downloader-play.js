@@ -33,7 +33,6 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
         // Verificar si el usuario ha alcanzado el límite de advertencias
         if (warnedUser.warnings >= 3) {
-            // Eliminar al usuario del grupo
             try {
                 await conn.groupParticipantsUpdate(m.chat, [usuario], 'remove');
                 await conn.reply(m.chat, `🚫 @${usuario} ha sido eliminado del grupo por recibir 3 advertencias.`, m);
