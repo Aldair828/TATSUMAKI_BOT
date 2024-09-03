@@ -30,6 +30,6 @@ let handler = async (m, { conn }) => {
 
 handler.help = ['topxp'];
 handler.tags = ['xp'];
-handler.command = ['topxp', 'top'];
+handler.command = ['topxp', 'topxp'];
 
 export default handler;
