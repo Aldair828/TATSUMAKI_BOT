@@ -90,7 +90,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ➥ roba créditos a otros usuarios
 
 ➢ .depositar cantidad 
-➥ deposita el dinero al Banco y guarda los 
+➥ deposita el dinero al Banco y guardalos 
 
 ➢ .retirar cantidad 
 ➥ retira el dinero del Banco 
@@ -98,7 +98,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ➢ .banco 
 ➥ guarda tus créditos de cualquier robo 
 
-➢ .top 
+➢ .topcreditos
 ➥ ve el top de mayores créditos 
 
 ➢ .prestamo cantidad 
