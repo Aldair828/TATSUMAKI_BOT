@@ -75,7 +75,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 .menu   para volver a la lista de menu 
 `.trim()
 
-    let imageUrl = 'https://telegra.ph/file/52034ef36501ddbadfd0b.jpg' // Reemplaza esto con el enlace directo a tu imagen
+    let imageUrl = 'https://telegra.ph/file/38f7b07ba6b88f40d3a4b.jpg' // Reemplaza esto con el enlace directo a tu imagen
     await conn.sendMessage(m.chat, { image: { url: imageUrl }, caption: menuText }, { quoted: m })
 
   } catch (e) {
