@@ -8,9 +8,13 @@ let handler = async (m, { conn }) => {
     let info = `
     *🔹 Información del Grupo 🔹*
 
+
     ➤ *Nombre del Grupo:* ${groupName}
+    
     ➤ *Descripción:* ${groupDesc || 'Sin descripción'}
+    
     ➤ *Número de Participantes:* ${participants}
+    
     ➤ *Creador del Grupo:* ${owner}
     `;
 
