@@ -8,12 +8,12 @@ let handler = async (m, { conn }) => {
 
     users.forEach(([jid, user], index) => {
         let rank;
-        if (user.limit >= 1700) rank = '💮 LEYENDA';
-        else if (user.limit >= 1200) rank = '🃏 MAESTRO';
-        else if (user.limit >= 700) rank = '💎 DIAMANTE';
-        else if (user.limit >= 300) rank = '🥇 ORO';
-        else if (user.limit >= 100) rank = '🥈 PLATA';
-        else rank = '🥉 BRONCE';
+        if (user.limit >= 1700) rank = '6';
+        else if (user.limit >= 1200) rank = '5;
+        else if (user.limit >= 700) rank = '4';
+        else if (user.limit >= 300) rank = '3';
+        else if (user.limit >= 100) rank = '2';
+        else rank = '1';
 
         str += `${index + 1})\n*[👤] 𝚄𝚂𝚄𝙰𝚁𝙸𝙾:* ${conn.getName(jid)}\n*[📱] 𝙽𝚄𝙼𝙴𝚁𝙾:* https://wa.me/${jid.split('@')[0]}\n*[💸] 𝙲𝚁𝙴́𝙳𝙸𝚃𝙾𝚂:* ${user.limit}\n*[🔱] 𝚁𝙰𝙽𝙶𝙾:* ${rank}\n\n`;
     });
