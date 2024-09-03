@@ -292,7 +292,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
 
 ╭──────༺♡༻──────╮
-                *ON / OFF*
+                 *ON / OFF*
 ╰──────༺♡༻──────╯
 
 
