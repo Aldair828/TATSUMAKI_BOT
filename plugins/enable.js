@@ -53,18 +53,7 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner }) => {
         throw false
       }
       bot.antiprivado = isEnable
-
-      if (isEnable) {
-        let chats = Object.keys(global.db.data.chats)
-        for (let chatId of chats) {
-          if (!chatId.endsWith('@g.us')) {
-            conn.updateBlockStatus(chatId, 'block')
-          }
-        }
-        m.reply('🚫 El bot ha sido bloqueado de todos los privados de WhatsApp.')
-      } else {
-        m.reply('✅ El bot ha sido desbloqueado y responderá en privados.')
-      }
+      m.reply(`🍭 La función *antiprivado* se *${isEnable ? 'activó' : 'desactivó'}* correctamente.`)
       break
 
     default:
@@ -92,14 +81,12 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner }) => {
 `.trim())
       throw false
   }
-  m.reply(`🍭 La función *${type}* se *${isEnable ? 'activó' : 'desactivó'}* correctamente.`)
 }
 
 handler.before = async (m, { conn }) => {
   let bot = global.db.data.settings[conn.user.jid] || {}
   if (m.chat.endsWith('@s.whatsapp.net') && bot.antiprivado) {
-    await conn.reply(m.chat, '🚫 El bot está inhabilitado en privado. Por favor, únete a un grupo para interactuar con él.', m)
-    await conn.updateBlockStatus(m.chat, 'block')
+    await conn.reply(m.chat, '🚫 El bot está en antiprivado. Si quieres usar el bot, únete a este grupo: [enlace del grupo].', m)
     return !0
   }
 }
