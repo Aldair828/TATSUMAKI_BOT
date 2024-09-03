@@ -140,5 +140,5 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     }
 };
 
-handler.command = ['pokemon', 'premiopokemon', 'toppokemones', 'soltarpokemon'];
+//handler.command = ['pokemon', 'premiopokemon', 'toppokemones', 'soltarpokemon'];/
 export default handler;
