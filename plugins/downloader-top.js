@@ -22,8 +22,8 @@ let handler = async (m, { conn }) => {
     conn.sendFile(m.chat, imageUrl, 'topcreditos.jpg', str.trim(), m);
 }
 
-handler.help = ['top'];
+handler.help = ['topcreditos'];
 handler.tags = ['econ'];
-handler.command = /^top$/i;
+handler.command = /^topcreditos$/i;
 
 export default handler;
