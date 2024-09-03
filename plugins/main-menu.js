@@ -50,13 +50,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
 *Puede seguir el canal del bot:* https://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x
 
-*🔰SU INFORMACIÓN BÁSICA🔰*
-
-➢ *[👤] USUARIO:* ${name}
-➢ *[📱] NÚMERO:* ${m.sender.split('@')[0]}
-➢ *[💸] CRÉDITOS:* ${limit}
-➢ *[👾] NIVEL:* ${level}
-
 *🔰INFORMACIÓN DEL BOT🔰*
 
 *𝘈𝘊𝘛𝘜𝘈𝘓𝘐𝘡𝘈𝘊𝘐𝘖𝘕  < 1.1.1 >*
@@ -68,18 +61,15 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ➢ *[⏳] TIEMPO ACTIVO:* ${uptime}
 ➢ *[🔐] MODO:* ${global.opts['self'] ? 'Privado' : 'Público'}
 
-᧔♡᧓  *L I S T A  -  M E N Ú S*  ᧔♡᧓
 
 
-PARA VER EL MENU DE *INFO-BOT*
 
-.menu1 
+PARA VER EL MENU COMPLETO USÉ 
+
+.allmenu
 
 
-⋘ FENIX_BOT ⋙
-
-➽  DEVELOPER 👨🏻‍💻: Aldair
-" https://wa.me/+51925015528 "
+⋘ FENIX_BOT 🐦‍🔥 ⋙
 
 `.trim()
 
