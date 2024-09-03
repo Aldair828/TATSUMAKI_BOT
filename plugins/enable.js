@@ -1,11 +1,10 @@
-let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isROwner }) => {
+let handler = async (m, { conn, usedPrefix, command, args, isOwner }) => {
   let isEnable = /true|enable|(turn)?on|1/i.test(command)
   let chat = global.db.data.chats[m.chat]
   let user = global.db.data.users[m.sender]
   let bot = global.db.data.settings[conn.user.jid] || {}
   let type = (args[0] || '').toLowerCase()
-  let isAll = false, isUser = false
-  
+
   switch (type) {
     case 'welcome':
     case 'bv':
@@ -15,7 +14,7 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
           global.dfail('group', m, conn)
           throw false
         }
-      } else if (!isAdmin) {
+      } else if (!isOwner && !isAdmin) {
         global.dfail('admin', m, conn)
         throw false
       }
@@ -24,29 +23,28 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
 
     case 'document':
     case 'documento':
-      isUser = true
       user.useDocument = isEnable
       break
 
     case 'antilink':
       if (m.isGroup) {
-        if (!(isAdmin || isOwner)) {
+        if (!isOwner && !isAdmin) {
           global.dfail('admin', m, conn)
           throw false
         }
       }
       chat.antiLink = isEnable
       break
-      
+
     case 'nsfw':
     case 'modohorny':
       if (m.isGroup) {
-        if (!(isAdmin || isOwner)) {
+        if (!isOwner && !isAdmin) {
           global.dfail('admin', m, conn)
           throw false
         }
       }
-      chat.nsfw = isEnable          
+      chat.nsfw = isEnable
       break
 
     case 'antiprivado':
@@ -55,6 +53,18 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
         throw false
       }
       bot.antiprivado = isEnable
+
+      if (isEnable) {
+        let chats = Object.keys(global.db.data.chats)
+        for (let chatId of chats) {
+          if (!chatId.endsWith('@g.us')) {
+            conn.updateBlockStatus(chatId, 'block')
+          }
+        }
+        m.reply('🚫 El bot ha sido bloqueado de todos los privados de WhatsApp.')
+      } else {
+        m.reply('✅ El bot ha sido desbloqueado y responderá en privados.')
+      }
       break
 
     default:
@@ -82,7 +92,16 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
 `.trim())
       throw false
   }
-  m.reply(`🍭 La función *${type}* se *${isEnable ? 'activó' : 'desactivó'}* ${isAll ? 'para este bot' : isUser ? '' : 'para este chat'}`)
+  m.reply(`🍭 La función *${type}* se *${isEnable ? 'activó' : 'desactivó'}* correctamente.`)
+}
+
+handler.before = async (m, { conn }) => {
+  let bot = global.db.data.settings[conn.user.jid] || {}
+  if (m.chat.endsWith('@s.whatsapp.net') && bot.antiprivado) {
+    await conn.reply(m.chat, '🚫 El bot está inhabilitado en privado. Por favor, únete a un grupo para interactuar con él.', m)
+    await conn.updateBlockStatus(m.chat, 'block')
+    return !0
+  }
 }
 
 handler.help = ['enable', 'disable']
