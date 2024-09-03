@@ -1,24 +1,38 @@
 let handler = async (m, { conn }) => {
+    // Obtener metadata del grupo
     let chat = await conn.groupMetadata(m.chat);
     let groupName = chat.subject;
     let groupDesc = chat.desc;
     let participants = chat.participants.length;
     let owner = chat.owner ? '@' + chat.owner.split('@')[0] : 'Desconocido';
+    let groupInviteCode = await conn.groupInviteCode(m.chat); // Obtener el enlace del grupo
+    let groupLink = `https://chat.whatsapp.com/${groupInviteCode}`;
 
+    // Obtener la imagen del grupo
+    let groupPic;
+    try {
+        groupPic = await conn.profilePictureUrl(m.chat, 'image');
+    } catch (e) {
+        groupPic = 'https://telegra.ph/file/c345415a52ae870fb68cc.jpg'; // URL de la imagen de respaldo
+    }
+
+    // Información del grupo
     let info = `
-    *🔹 Información del Grupo 🔹*
+*🔹 Información del Grupo 🔹*
 
+➤ *Nombre del Grupo:* ${groupName}
 
-    ➤ *Nombre del Grupo:* ${groupName}
-    
-    ➤ *Descripción:* ${groupDesc || 'Sin descripción'}
-    
-    ➤ *Número de Participantes:* ${participants}
-    
-    ➤ *Creador del Grupo:* ${owner}
+➤ *Descripción:* ${groupDesc || 'Sin descripción'}
+
+➤ *Número de Participantes:* ${participants}
+
+➤ *Creador del Grupo:* ${owner}
+
+➤ *Enlace del Grupo:* ${groupLink}
     `;
 
-    conn.reply(m.chat, info, m, { mentions: [chat.owner] });
+    // Enviar el mensaje con la imagen del grupo o la imagen de respaldo
+    conn.sendFile(m.chat, groupPic, 'group.jpg', info, m, { mentions: [chat.owner] });
 };
 
 handler.help = ['infogrupo'];
