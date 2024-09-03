@@ -22,7 +22,7 @@ const handler = async (m, { isOwner, isAdmin, conn, participants }) => {
   if (fantasmas.length > 0) {
     await conn.sendMessage(m.chat, { text: teks, mentions: fantasmas.map(a => a.id) });
   } else {
-    await conn.sendMessage(m.chat, { text: "No hay fantasmas en el grupo. Todos han participado en las últimas 24 horas." });
+    await conn.sendMessage(m.chat, { text: "No hay fantasmas en el grupo. Todos han hablado en las últimas 24 horas." });
   }
 };
 
