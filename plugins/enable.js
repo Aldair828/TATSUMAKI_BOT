@@ -87,7 +87,7 @@ handler.before = async (m, { conn }) => {
   let bot = global.db.data.settings[conn.user.jid] || {}
   if (m.chat.endsWith('@s.whatsapp.net') && bot.antiprivado) {
     await conn.reply(m.chat, '🚫 El bot está en antiprivado. Si quieres usar el bot, únete a este grupo: [enlace del grupo].', m)
-    return !0
+    return !1  // Evitar que el bot procese otros comandos
   }
 }
 
