@@ -1,3 +1,4 @@
+
 import fetch from 'node-fetch';
 
 let handler = async (m, { conn, args, command }) => {
@@ -25,8 +26,9 @@ let handler = async (m, { conn, args, command }) => {
         let pokemon = await res.json();
         let stats = calcularPoder(pokemon.stats); // Calcular el poder del Pokémon
         let precio = determinarPrecioPorPoder(stats); // Determinar el precio según el poder
+        let imagen = pokemon.sprites.other['official-artwork'].front_default; // Obtener la URL de la imagen
 
-        // Mostrar las estadísticas y el precio del Pokémon
+        // Mostrar las estadísticas, el precio y la imagen del Pokémon
         if (command === 'pokemon') {
             let estadisticas = pokemon.stats.map(stat => `${stat.stat.name}: ${stat.base_stat}`).join('\n');
             let mensaje = `
@@ -39,7 +41,7 @@ ${estadisticas}
 
 Usa \`.comprarpokemon ${pokemonName}\` para comprar este Pokémon.
             `;
-            conn.reply(m.chat, mensaje, m);
+            conn.sendFile(m.chat, imagen, `${pokemon.name}.jpg`, mensaje, m);
         }
 
         // Comprar el Pokémon
@@ -54,7 +56,8 @@ Usa \`.comprarpokemon ${pokemonName}\` para comprar este Pokémon.
             user.pokemons.push({
                 nombre: pokemonName,
                 poder: stats,
-                precio: precio
+                precio: precio,
+                imagen: imagen
             }); // Almacenar el Pokémon en la base de datos del usuario
 
             conn.reply(m.chat, `¡Has comprado a ${pokemonName} por ${precio} créditos!\n\n .mispokemons para ver tus Pokémones.\n\n .venderpokemon nombre del pokemon para vender tus Pokémones`, m);
