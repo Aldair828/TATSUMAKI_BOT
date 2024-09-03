@@ -1,79 +1,117 @@
 import fetch from 'node-fetch';
 
-let handler = async (m, { conn, args, command }) => {
+let handler = async (m, { conn, usedPrefix, command, args }) => {
     try {
         let user = global.db.data.users[m.sender];
-        
+
         // Verificar si el usuario está registrado
         if (!user.registered) {
             conn.reply(m.chat, 'Por favor, regístrate usando el comando `.reg nombre.edad` antes de usar este comando.', m);
             return;
         }
 
-        if (!args[0]) {
-            conn.reply(m.chat, 'Por favor, proporciona el nombre de un Pokémon. Ejemplo: `.pokemon Pikachu`.', m);
-            return;
-        }
-
-        let pokemonName = args[0].toLowerCase();
-        let res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
-        if (!res.ok) {
-            conn.reply(m.chat, `No se pudo encontrar información para el Pokémon: ${pokemonName}.`, m);
-            return;
-        }
-
-        let pokemon = await res.json();
-        let stats = calcularPoder(pokemon.stats); // Calcular el poder del Pokémon
-        let precioCompra = determinarPrecioCompra(stats); // Determinar el precio de compra según el poder
-        let precioVenta = determinarPrecioVenta(stats); // Determinar el precio de venta según el poder
-        let imagen = pokemon.sprites.other['official-artwork'].front_default; // Obtener la URL de la imagen
-
-        // Mostrar las estadísticas, el precio de compra y la imagen del Pokémon
+        // Comando .pokemon nombre
         if (command === 'pokemon') {
-            let estadisticas = pokemon.stats.map(stat => `${stat.stat.name}: ${stat.base_stat}`).join('\n');
-            let mensaje = `
-*Pokémon:* ${pokemon.name}
-*Poder Total:* ${stats}
-*Precio de Compra:* ${precioCompra} créditos
-*Precio de Venta:* ${precioVenta} créditos
+            let pokemonName = args.join(' ').toLowerCase();
+            if (!pokemonName) {
+                conn.reply(m.chat, 'Por favor, proporciona el nombre de un Pokémon. Ejemplo: `.pokemon Pikachu`', m);
+                return;
+            }
 
-*Estadísticas:*
-${estadisticas}
+            let res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+            if (!res.ok) {
+                conn.reply(m.chat, 'No se encontró el Pokémon. Verifica el nombre y vuelve a intentarlo.', m);
+                return;
+            }
 
-Usa \`.comprarpokemon ${pokemonName}\` para comprar este Pokémon.
-            `;
-            conn.sendFile(m.chat, imagen, `${pokemon.name}.jpg`, mensaje, m);
+            let pokemon = await res.json();
+            let poderTotal = pokemon.stats.reduce((total, stat) => total + stat.base_stat, 0);
+            let precioCompra = calcularPrecioCompra(poderTotal);
+
+            let statsMessage = pokemon.stats.map(stat => 
+                `${stat.stat.name}: ${stat.base_stat}`
+            ).join('\n');
+
+            conn.sendFile(m.chat, pokemon.sprites.front_default, 'pokemon.jpg', 
+                `**Nombre:** ${pokemon.name}\n` +
+                `**Poder Total:** ${poderTotal}\n` +
+                `**Precio de Compra:** ${precioCompra} créditos\n\n` +
+                `Estadísticas:\n${statsMessage}`, m
+            );
         }
 
-        // Comprar el Pokémon
+        // Comando .comprarpokemon nombre
         if (command === 'comprarpokemon') {
+            let pokemonName = args.join(' ').toLowerCase();
+            if (!pokemonName) {
+                conn.reply(m.chat, 'Por favor, proporciona el nombre de un Pokémon. Ejemplo: `.comprarpokemon Pikachu`', m);
+                return;
+            }
+
+            let res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+            if (!res.ok) {
+                conn.reply(m.chat, 'No se encontró el Pokémon. Verifica el nombre y vuelve a intentarlo.', m);
+                return;
+            }
+
+            let pokemon = await res.json();
+            let poderTotal = pokemon.stats.reduce((total, stat) => total + stat.base_stat, 0);
+            let precioCompra = calcularPrecioCompra(poderTotal);
+
             if (user.limit < precioCompra) {
-                conn.reply(m.chat, `No tienes suficientes créditos para comprar a ${pokemonName}. Necesitas ${precioCompra} créditos.`, m);
+                conn.reply(m.chat, `No tienes suficientes créditos para comprar este Pokémon. Necesitas ${precioCompra} créditos.`, m);
                 return;
             }
 
             user.limit -= precioCompra;
             user.pokemons = user.pokemons || [];
             user.pokemons.push({
-                nombre: pokemonName,
-                poder: stats,
-                precioCompra: precioCompra,
-                precioVenta: precioVenta,
-                imagen: imagen
-            }); // Almacenar el Pokémon en la base de datos del usuario
+                name: pokemon.name,
+                power: poderTotal,
+                sprite: pokemon.sprites.front_default
+            });
 
-            conn.reply(m.chat, `¡Has comprado a ${pokemonName} por ${precioCompra} créditos!\n\n .mipokemon para ver tus Pokémones.\n\n .venderpokemon nombre del pokemon para vender tus Pokémones`, m);
+            conn.sendFile(m.chat, pokemon.sprites.front_default, 'pokemon.jpg',
+                `¡Has comprado un Pokémon!\n` +
+                `**Nombre:** ${pokemon.name}\n` +
+                `**Poder Total:** ${poderTotal}\n` +
+                `**Precio de Compra:** ${precioCompra} créditos\n\n` +
+                `Usa \`.mipokemon\` para ver tus Pokémon`, m
+            );
         }
 
-        // Mostrar los Pokémon que tiene el usuario
-        if (command === 'mipokemon') {
-            if (!user.pokemons || user.pokemons.length === 0) {
-                conn.reply(m.chat, 'No tienes Pokémones. Compra uno con el comando `.comprarpokemon [nombre]`.', m);
+        // Comando .venderpokemon
+        if (command === 'venderpokemon') {
+            let pokemonIndex = parseInt(args[0]) - 1;
+            if (isNaN(pokemonIndex) || pokemonIndex < 0 || pokemonIndex >= (user.pokemons || []).length) {
+                conn.reply(m.chat, 'Elige un Pokémon válido para vender. Usa `.mipokemon` para ver tus Pokémon.', m);
                 return;
             }
 
-            let pokemonList = user.pokemons.map((p, i) => `${i + 1}. *${p.nombre}* (Poder: ${p.poder}, Precio de Venta: ${p.precioVenta} créditos)`).join('\n');
-            conn.reply(m.chat, `Estos son tus Pokémones:\n\n${pokemonList}\n\nUsa \`.venderpokemon [número]\` para vender un Pokémon.`, m);
+            let pokemon = user.pokemons[pokemonIndex];
+            let precioCompra = calcularPrecioCompra(pokemon.power);
+            let precioVenta = calcularPrecioVenta(precioCompra);
+
+            user.limit += precioVenta;
+            user.pokemons.splice(pokemonIndex, 1);
+
+            conn.reply(m.chat, `¡Venta exitosa! Has vendido a ${pokemon.name} por ${precioVenta} créditos.`, m);
+        }
+
+        // Comando .mipokemon
+        if (command === 'mipokemon') {
+            if (!user.pokemons || user.pokemons.length === 0) {
+                conn.reply(m.chat, 'No tienes ningún Pokémon. Compra uno con el comando `.comprarpokemon nombre`.', m);
+                return;
+            }
+
+            let pokemonList = user.pokemons.map((p, i) => 
+                `${i + 1}. **${p.name}**\n` +
+                `**Poder:** ${p.power}\n` +
+                `**Foto:**\n${p.sprite}`
+            ).join('\n\n');
+
+            conn.reply(m.chat, `Estos son tus Pokémon:\n\n${pokemonList}`, m);
         }
 
     } catch (e) {
@@ -82,24 +120,30 @@ Usa \`.comprarpokemon ${pokemonName}\` para comprar este Pokémon.
     }
 };
 
-// Función para calcular el poder total de un Pokémon basado en sus estadísticas
-function calcularPoder(stats) {
-    return stats.reduce((total, stat) => total + stat.base_stat, 0);
+// Función para calcular el precio de compra basado en el rango de poder
+function calcularPrecioCompra(poder) {
+    if (poder >= 900) return 4000;
+    if (poder >= 800) return 1800;
+    if (poder >= 700) return 1200;
+    if (poder >= 600) return 900;
+    if (poder >= 500) return 600;
+    if (poder >= 400) return 490;
+    if (poder >= 300) return 290;
+    if (poder >= 200) return 120;
+    if (poder >= 100) return 50;
+    return 0; // Sin precio si está fuera de los rangos
 }
 
-// Función para determinar el precio de compra según el poder del Pokémon
-function determinarPrecioCompra(poder) {
-    return 50 + Math.floor(poder / 50) * 50;
+// Función para calcular el precio de venta basado en el precio de compra
+function calcularPrecioVenta(precioCompra) {
+    // Ajuste del precio de venta como un porcentaje del precio de compra
+    let porcentajeVenta = 0.25; // 25% del precio de compra
+    return Math.floor(precioCompra * porcentajeVenta);
 }
 
-// Función para determinar el precio de venta según el poder del Pokémon
-function determinarPrecioVenta(poder) {
-    return 60 + Math.floor(poder / 50) * 60;
-}
-
-handler.help = ['pokemon [nombre]', 'comprarpokemon [nombre]', 'mipokemon', 'venderpokemon [nombre]'];
-handler.tags = ['pokemon', 'econ'];
-handler.command = /^(pokemon|comprarpokemon|mipokemon|venderpokemon)$/i;
+handler.help = ['pokemon', 'comprarpokemon', 'venderpokemon [número]', 'mipokemon'];
+handler.tags = ['pokemon'];
+handler.command = /^(pokemon|comprarpokemon|venderpokemon|mipokemon)$/i;
 handler.register = true;
 
 export default handler;
