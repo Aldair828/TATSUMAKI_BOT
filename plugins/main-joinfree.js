@@ -17,7 +17,13 @@ let handler = async (m, { conn, args }) => {
         // Enviar mensaje de confirmación en el grupo al que se unió
         let message = 'El bot se unió al grupo correctamente\n\nJOINFREE\n\nCANAL:\nhttps://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x';
         await conn.sendMessage(result, { text: message });
-        
+
+        // Establecer un temporizador para dejar el grupo después de 5 minutos
+        setTimeout(async () => {
+            await conn.sendMessage(result, { text: 'El bot se retirará del grupo ahora.' });
+            await conn.groupLeave(result);
+        }, 5 * 60 * 1000); // 5 minutos en milisegundos
+
     } catch (e) {
         m.reply('Hubo un error al intentar unirse al grupo. Por favor, verifica el enlace.');
     }
