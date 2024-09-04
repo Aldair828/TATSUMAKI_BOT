@@ -34,13 +34,29 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
         if (command === 'agregarcreditos') {
             user.limit += limit;
-            conn.reply(m.chat, `Se han agregado ${limit} créditos a ${conn.getName(mentionedJid)}. Ahora tiene ${user.limit} créditos.`, m);
+            conn.reply(m.chat, `𝚂𝙴 𝙰 𝙰𝙽̃𝙰𝙳𝙸𝙳𝙾 𝙲𝚁𝙴́𝙳𝙸𝚃𝙾𝚂 𝙰𝙻 𝚄𝚂𝚄𝙰𝚁𝙸𝙾 @${mentionedJid.split('@')[0]}
+
+┏╍╍╍╍╍╍╍╍╍╍╍╍╍
+┃• *agregados:* ${limit}
+┗╍╍╍╍╍╍╍╍╍╍╍╍╍
+
+┏╍╍╍╍╍╍╍╍╍╍╍╍╍
+┃• *tiene:* ${user.limit}
+┗╍╍╍╍╍╍╍╍╍╍╍╍╍`, m);
         } else if (command === 'quitarcreditos') {
             if (user.limit < limit) {
                 return conn.reply(m.chat, `El usuario no tiene suficientes créditos para quitar. Tiene ${user.limit} créditos.`, m);
             }
             user.limit -= limit;
-            conn.reply(m.chat, `Se han quitado ${limit} créditos a ${conn.getName(mentionedJid)}. Ahora tiene ${user.limit} créditos.`, m);
+            conn.reply(m.chat, `𝚂𝙴 𝙷𝙰𝙽 𝚀𝚄𝙸𝚃𝙰𝙳𝙾 𝙲𝚁𝙴́𝙳𝙸𝚃𝙾𝚂 𝙰𝙻 𝚄𝚂𝚄𝙰𝚁𝙸𝙾 @${mentionedJid.split('@')[0]}
+
+┏╍╍╍╍╍╍╍╍╍╍╍╍╍
+┃• *quitados:* ${limit}
+┗╍╍╍╍╍╍╍╍╍╍╍╍╍
+
+┏╍╍╍╍╍╍╍╍╍╍╍╍╍
+┃• *tiene:* ${user.limit}
+┗╍╍╍╍╍╍╍╍╍╍╍╍╍`, m);
         }
     }
 }
