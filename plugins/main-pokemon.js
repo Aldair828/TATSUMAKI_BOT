@@ -115,6 +115,35 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
             conn.reply(m.chat, `Estos son tus Pokémon:\n\n${pokemonList}`, m);
         }
 
+        // Comando .regalarpokemon
+        if (command === 'regalarpokemon') {
+            let targetUser = m.mentionedJid[0];
+            if (!targetUser) {
+                conn.reply(m.chat, 'Por favor, menciona a un usuario al que quieras regalar el Pokémon. Ejemplo: `.regalarpokemon @usuario 1`', m);
+                return;
+            }
+
+            let pokemonIndex = parseInt(args[1]) - 1;
+            if (isNaN(pokemonIndex) || pokemonIndex < 0 || pokemonIndex >= (user.pokemons || []).length) {
+                conn.reply(m.chat, 'Elige un Pokémon válido para regalar. Usa `.mipokemon` para ver tus Pokémon.', m);
+                return;
+            }
+
+            let pokemon = user.pokemons[pokemonIndex];
+            let recipient = global.db.data.users[targetUser];
+
+            if (!recipient) {
+                conn.reply(m.chat, 'El usuario al que intentas regalar el Pokémon no está registrado.', m);
+                return;
+            }
+
+            user.pokemons.splice(pokemonIndex, 1);
+            recipient.pokemons = recipient.pokemons || [];
+            recipient.pokemons.push(pokemon);
+
+            conn.reply(m.chat, `¡Has regalado a ${pokemon.name} a ${await conn.getName(targetUser)}!`, m);
+        }
+
     } catch (e) {
         console.log(e);
         conn.reply(m.chat, 'Hubo un error al procesar tu solicitud.', m);
@@ -142,9 +171,9 @@ function calcularPrecioVenta(precioCompra) {
     return Math.floor(precioCompra * (1 + incrementoVenta));
 }
 
-handler.help = ['pokemon', 'comprarpokemon', 'venderpokemon [número]', 'mipokemon'];
+handler.help = ['pokemon', 'comprarpokemon', 'venderpokemon [número]', 'mipokemon', 'regalarpokemon @user [número]'];
 handler.tags = ['pokemon'];
-handler.command = /^(pokemon|comprarpokemon|venderpokemon|mipokemon)$/i;
+handler.command = /^(pokemon|comprarpokemon|venderpokemon|mipokemon|regalarpokemon)$/i;
 handler.register = true;
 
 export default handler;
