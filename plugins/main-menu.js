@@ -204,6 +204,9 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ➢ .pinterest 
 ➥ busca imágenes de pinterest
 
+➢ .fenixgpt cuanto es 1+1
+➥ busca información rápido con fenixgpt 🐦‍🔥
+
 ➢ .google búsqueda
 ➥ busca cosas de google 
 
