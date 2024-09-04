@@ -1,27 +1,30 @@
 let cooldowns = {}
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
-
     if (!args[0]) return m.reply('🍭 Ingresa la cantidad de *Creditos* que deseas apostar.\n\n`Ejemplo:`\n' + `> *${usedPrefix + command}* 10`)
     if (isNaN(args[0])) return m.reply('🍭 Ingresa la cantidad de *Creditos* que deseas apostar.\n\n`Ejemplo:`\n' + `> *${usedPrefix + command}* 10`)
+    
     let apuesta = parseInt(args[0])
     let users = global.db.data.users[m.sender]
-    
+
+    // Verifica si el usuario tiene suficientes créditos
+    if (users.limit < apuesta) {
+        return m.reply(`❌ No tienes suficientes créditos para apostar *${apuesta}* créditos.`)
+    }
+
     let tiempoEspera = 15
-	    
-	    if (cooldowns[m.sender] && Date.now() - cooldowns[m.sender] < tiempoEspera * 1000) {
-    let tiempoRestante = segundosAHMS(Math.ceil((cooldowns[m.sender] + tiempoEspera * 1000 - Date.now()) / 1000))
-    m.reply(`⏱ Espera *${tiempoRestante}* para apostar nuevamente.`)
-    return
-  }
+
+    if (cooldowns[m.sender] && Date.now() - cooldowns[m.sender] < tiempoEspera * 1000) {
+        let tiempoRestante = segundosAHMS(Math.ceil((cooldowns[m.sender] + tiempoEspera * 1000 - Date.now()) / 1000))
+        m.reply(`⏱ Espera *${tiempoRestante}* para apostar nuevamente.`)
+        return
+    }
 
     let emojis = ["🍎", "🍉", "🍓"];
     let a = Math.floor(Math.random() * emojis.length);
     let b = Math.floor(Math.random() * emojis.length);
     let c = Math.floor(Math.random() * emojis.length);
-    let x = [],
-        y = [],
-        z = [];
+    let x = [], y = [], z = [];
     for (let i = 0; i < 3; i++) {
         x[i] = emojis[a];
         a++;
@@ -37,21 +40,23 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         c++;
         if (c == emojis.length) c = 0;
     }
+
     let end;
     if (a == b && b == c) {
-        end = `Acabas de ganar   *${apuesta} *Creditos*`
+        end = `Acabas de ganar *${apuesta}* Créditos`
         users.limit += apuesta
     } else if (a == b || a == c || b == c) {
-        end = `Casi lo logras sigue intentando :) \nTen *1 Creditos*`
+        end = `Casi lo logras, sigue intentando :) \nTe damos *1 Crédito*`
         users.limit += 1
     } else {
-        end = `Perdiste  *${apuesta} *Creditos*`
+        end = `Perdiste *${apuesta}* Créditos`
         users.limit -= apuesta
     }
+
     cooldowns[m.sender] = Date.now()
     return await conn.reply(m.chat,
         `
-  🎰 | *SLOTS* 
+🎰 | *SLOTS* 
 ──────────
 ${x[0]} : ${y[0]} : ${z[0]}
 ${x[1]} : ${y[1]} : ${z[1]}
@@ -68,6 +73,6 @@ handler.group = false
 export default handler
 
 function segundosAHMS(segundos) {
-  let segundosRestantes = segundos % 60
-  return `${segundosRestantes} segundos`
+    let segundosRestantes = segundos % 60
+    return `${segundosRestantes} segundos`
 }
