@@ -1,39 +1,31 @@
 let handler = async (m, { conn, args }) => {
-    if (!args[0]) return m.reply('Por favor, proporciona un enlace de grupo. Ejemplo: .joinfree https://chat.whatsapp.com/XXXXXXXXXXXXXX');
+    if (!args[0]) return m.reply('Por favor, proporciona un enlace de grupo. Ejemplo: .joinfree https://chat.whatsapp.com/XXXXXXXXXXXXXX')
 
     try {
-        // Extraer el código de invitación del enlace
-        let inviteCode = args[0].split('https://chat.whatsapp.com/')[1];
-        
         // Unirse al grupo
-        await conn.groupAcceptInvite(inviteCode);
+        let result = await conn.groupAcceptInvite(args[0].split('https://chat.whatsapp.com/')[1]);
         
-        // Esperar un momento para que el bot se una al grupo
-        await new Promise(resolve => setTimeout(resolve, 5000)); // 5 segundos de espera
-        
-        // Obtener metadata del grupo recién unido
-        let groupMetadata = await conn.groupMetadata(inviteCode);
+        // Obtener información del grupo recién unido
+        let groupMetadata = await conn.groupMetadata(result);
         
         // Verificar si el grupo tiene más de 25 participantes
         if (groupMetadata.participants.length < 25) {
-            // Si el grupo tiene menos de 25 participantes, el bot abandona el grupo
-            await conn.groupLeave(inviteCode);
-            return m.reply(`El grupo ${groupMetadata.subject} tiene menos de 25 participantes. El bot ha abandonado el grupo.`);
+            await conn.groupLeave(result); // Dejar el grupo si tiene menos de 25 participantes
+            return m.reply(`El grupo ${groupMetadata.subject} tiene menos de 25 participantes. No se unirá.`);
         }
         
         // Enviar mensaje de confirmación en el grupo al que se unió
         let message = 'El bot se unió al grupo correctamente\n\nJOINFREE\n\nCANAL:\nhttps://whatsapp.com/channel/0029VafZvB6J3jv3qCnqNu3x';
-        await conn.sendMessage(groupMetadata.id, { text: message });
-
+        await conn.sendMessage(result, { text: message });
+        
     } catch (e) {
-        m.reply('Hubo un error al intentar unirse al grupo. Por favor, verifica el enlace o la validez del grupo.');
+        m.reply('Hubo un error al intentar unirse al grupo. Por favor, verifica el enlace.');
     }
 }
 
 handler.help = ['joinfree']
 handler.tags = ['group']
 handler.command = /^joinfree$/i
-handler.group = false // Disponible en chats individuales
-handler.admin = false // No requiere ser admin
+handler.owner = true // Solo el owner puede usar este comando
 
 export default handler
