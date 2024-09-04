@@ -1,6 +1,6 @@
 let handler = async (m, { conn, usedPrefix, command }) => {
     let pp = 'https://tinyurl.com/26djysdo'; // Imagen para el primer enlace
-    let pp2 = 'https://tinyurl.com/294oahv9'; // Imagen para el segundo enlace
+    let pp2 = 'https://tinyurl.com/26q5b36b'; // Imagen para el segundo enlace
     let who;
 
     if (m.isGroup) {
