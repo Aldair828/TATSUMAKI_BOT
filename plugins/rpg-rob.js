@@ -26,8 +26,9 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     let targetUserData = global.db.data.users[who]
     let robAmount = Math.floor(Math.random() * (maxRob - minRob + 1)) + minRob
 
-    // Verificar si el usuario objetivo tiene suficientes créditos
-    if (targetUserData.limit < robAmount) 
+    // Verificar si el usuario objetivo tiene suficientes créditos fuera del banco
+    let availableCredits = targetUserData.limit
+    if (availableCredits < robAmount) 
         return m.reply(`😿 @${who.split`@`[0]} tiene menos de *${robAmount} Créditos*. No robes a un pobre :v`, null, { mentions: [who] })
 
     // Transferir créditos
