@@ -5,8 +5,20 @@ let handler = async (m, { conn }) => {
     let groupDesc = chat.desc;
     let participants = chat.participants.length;
     let owner = chat.owner ? '@' + chat.owner.split('@')[0] : 'Desconocido';
-    let groupInviteCode = await conn.groupInviteCode(m.chat); // Obtener el enlace del grupo
-    let groupLink = `https://chat.whatsapp.com/${groupInviteCode}`;
+    let groupCreation = new Date(chat.creation * 1000).toLocaleString("es-ES", { timeZone: "UTC", hour12: false }); // Fecha de creación
+
+    // Verificar si el bot es administrador
+    let botIsAdmin = chat.participants.find(p => p.id === conn.user.jid)?.admin;
+    let groupInviteCode;
+    let groupLink;
+
+    if (botIsAdmin) {
+        // Obtener el enlace del grupo si el bot es admin
+        groupInviteCode = await conn.groupInviteCode(m.chat);
+        groupLink = `https://chat.whatsapp.com/${groupInviteCode}`;
+    } else {
+        groupLink = 'El bot no es administrador';
+    }
 
     // Obtener la imagen del grupo
     let groupPic;
@@ -27,6 +39,8 @@ let handler = async (m, { conn }) => {
 ➤ *Número de Participantes:* ${participants}
 
 ➤ *Creador del Grupo:* ${owner}
+
+➤ *Fecha de Creación:* ${groupCreation}
 
 ➤ *Enlace del Grupo:* ${groupLink}
     `;
