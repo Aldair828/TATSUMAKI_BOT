@@ -111,7 +111,10 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ➥ apuesta y gana créditos 
 
 ➢ .crimen 
-➥ roba créditos a otros usuarios
+➥ roba créditos a otros usuarios 
+
+➢ .robar @user
+➥ roba los créditos de otros usuarios / no se puede robar si esta en el banco
 
 ➢ .depositar cantidad 
 ➥ deposita el dinero al Banco y guardalos 
@@ -287,6 +290,12 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
 ➢ .abrazo @user 
 ➥ abraza a un usuario 
+
+➢ .golpear @user
+➥ golpear a un usuario
+
+➢ .besar @user
+➥ besa a un usuario 
 
 ➢ .gay @user 
 ➥ ve el promedio de gay de un usuario 
