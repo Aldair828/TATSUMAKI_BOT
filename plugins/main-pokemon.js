@@ -29,14 +29,15 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
             let precioCompra = calcularPrecioCompra(poderTotal);
 
             let statsMessage = pokemon.stats.map(stat => 
-                `${stat.stat.name}: ${stat.base_stat}`
+                `*${stat.stat.name.replace('-', ' ')}:* ${stat.base_stat}`
             ).join('\n');
 
             conn.sendFile(m.chat, pokemon.sprites.front_default, 'pokemon.jpg', 
-                `**Nombre:** ${pokemon.name}\n` +
-                `**Poder Total:** ${poderTotal}\n` +
-                `**Precio de Compra:** ${precioCompra} créditos\n\n` +
-                `Estadísticas:\n${statsMessage}`, m
+                `*Nombre:* ${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}\n` +
+                `*Poder Total:* ${poderTotal}\n` +
+                `*Precio de Compra:* ${precioCompra} créditos\n\n` +
+                `Estadísticas:\n${statsMessage}\n\n` +
+                `.comprarpokemon ${pokemon.name}`, m
             );
         }
 
@@ -73,9 +74,9 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
 
             conn.sendFile(m.chat, pokemon.sprites.front_default, 'pokemon.jpg',
                 `¡Has comprado un Pokémon!\n` +
-                `**Nombre:** ${pokemon.name}\n` +
-                `**Poder Total:** ${poderTotal}\n` +
-                `**Precio de Compra:** ${precioCompra} créditos\n\n` +
+                `*Nombre:* ${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}\n` +
+                `*Poder Total:* ${poderTotal}\n` +
+                `*Precio de Compra:* ${precioCompra} créditos\n\n` +
                 `Usa \`.mipokemon\` para ver tus Pokémon`, m
             );
         }
@@ -137,8 +138,8 @@ function calcularPrecioCompra(poder) {
 // Función para calcular el precio de venta basado en el precio de compra
 function calcularPrecioVenta(precioCompra) {
     // Ajuste del precio de venta como un porcentaje del precio de compra
-    let porcentajeVenta = 0.25; // 25% del precio de compra
-    return Math.floor(precioCompra * porcentajeVenta);
+    let incrementoVenta = 0.20; // Incremento del 20% sobre el precio de compra
+    return Math.floor(precioCompra * (1 + incrementoVenta));
 }
 
 handler.help = ['pokemon', 'comprarpokemon', 'venderpokemon [número]', 'mipokemon'];
