@@ -1,4 +1,3 @@
-
 let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isROwner }) => {
   let isEnable = /true|enable|(turn)?on|1/i.test(command)
   let chat = global.db.data.chats[m.chat]
@@ -6,8 +5,9 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
   let bot = global.db.data.settings[conn.user.jid] || {}
   let type = (args[0] || '').toLowerCase()
   let isAll = false, isUser = false
+  
   switch (type) {
-  case 'welcome':
+    case 'welcome':
     case 'bv':
     case 'bienvenida':
       if (!m.isGroup) {
@@ -24,9 +24,9 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
   
     case 'document':
     case 'documento':
-    isUser = true
-    user.useDocument = isEnable
-    break
+      isUser = true
+      user.useDocument = isEnable
+      break
  
     case 'antilink':
       if (m.isGroup) {
@@ -38,15 +38,27 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
       chat.antiLink = isEnable
       break
       
-      case 'nsfw':
-      case 'modohorny':
-       if (m.isGroup) {
-         if (!(isAdmin || isOwner)) {
-           global.dfail('admin', m, conn)
-            throw false
-           }}
-    chat.nsfw = isEnable          
-    break
+    case 'antilink2':
+      if (m.isGroup) {
+        if (!(isAdmin || isOwner)) {
+          global.dfail('admin', m, conn)
+          throw false
+        }
+      }
+      chat.antiLink2 = isEnable
+      break
+      
+    case 'nsfw':
+    case 'modohorny':
+      if (m.isGroup) {
+        if (!(isAdmin || isOwner)) {
+          global.dfail('admin', m, conn)
+          throw false
+        }
+      }
+      chat.nsfw = isEnable          
+      break
+    
     default:
       if (!/[01]/.test(command)) return m.reply(`
 *🍟 Ingresa una opción para habilitar o deshabilitar*
@@ -61,6 +73,9 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
 *Tipo :* antilink 
 *Descripción :* Des/Activa el *AntiLink* para Grupos
 
+*Tipo :* antilink2
+*Descripción :* Des/Activa el *AntiLink2* para Grupos (detección de enlaces más avanzada)
+
 *Tipo :* document 
 *Descripción :* Des/Activa la *Descarga En Documentos* para el Usuario
 
@@ -69,6 +84,7 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
 `.trim())
       throw false
   }
+  
   m.reply(`🍭 La función *${type}* se *${isEnable ? 'activó' : 'desactivó'}* ${isAll ? 'para este bot' : isUser ? '' : 'para este chat'}`)
 }
 
