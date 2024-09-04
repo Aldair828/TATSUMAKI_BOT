@@ -115,22 +115,29 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
             conn.reply(m.chat, `Estos son tus Pokémon:\n\n${pokemonList}`, m);
         }
 
-        // Comando .regalarpokemon
+        // Comando .regalarpokemon @user nombre
         if (command === 'regalarpokemon') {
-            let targetUser = m.mentionedJid[0];
-            if (!targetUser) {
-                conn.reply(m.chat, 'Por favor, menciona a un usuario al que quieras regalar el Pokémon. Ejemplo: `.regalarpokemon @usuario 1`', m);
+            let targetUserJid = m.mentionedJid[0];
+            let pokemonName = args.slice(1).join(' ').toLowerCase();
+
+            if (!targetUserJid) {
+                conn.reply(m.chat, 'Por favor, menciona a un usuario al que quieras regalar el Pokémon. Ejemplo: `.regalarpokemon @usuario Pikachu`', m);
                 return;
             }
 
-            let pokemonIndex = parseInt(args[1]) - 1;
-            if (isNaN(pokemonIndex) || pokemonIndex < 0 || pokemonIndex >= (user.pokemons || []).length) {
-                conn.reply(m.chat, 'Elige un Pokémon válido para regalar. Usa `.mipokemon` para ver tus Pokémon.', m);
+            if (!pokemonName) {
+                conn.reply(m.chat, 'Por favor, proporciona el nombre del Pokémon que deseas regalar. Ejemplo: `.regalarpokemon @usuario Pikachu`', m);
+                return;
+            }
+
+            let pokemonIndex = (user.pokemons || []).findIndex(p => p.name.toLowerCase() === pokemonName);
+            if (pokemonIndex === -1) {
+                conn.reply(m.chat, 'No tienes ese Pokémon en tu inventario.', m);
                 return;
             }
 
             let pokemon = user.pokemons[pokemonIndex];
-            let recipient = global.db.data.users[targetUser];
+            let recipient = global.db.data.users[targetUserJid];
 
             if (!recipient) {
                 conn.reply(m.chat, 'El usuario al que intentas regalar el Pokémon no está registrado.', m);
@@ -141,7 +148,7 @@ let handler = async (m, { conn, usedPrefix, command, args }) => {
             recipient.pokemons = recipient.pokemons || [];
             recipient.pokemons.push(pokemon);
 
-            conn.reply(m.chat, `¡Has regalado a ${pokemon.name} a ${await conn.getName(targetUser)}!`, m);
+            conn.reply(m.chat, `¡Has regalado a ${pokemon.name} a ${await conn.getName(targetUserJid)}!`, m);
         }
 
     } catch (e) {
@@ -171,7 +178,7 @@ function calcularPrecioVenta(precioCompra) {
     return Math.floor(precioCompra * (1 + incrementoVenta));
 }
 
-handler.help = ['pokemon', 'comprarpokemon', 'venderpokemon [número]', 'mipokemon', 'regalarpokemon @user [número]'];
+handler.help = ['pokemon', 'comprarpokemon', 'venderpokemon [número]', 'mipokemon', 'regalarpokemon @user nombre'];
 handler.tags = ['pokemon'];
 handler.command = /^(pokemon|comprarpokemon|venderpokemon|mipokemon|regalarpokemon)$/i;
 handler.register = true;
