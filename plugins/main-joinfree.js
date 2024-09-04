@@ -34,6 +34,6 @@ let handler = async (m, { conn, args }) => {
 handler.help = ['joinfree'];
 handler.tags = ['group'];
 handler.command = /^joinfree$/i;
-handler.owner = true; // Solo el owner puede usar este comando
+// handler.owner = true; // Esto se elimina para permitir a todos los usuarios usar el comando
 
 export default handler;
