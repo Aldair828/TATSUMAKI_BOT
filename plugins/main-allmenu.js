@@ -77,6 +77,12 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
                *ECONOMÍA*
 ╰──────༺♡༻──────╯
 
+➢ .minar
+➥ mina diamantes
+
+➢ .work
+➥ trabaja en algo y gana diamantes
+
 ➢ .cazar 
 ➥ caza animales y gana créditos 
 
@@ -147,14 +153,17 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ➢ .venderwaifu
 ➥ vende la waifu que tienes
 
-➢ .pokemon
-➥ consigue un pokemon 
+➢ .pokemon pikachu
+➥ para ver el pokemon y sus estadísticas
 
-➢ .premiopokemon
-➥ reclama los premios que te da tu pokemon 
+➢ .comprarpokemon pikachu
+➥ compra el pokemon
 
-➢ .soltarpokemon 
-➥ suelta tu pokemon y captura otro 
+➢ .mipokemon
+➥ ve tu pokemon que tienes 
+
+➢ .venderpokemon número 
+➥ vende tu pokemon 
 
 ➢ .tienda 
 ➥ ve los rangos y precios en la tienda 
