@@ -5,10 +5,12 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
     let senderId = m.sender
     let senderName = conn.getName(senderId)
   
-    let tiempoEspera = 5 * 60
+    // Determinar el tiempo de espera según el comando
+    let tiempoEspera = command === 'robar' || command === 'rob' ? 30 * 60 : 5 * 60 // 30 minutos para robar, 5 minutos para crimen
+
     if (cooldowns[m.sender] && Date.now() - cooldowns[m.sender] < tiempoEspera * 1000) {
         let tiempoRestante = segundosAHMS(Math.ceil((cooldowns[m.sender] + tiempoEspera * 1000 - Date.now()) / 1000))
-        m.reply(`🍭 Ya has cometido un Crimen recientemente, espera *⏱ ${tiempoRestante}* para cometer tu próximo Crimen y evitar ser atrapado.`)
+        m.reply(`🍭 Ya has cometido un Crimen o Robo recientemente, espera *⏱ ${tiempoRestante}* para realizar otro.`)
         return
     }
   
@@ -100,8 +102,8 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
 }
 
 handler.tags = ['rpg']
-handler.help = ['crimen']
-handler.command = ['crimen', 'crime']
+handler.help = ['crimen', 'robar']
+handler.command = ['crimen', 'crime', 'robar', 'rob']
 handler.register = true
 handler.group = true
 
@@ -112,4 +114,4 @@ function segundosAHMS(segundos) {
     let minutos = Math.floor((segundos % 3600) / 60)
     let segundosRestantes = segundos % 60
     return `${minutos} minutos y ${segundosRestantes} segundos`
-}
+                                                 }
