@@ -2,16 +2,17 @@ const cooldowns = {}
 
 let handler = async (m, { conn, usedPrefix, command }) => {
    let user = global.db.data.users[m.sender]
-   let amount = Math.floor(Math.random() * (5 - 10) + 10) + 1
-   const tiempoEspera = 5 * 60 // 5 minutos
-  if (cooldowns[m.sender] && Date.now() - cooldowns[m.sender] < tiempoEspera * 1000) {
-    const tiempoRestante = segundosAHMS(Math.ceil((cooldowns[m.sender] + tiempoEspera * 1000 - Date.now()) / 1000))
-    m.reply(`🕜 Espera *${tiempoRestante}* para volver a Trabajar.`)
-    return
-  }
+   const tiempoEspera = 5 * 60 // 5 minutos de cooldown
+
+   if (cooldowns[m.sender] && Date.now() - cooldowns[m.sender] < tiempoEspera * 1000) {
+       const tiempoRestante = segundosAHMS(Math.ceil((cooldowns[m.sender] + tiempoEspera * 1000 - Date.now()) / 1000))
+       m.reply(`🕜 Espera *${tiempoRestante}* para volver a trabajar.`)
+       return
+   }
+
    let work = works.getRandom()
-   user.limit += amount
-   await m.reply(`${work} *${amount} 🍬 Dulces.*`)
+   user.money = (user.money || 0) + user.limit // Incrementa los créditos del usuario basados en el valor de `limit`
+   await m.reply(`${work} *${user.limit}* créditos.`)
    cooldowns[m.sender] = Date.now()
 }
 
@@ -22,12 +23,12 @@ handler.register = true
 export default handler
 
 function segundosAHMS(segundos) {
-  const minutos = Math.floor((segundos % 3600) / 60)
-  const segundosRestantes = segundos % 60
-  return `${minutos} minutos y ${segundosRestantes} segundos`
+   const minutos = Math.floor((segundos % 3600) / 60)
+   const segundosRestantes = segundos % 60
+   return `${minutos} minutos y ${segundosRestantes} segundos`
 }
 
-// Thanks to FG98
+// Lista de trabajos con los mensajes de recompensa
 const works = [
    "Trabajas como cortador de galletas y ganas",
    "Trabaja para una empresa militar privada, ganando",
@@ -62,4 +63,4 @@ const works = [
    "Trabajas como zoólogo y ganas",
    "Vendiste sándwiches de pescado y obtuviste",
    "Reparas las máquinas recreativas y recibes",
-] 
+]
