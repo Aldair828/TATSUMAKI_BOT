@@ -64,9 +64,268 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
 
 
-PARA VER EL MENU COMPLETO USÉ 
+ ╭──────༺♡༻──────╮
+                *INFO-BOT*
+╰──────༺♡༻──────╯
 
-.allmenu
+
+➢ .owner 
+➥ ve los contactos de los creadores 
+
+➢ .grupos 
+➥ ve los grupos y canales oficiales del bot 
+
+➢ .estado 
+➥ ve el estado del bot 
+
+➢ .totalfunciones 
+➥ ve cuantas funciones tiene el bot 
+
+➢ .ping 
+➥ ve la velocidad del bot 
+
+➢ .runtime 
+➥ ve cuanto tiempo lleva activo el bot
+
+
+
+╭──────༺♡༻──────╮
+               *ECONOMÍA*
+╰──────༺♡༻──────╯
+
+➢ .minar
+➥ mina diamantes
+
+➢ .work
+➥ trabaja en algo y gana diamantes
+
+➢ .cazar 
+➥ caza animales y gana créditos 
+
+➢ .slot cantidad 
+➥ apuesta créditos y gana 
+
+➢ .ruleta 10 negro / rojo 
+➥ apuesta y gana créditos 
+
+➢ .crimen 
+➥ roba créditos a otros usuarios
+
+➢ .depositar cantidad 
+➥ deposita el dinero al Banco y guardalos 
+
+➢ .retirar cantidad 
+➥ retira el dinero del Banco 
+
+➢ .banco 
+➥ guarda tus créditos de cualquier robo 
+
+➢ .topcreditos
+➥ ve el top de mayores créditos 
+
+➢ .prestamo cantidad 
+➥ pide prestamo al bot 
+
+➢ .pagar cantidad 
+➥ paga el préstamo 
+
+➢ .transferir @user cantidad 
+➥ transfiere créditos a otros usuarios
+
+
+╭──────༺♡༻──────╮
+                        *XP*
+╰──────༺♡༻──────╯
+ 
+➢ .xp 
+➥ ve tu cartera de xp 
+
+➢ .vip 
+➥ ve si eres usuario vip
+
+➢ .tienda vip 
+➥ comprar vip por un tiempo 
+
+➢ .topxp 
+➥ ve quienes son los top de más xp
+
+➢ .ppt piedra / papel / tijera
+➥ juega y gana xp
+
+➢ .adivina 1 - 100
+➥ adivina el número y gana mucho xp
+
+
+╭──────༺♡༻──────╮
+         *TIENDA Y VENTAS*
+╰──────༺♡༻──────╯
+ 
+➢ .comprarwaifu 
+➥ comprar una waifu 
+
+➢ .miswaifus 
+➥ ve tus waifus que compraste
+
+➢ .venderwaifu
+➥ vende la waifu que tienes
+
+➢ .pokemon pikachu
+➥ para ver el pokemon y sus estadísticas
+
+➢ .comprarpokemon pikachu
+➥ compra el pokemon
+
+➢ .mipokemon
+➥ ve tu pokemon que tienes 
+
+➢ .venderpokemon número 
+➥ vende tu pokemon 
+
+➢ .tienda 
+➥ ve los rangos y precios en la tienda 
+
+➢ .comprar rango 
+➥ comprar un rango y múltiplica tus ganancias 
+
+➢ .mirango 
+➥ ve tu rango que tienes
+
+
+╭──────༺♡༻──────╮
+              *BUSQUEDAS*
+╰──────༺♡༻──────╯
+
+
+➢ .pinterest 
+➥ busca imágenes de pinterest
+
+➢ .google búsqueda
+➥ busca cosas de google 
+
+➢ .imagen búsqueda
+➥ busca imagen de lo que busques
+
+➢ .tiktok link 
+➥ descarga un vídeo de tiktok sin marca de agua 
+
+➢ .tiktoksearch nombre 
+➥ ve videos de tiktok en carrusel
+
+
+╭──────༺♡༻──────╮
+               *SUB BOTS*
+╰──────༺♡༻──────╯
+
+
+➢ .bots 
+➥ ve cuantos subots ahí 
+
+➢ .code 
+➥ pide Código para vincular y ser un subot 
+
+➢ .qr
+➥ pide Código qr para escanear y ser un subot
+
+
+╭──────༺♡༻──────╮
+                *REGISTRO*
+╰──────༺♡༻──────╯
+
+
+➢ .reg nombre.edad
+➥ regístrate en el bot 
+
+➢ .unreg número de serie 
+➥ elimina tu registro del bot 
+
+➢ .nserie 
+➥ ve tu número de serie 
+
+➢ .perfil 
+➥ ve tu perfil en el bot
+
+
+╭──────༺♡༻──────╮
+                *STICKERS*
+╰──────༺♡༻──────╯
+
+
+➢ .s / .stikert 
+➥ convierte una foto en stikert
+
+
+╭──────༺♡༻──────╮
+               *IMÁGENES*
+╰──────༺♡༻──────╯
+
+
+➢ .megumin 
+
+➢ .neko 
+
+➢ .shinobu
+
+
+╭──────༺♡༻──────╮
+               *DIVERSION*
+╰──────༺♡༻──────╯
+
+
+➢ .afk razón 
+➥ quédate afk sin que te molesten 
+
+➢ .dance @user 
+➥ baila con un usuario
+
+➢ .abrazo @user 
+➥ abraza a un usuario 
+
+➢ .gay @user 
+➥ ve el promedio de gay de un usuario 
+
+➢ .ship @user @user 
+➥ shipea a dos usuarios 
+
+➢ .bot hola 
+➥ interactúa con el bot
+
+
+╭──────༺♡༻──────╮
+                  *GRUPOS*
+╰──────༺♡༻──────╯
+
+➢ .grupo cerrar 
+➥ cierra el grupo
+
+➢ .grupo abrir
+➥ abre el grupo 
+
+➢ .kick @user 
+➥ elimina a un usuario 
+
+➢ .link 
+➥ ve el link del Grupo 
+
+➢ .encuesta pregunta|opciones 
+➥ haz encuestas en el grupo 
+
+➢ .promote @user 
+➥ asciende a admin a un usuario 
+
+➢ .invocar mensaje 
+➥ invoca a todo el grupo
+
+
+╭──────༺♡༻──────╮
+                 *ON / OFF*
+╰──────༺♡༻──────╯
+
+
+➢ .on / off welcome 
+➥ activa y desactiva la bienvenida
+
+➢ .on / off antilink 
+➥ activa y desactiva el antilink
 
 
 ⋘ FENIX_BOT 🐦‍🔥 ⋙
