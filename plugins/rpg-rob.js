@@ -1,11 +1,15 @@
 let minRob = 15  // Cantidad mínima de créditos que se puede robar
 let maxRob = 30  // Cantidad máxima de créditos que se puede robar
+let cooldown = 5000  // 5 segundos en milisegundos
 
 let handler = async (m, { conn, usedPrefix, command }) => {
     let userData = global.db.data.users[m.sender]
-    let time = userData.lastrob + 7200000
-    if (new Date - userData.lastrob < 7200000) 
-        throw `*⏱️ ¡Hey! Espera ${msToTime(time - new Date())} para volver a robar*`
+    let now = Date.now()
+    let time = userData.lastrob + cooldown
+
+    if (now - userData.lastrob < cooldown) {
+        throw `*⏱️ ¡Espera ${msToTime(time - now)} para volver a robar!*`
+    }
 
     let who
     if (m.isGroup) 
@@ -23,16 +27,19 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     let robAmount = Math.floor(Math.random() * (maxRob - minRob + 1)) + minRob
 
     // Verificar si el usuario objetivo tiene suficientes créditos
-    if (targetUserData.money < robAmount) 
+    if (targetUserData.limit < robAmount) 
         return m.reply(`😿 @${who.split`@`[0]} tiene menos de *${robAmount} Créditos*. No robes a un pobre :v`, null, { mentions: [who] })
 
     // Transferir créditos
-    userData.money += robAmount
-    targetUserData.money -= robAmount
+    userData.limit += robAmount
+    targetUserData.limit -= robAmount
+
+    // Asegurarse de que las modificaciones se guarden en la base de datos
+    global.db.write()
 
     // Enviar mensaje de éxito
     m.reply(`*✧ Robaste ${robAmount} Créditos a @${who.split`@`[0]}*`, null, { mentions: [who] })
-    userData.lastrob = new Date * 1
+    userData.lastrob = now
 }
 
 handler.help = ['robar', 'rob']
