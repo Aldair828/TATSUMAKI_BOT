@@ -1,90 +1,53 @@
-// robar.js
-let cooldowns = {}
+let ro = 3000  // Cantidad máxima de créditos que se puede robar
 
-let handler = async (m, { conn, text, command, usedPrefix }) => {
-    let users = global.db.data.users
-    let senderId = m.sender
-    let senderName = conn.getName(senderId)
-  
-    let tiempoEspera = 30 * 60 // 30 minutos
+let handler = async (m, { conn, usedPrefix, command }) => {
+    let time = global.db.data.users[m.sender].lastrob + 7200000
+    if (new Date - global.db.data.users[m.sender].lastrob < 7200000) 
+        throw `*⏱️ ¡Hey! Espera ${msToTime(time - new Date())} para volver a robar*`
 
-    if (cooldowns[m.sender] && Date.now() - cooldowns[m.sender] < tiempoEspera * 1000) {
-        let tiempoRestante = segundosAHMS(Math.ceil((cooldowns[m.sender] + tiempoEspera * 1000 - Date.now()) / 1000))
-        m.reply(`🍭 Ya has cometido un Robo recientemente, espera *⏱ ${tiempoRestante}* para robar nuevamente.`)
-        return
-    }
-  
-    cooldowns[m.sender] = Date.now()
-  
-    let senderLimit = users[senderId].limit || 0
-    let targetId = m.mentionedJid[0] || text.trim() + '@s.whatsapp.net'
+    let who
+    if (m.isGroup) 
+        who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : false
+    else 
+        who = m.chat
 
-    if (!targetId || !users[targetId]) {
-        m.reply('🍭 Debes mencionar a un usuario válido para robarle.')
-        return
-    }
+    if (!who) 
+        throw `𝙀𝙏𝙄𝙌𝙐𝙀𝙏𝘼 𝘼 𝘼𝙇𝙂𝙐𝙄𝙀𝙉 𝙋𝘼𝙍𝘼 𝙍𝙊𝘽𝘼𝙍`
 
-    let targetLimit = users[targetId].limit || 0
+    if (!(who in global.db.data.users)) 
+        throw `𝙀𝙇 𝙐𝙎𝙐𝘼𝙍𝙄𝙊 𝙉𝙊 𝙎𝙀 𝙀𝙉𝘾𝙐𝙀𝙉𝙏𝙍𝘼 𝙀𝙉 𝙈𝙄 𝘽𝘼𝙎𝙀 𝘿𝙀 𝘿𝘼𝙏𝙊𝙎.`
 
-    let minAmount = 15
-    let maxAmount = 50
+    let targetUser = global.db.data.users[who]
+    let rob = Math.floor(Math.random() * ro)
 
-    let amountTaken = Math.floor(Math.random() * (maxAmount - minAmount + 1)) + minAmount
+    // Verificar si el usuario objetivo tiene suficientes créditos
+    if (targetUser.money < rob) 
+        return m.reply(`😿 @${who.split`@`[0]} tiene menos de *${ro} Créditos*. No robes a un pobre :v`, null, { mentions: [who] })
 
-    // Obtener el multiplicador según el rango del usuario
-    let multiplicador = 1
-    let rangoMensaje = ''
-    if (users[senderId].rango) {
-        switch (users[senderId].rango) {
-            case 'bronce':
-                multiplicador = 2
-                break
-            case 'plata':
-                multiplicador = 3
-                break
-            case 'oro':
-                multiplicador = 4
-                break
-            case 'diamante':
-                multiplicador = 5
-                break
-            case 'maestro':
-                multiplicador = 6
-                break
-            case 'leyenda':
-                multiplicador = 7
-                break
-            default:
-                multiplicador = 1
-        }
-        rangoMensaje = `\n\n𝚃𝙸𝙴𝙽𝙴 𝚄𝙽 𝚁𝙰𝙽𝙶𝙾: ${users[senderId].rango.charAt(0).toUpperCase() + users[senderId].rango.slice(1)}`
-    }
+    // Transferir créditos
+    global.db.data.users[m.sender].money += rob
+    global.db.data.users[who].money -= rob
 
-    let amountWithMultiplier = amountTaken * multiplicador
-    users[senderId].limit = Math.min(senderLimit + amountWithMultiplier, maxAmount * multiplicador)
-    users[targetId].limit = Math.max(targetLimit - amountTaken, 0)
-
-    conn.sendMessage(m.chat, {
-        text: `🍭𝘼𝘾𝘼𝘽𝘼𝙎 𝘿𝙀 𝙍𝙊𝘽𝘼𝙍 *${amountWithMultiplier} Créditos* 𝘼𝙇 𝙐𝙎𝙐𝘼𝙍𝙄𝙊 @${targetId.split("@")[0]}${rangoMensaje}\n\nSe suman *+${amountWithMultiplier} Créditos* a ${senderName}.`,
-        contextInfo: { 
-            mentionedJid: [targetId],
-        }
-    }, { quoted: m })
-
-    global.db.write()
+    // Enviar mensaje de éxito
+    m.reply(`*✧ Robaste ${rob} Créditos a @${who.split`@`[0]}*`, null, { mentions: [who] })
+    global.db.data.users[m.sender].lastrob = new Date * 1
 }
 
-handler.tags = ['rpg']
-handler.help = ['robar']
-handler.command = ['robar']
-handler.register = true
+handler.help = ['robar', 'rob']
+handler.tags = ['econ']
+handler.command = ['robar', 'rob']
 handler.group = true
+handler.register = true
 
-export default handler
+export default handler  
 
-function segundosAHMS(segundos) {
-    let horas = Math.floor(segundos / 3600)
-    let minutos = Math.floor((segundos % 3600) / 60)
-    let segundosRestantes = segundos % 60
-    return `${minutos} minutos y ${segundosRestantes} segundos`
-                                              }
+function msToTime(duration) {
+    var milliseconds = parseInt((duration % 1000) / 100),
+    seconds = Math.floor((duration / 1000) % 60),
+    minutes = Math.floor((duration / (1000 * 60)) % 60),
+    hours = Math.floor((duration / (1000 * 60 * 60)) % 24)
+    hours = (hours < 10) ? "0" + hours : hours
+    minutes = (minutes < 10) ? "0" + minutes : minutes
+    seconds = (seconds < 10) ? "0" + seconds : seconds
+    return hours + " Hora(s) " + minutes + " Minuto(s)"
+}
