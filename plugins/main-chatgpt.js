@@ -12,7 +12,7 @@ const openaiii = new OpenAIApi(configuration);
 
 const handler = async (m, { conn, text, usedPrefix, command }) => {
   if (!text) {
-    return m.reply('𝔼𝕊ℂℝ𝕀𝔹𝔸 𝕊𝕌 ℙℝ𝔼𝔾𝕌ℕ𝕋𝔸 ℙ𝔸ℝ𝔸 ℚ𝕌𝔼 𝔽𝔼́ℕ𝕀𝕏 𝕃𝔼 ℝ𝔼𝕊ℙ𝕆ℕ𝔻𝔸');
+    return m.reply('*𝔼𝕊ℂℝ𝕀𝔹𝔸 𝕊𝕌 ℙℝ𝔼𝔾𝕌ℕ𝕋𝔸 ℙ𝔸ℝ𝔸 ℚ𝕌𝔼 𝔽𝔼́ℕ𝕀𝕏 𝕃𝔼 ℝ𝔼𝕊ℙ𝕆ℕ𝔻𝔸 🐦‍🔥*');
   }
 
   if (command === 'fenixgpt') {
