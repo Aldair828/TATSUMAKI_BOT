@@ -87,6 +87,8 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ➢ .runtime 
 ➥ ve cuanto tiempo lleva activo el bot
 
+➢ .joinfree link
+➥ agrega al bot a tu grupo 
 
 
 ╭──────༺♡༻──────╮
@@ -180,6 +182,9 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
 ➢ .venderpokemon número 
 ➥ vende tu pokemon 
+
+➢ .regalarpokemon @user Pikachu
+➥ regala un pokemon a tu amigo 
 
 ➢ .tienda 
 ➥ ve los rangos y precios en la tienda 
