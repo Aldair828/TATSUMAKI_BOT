@@ -1,8 +1,10 @@
-let ro = 3000  // Cantidad máxima de créditos que se puede robar
+let minRob = 15  // Cantidad mínima de créditos que se puede robar
+let maxRob = 30  // Cantidad máxima de créditos que se puede robar
 
 let handler = async (m, { conn, usedPrefix, command }) => {
-    let time = global.db.data.users[m.sender].lastrob + 7200000
-    if (new Date - global.db.data.users[m.sender].lastrob < 7200000) 
+    let userData = global.db.data.users[m.sender]
+    let time = userData.lastrob + 7200000
+    if (new Date - userData.lastrob < 7200000) 
         throw `*⏱️ ¡Hey! Espera ${msToTime(time - new Date())} para volver a robar*`
 
     let who
@@ -17,20 +19,21 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     if (!(who in global.db.data.users)) 
         throw `𝙀𝙇 𝙐𝙎𝙐𝘼𝙍𝙄𝙊 𝙉𝙊 𝙎𝙀 𝙀𝙉𝘾𝙐𝙀𝙉𝙏𝙍𝘼 𝙀𝙉 𝙈𝙄 𝘽𝘼𝙎𝙀 𝘿𝙀 𝘿𝘼𝙏𝙊𝙎.`
 
-    let targetUser = global.db.data.users[who]
-    let rob = Math.floor(Math.random() * ro)
+    let targetUserData = global.db.data.users[who]
+    let userLimit = Math.max(minRob, Math.min(maxRob, userData.money))
+    let robAmount = Math.floor(Math.random() * (userLimit - minRob + 1)) + minRob
 
     // Verificar si el usuario objetivo tiene suficientes créditos
-    if (targetUser.money < rob) 
-        return m.reply(`😿 @${who.split`@`[0]} tiene menos de *${ro} Créditos*. No robes a un pobre :v`, null, { mentions: [who] })
+    if (targetUserData.money < robAmount) 
+        return m.reply(`😿 @${who.split`@`[0]} tiene menos de *${robAmount} Créditos*. No robes a un pobre :v`, null, { mentions: [who] })
 
     // Transferir créditos
-    global.db.data.users[m.sender].money += rob
-    global.db.data.users[who].money -= rob
+    userData.money += robAmount
+    targetUserData.money -= robAmount
 
     // Enviar mensaje de éxito
-    m.reply(`*✧ Robaste ${rob} Créditos a @${who.split`@`[0]}*`, null, { mentions: [who] })
-    global.db.data.users[m.sender].lastrob = new Date * 1
+    m.reply(`*✧ Robaste ${robAmount} Créditos a @${who.split`@`[0]}*`, null, { mentions: [who] })
+    userData.lastrob = new Date * 1
 }
 
 handler.help = ['robar', 'rob']
