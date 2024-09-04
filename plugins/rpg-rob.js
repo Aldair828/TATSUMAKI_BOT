@@ -20,8 +20,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
         throw `𝙀𝙇 𝙐𝙎𝙐𝘼𝙍𝙄𝙊 𝙉𝙊 𝙎𝙀 𝙀𝙉𝘾𝙐𝙀𝙉𝙏𝙍𝘼 𝙀𝙉 𝙈𝙄 𝘽𝘼𝙎𝙀 𝘿𝙀 𝘿𝘼𝙏𝙊𝙎.`
 
     let targetUserData = global.db.data.users[who]
-    let userLimit = Math.max(minRob, Math.min(maxRob, userData.money))
-    let robAmount = Math.floor(Math.random() * (userLimit - minRob + 1)) + minRob
+    let robAmount = Math.floor(Math.random() * (maxRob - minRob + 1)) + minRob
 
     // Verificar si el usuario objetivo tiene suficientes créditos
     if (targetUserData.money < robAmount) 
