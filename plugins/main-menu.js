@@ -294,6 +294,9 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
                   *GRUPOS*
 ╰──────༺♡༻──────╯
 
+➢ .infogrupo
+➥ ve la información del grupo
+
 ➢ .grupo cerrar 
 ➥ cierra el grupo
 
