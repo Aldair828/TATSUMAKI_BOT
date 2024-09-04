@@ -1,6 +1,6 @@
 let handler = async (m, { conn, usedPrefix, command }) => {
-    let pp = 'https://tinyurl.com/26q5b36b'; // Imagen para el primer enlace
-    let pp2 = 'https://tinyurl.com/26q5b36b'; // Imagen para el segundo enlace
+    let pp = 'https://tinyurl.com/26djysdo'; // Imagen para el primer enlace
+    let pp2 = 'https://tinyurl.com/294oahv9'; // Imagen para el segundo enlace
     let who;
 
     if (m.isGroup) {
@@ -16,10 +16,13 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     let name2 = conn.getName(who);
     let name = conn.getName(m.sender);
 
+    console.log(`Command received: ${command}`);
+    console.log(`Who: ${who}, Name2: ${name2}, Sender: ${name}`);
+
     await conn.sendMessage(m.chat, {
         video: { url: [pp, pp2].getRandom() },
         gifPlayback: true,
-        caption: `*${name}*` + ' está golpeando a' + ` *${name2}*` + ' (ง'`(`'̀)ง'
+        caption: `*${name}* está golpeando a *${name2}* (ง'̀-'́)ง`
     }, { quoted: m });
 };
 
