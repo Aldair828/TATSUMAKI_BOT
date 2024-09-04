@@ -1,6 +1,6 @@
 let minRob = 15  // Cantidad mínima de créditos que se puede robar
 let maxRob = 30  // Cantidad máxima de créditos que se puede robar
-let cooldown = 5000  // 5 segundos en milisegundos
+let cooldown = 1200000  // 20 minutos en milisegundos
 
 let handler = async (m, { conn, usedPrefix, command }) => {
     let userData = global.db.data.users[m.sender]
