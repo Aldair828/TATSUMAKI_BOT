@@ -302,7 +302,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 
 ╭──────༺♡༻──────╮
                  *ON / OFF*
-╰──────༺♡༻──────╯
+╰──────༺♡༻──────╯antilink
 
 
 ➢ .on / off welcome 
@@ -321,9 +321,9 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
   }
 }
 
-handler.help = ['allmenu']
-handler.tags = ['main']
-handler.command = ['allmenu', 'allmenu', 'allmenu'] 
+//handler.help = ['allmenu']
+//handler.tags = ['main']
+//handler.command = ['allmenu', 'allmenu', 'allmenu'] 
 handler.register = true 
 export default handler
 
