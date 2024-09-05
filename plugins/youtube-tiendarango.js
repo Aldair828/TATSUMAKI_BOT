@@ -1,12 +1,12 @@
 let handler = async (m, { conn, args, usedPrefix, command }) => {
     let user = global.db.data.users[m.sender];
     let rangos = {
-        bronce: { costo: 5000, multiplicador: 2, image: 'https://telegra.ph/file/fe711151a05b2c875ce4a.jpg' },
-        plata: { costo: 10000, multiplicador: 3, image: 'https://telegra.ph/file/21acf238f453992a88690.jpg' },
-        oro: { costo: 50000, multiplicador: 4, image: 'https://telegra.ph/file/d7cb0259f13d9342590a3.jpg' },
-        diamante: { costo: 100000, multiplicador: 5, image: 'https://telegra.ph/file/07f7e54181e72534e0b30.jpg' },
-        maestro: { costo: 5000000, multiplicador: 6, image: 'https://telegra.ph/file/30beab8c1ad2ee7feff9a.jpg' },
-        leyenda: { costo: 100000000, multiplicador: 7, image: 'https://telegra.ph/file/f1b86c0adb6c3296de1f1.jpg' },
+        bronce: { costo: 10000, multiplicador: 2, image: 'https://telegra.ph/file/fe711151a05b2c875ce4a.jpg' },
+        plata: { costo: 50000, multiplicador: 3, image: 'https://telegra.ph/file/21acf238f453992a88690.jpg' },
+        oro: { costo: 100000, multiplicador: 4, image: 'https://telegra.ph/file/d7cb0259f13d9342590a3.jpg' },
+        diamante: { costo: 500000, multiplicador: 5, image: 'https://telegra.ph/file/07f7e54181e72534e0b30.jpg' },
+        maestro: { costo: 1000000, multiplicador: 6, image: 'https://telegra.ph/file/30beab8c1ad2ee7feff9a.jpg' },
+        leyenda: { costo: 500000000, multiplicador: 7, image: 'https://telegra.ph/file/f1b86c0adb6c3296de1f1.jpg' },
     };
 
     let isVip = global.prems.includes(m.sender.split('@')[0]); // Verificar si el usuario es VIP
