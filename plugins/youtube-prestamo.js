@@ -103,9 +103,9 @@ let handlerCreditInterceptor = async (user, creditsGained) => {
     }
 };
 
-handler.help = ['prestamo <cantidad>', 'pagar <cantidad>'];
-handler.tags = ['econ'];
-handler.command = /^prestamo|pagar$/i;
+//handler.help = ['prestamo <cantidad>', 'pagar <cantidad>'];
+//handler.tags = ['econ'];
+//handler.command = /^prestamo|pagar$/i;
 handler.group = true;
 handler.register = true;
 
