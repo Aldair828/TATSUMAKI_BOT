@@ -1,4 +1,4 @@
-import { watchFile, unwatchFile } from 'fs' 
+#import { watchFile, unwatchFile } from 'fs' 
 import chalk from 'chalk'
 import { fileURLToPath } from 'url'
 import fs from 'fs'
@@ -12,7 +12,7 @@ import moment from 'moment-timezone'
 global.owner = [
   ['51925015528', 'Aldair 👾', true],
   ['522482267952', 'Abraham ', true],
-  [''],
+  ['5493624187763'],
   [''],
   [''],
   ['']
