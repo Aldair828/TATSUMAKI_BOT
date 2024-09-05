@@ -100,8 +100,8 @@ beneficios de ser vip - PUEDES TRANSFERIR HASTA 500 CRÉDITOS A CUALQUIER USUARI
     }
 };
 
-handler.help = ['comprarvip <horas>', 'vip', 'tiendavip'];
-handler.tags = ['vip'];
-handler.command = ['comprarvip', 'vip', 'tiendavip'];
+//handler.help = ['comprarvip <horas>', 'vip', 'tiendavip'];
+//handler.tags = ['vip'];
+//handler.command = ['comprarvip', 'vip', 'tiendavip'];
 
 export default handler;
