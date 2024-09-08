@@ -128,12 +128,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ➢ .topcreditos
 ➥ ve el top de mayores créditos 
 
-➢ .prestamo cantidad 
-➥ pide prestamo al bot 
-
-➢ .pagar cantidad 
-➥ paga el préstamo 
-
 ➢ .transferir @user cantidad 
 ➥ transfiere créditos a otros usuarios
 
@@ -144,12 +138,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
  
 ➢ .xp 
 ➥ ve tu cartera de xp 
-
-➢ .vip 
-➥ ve si eres usuario vip
-
-➢ .tienda vip 
-➥ comprar vip por un tiempo 
 
 ➢ .topxp 
 ➥ ve quienes son los top de más xp
@@ -189,14 +177,6 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
 ➢ .regalarpokemon @user Pikachu
 ➥ regala un pokemon a tu amigo 
 
-➢ .tienda 
-➥ ve los rangos y precios en la tienda 
-
-➢ .comprar rango 
-➥ comprar un rango y múltiplica tus ganancias 
-
-➢ .mirango 
-➥ ve tu rango que tienes
 
 
 ╭──────༺♡༻──────╮
